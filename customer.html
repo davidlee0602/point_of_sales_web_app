@@ -1,0 +1,153 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Cellular Phone Point of Sales System -->
+	<title>Area 51 Emporium</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="customer.css">
+</head>
+<body>
+
+<!-- Navbar content -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="index.html" class="navbar-brand"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Area 51</a>
+		</div>	  
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#">Phones</a></li>
+			<li><a href="#">Invoices</a></li>
+			<li><a href="customer.html">Customers</a></li>
+			<li><a href="#">About</a></li>
+		</ul>
+	</div>
+</nav>
+
+<!-- Jumbotron - Add form -->
+<div class="container">
+	<!-- <div class="col-lg-7"> -->
+		<p><strong>Add Customer</strong></p>
+		<div class="jumbotron">
+			<form>
+				<div class="container">
+					<u>NAME</u>
+					<div class="row">
+						<div class="col-lg-1">
+							First<input type="text" name="fname"><br>
+						</div>
+						<div class="col-lg-1 col-lg-offset-2">
+							Last<input type="text" name="lname"><br>
+						</div>
+
+					</div>
+					<br>
+					<u>ADDRESS</u>
+					<div class="row">
+						<div class="col-lg-1">
+							Street<input type="text" name="street"><br>
+						</div>
+						<div class="col-lg-1 col-lg-offset-2">
+							City<input type="text" name="city"><br>
+						</div>
+						<div class="col-lg-1 col-lg-offset-2">
+							State<input type="text" name="state"><br>
+						</div>
+						<div class="col-lg-1 col-lg-offset-2">
+							Zip<input type="text" name="zip"><br>
+						</div>
+					</div>
+					
+					<br>
+					<u>CONTACT</u>
+					<div class="row">
+						<div class="col-lg-1">
+							Phone<input type="text" name="phone"><br>
+						</div>
+						<div class="col-lg-1 col-lg-offset-2">
+							Email<input type="text" name="email"><br>
+						</div>
+					</div>
+					<br>
+					<div class="row text-right">
+						<button type="button" class="btn btn-primary btn-lg">SUBMIT</button>
+					</div>
+				</div>				
+			</form>
+		</div>
+	<!-- </div> -->
+</div>
+
+<div class="container">
+	<!-- <div class="col-lg-12"> -->
+		<p><strong>Customer View</strong></p>
+		<div class="jumbotron">
+			<table>
+				<thead align="Center">
+					<tr>
+						<th>First Name</th>						
+						<th>Last Name</th>						
+						<th>Street</th>						
+						<th>City</th>						
+						<th>State</th>						
+						<th>Zip</th>						
+						<th>Phone</th>	
+						<th>Email</th>
+						<th>Update</th>		
+						<th>Delete</th>				
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>David</td>
+						<td>Lee</td>
+						<td>100 Market St.</td>
+						<td>Hoboken</td>
+						<td>NJ</td>
+						<td>07030</td>
+						<td>XXX-XXX-XXXX</td>
+						<td>leed8@oregonstate.edu</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
+							</div>
+						</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-danger btn-sm">DELETE</button>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>Huy</td>
+						<td>Nguyen</td>
+						<td>500 Jones St.</td>
+						<td>Dallas</td>
+						<td>TX</td>
+						<td>75001</td>
+						<td>XXX-XXX-XXXX</td>
+						<td>nguyehu6@oregonstate.edu</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
+							</div>
+						</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-danger btn-sm">DELETE</button>
+							</div>
+						</td>
+					</tr>							
+				</tbody>
+			</table>
+			<br>
+		</div>
+	<!-- </div> -->
+</div>
+
+
+
+
+</body>
+</html>
