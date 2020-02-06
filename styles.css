@@ -39,5 +39,14 @@ table, th, td {
 
 .add-form-collapseable {
 	overflow: hidden;
-	animation-duration: 4s;
+	transition: all 0.5s ease-out;
+}
+
+.hide {
+	display: none;
+}
+
+.my_collapse {
+	height: 0;
+	width: 0;
 }
