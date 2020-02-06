@@ -1,6 +1,10 @@
 body{
 	padding-top: 70px;
-
+	background: url('background.jpg') no-repeat center center fixed;
+  	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	background-size: cover;
+  	-o-background-size: cover;
 }
 
 .jumbotron{
@@ -31,4 +35,9 @@ table {
 
 table, th, td {
   border: 1px solid black;
+}
+
+.add-form-collapseable {
+	overflow: hidden;
+	animation-duration: 4s;
 }

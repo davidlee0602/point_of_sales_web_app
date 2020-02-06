@@ -1,0 +1,26 @@
+ken - 2/5/2020
+- home page
+  - start invoice -> goes to invoices page, and opens "new invoice" section
+  - edit invoice -> goes to edit invoice page, opens edit modal, allowing user to choose invoice by id from dropdown menu
+  - add phone -> goes to phones page, opens "new phone" section
+  
+  - add customer -> goes to customers page, opens "new customer" section
+  - add carrier -> goes to carriers page, opens "new carriers" section
+  - add payment methods -> goes to payment methods page, opens "new payment method" section
+
+
+
+- edit invoice page (this functionality adds new record to invoice_details)
+  - if clicked from invoices page -> edit button -> opens edit modal with fixed invoice id
+  - if clicked from "edit invoice" from home page, opens edit modal, allowing user to choose invoice by id from dropdown menu
+
+  - has "add phone" button to add another form input to choose a phone from dropdown
+  - should be submitted through javascript since "add phone to invoice" dynamically changes invoice (maybe? maybe not?)
+
+
+
+- Phones
+  - each phone has "add to invoice" button. modal pops up to select invoice id from dropdown, submit or cancel
+    - submit will add phone to "invoice_details" table
+
+======================
