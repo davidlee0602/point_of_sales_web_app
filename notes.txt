@@ -3,7 +3,7 @@ ken - 2/5/2020
   - start invoice -> goes to invoices page, and opens "new invoice" section
   - edit invoice -> goes to edit invoice page, opens edit modal, allowing user to choose invoice by id from dropdown menu
   - add phone -> goes to phones page, opens "new phone" section
-  
+
   - add customer -> goes to customers page, opens "new customer" section
   - add carrier -> goes to carriers page, opens "new carriers" section
   - add payment methods -> goes to payment methods page, opens "new payment method" section
@@ -24,3 +24,9 @@ ken - 2/5/2020
     - submit will add phone to "invoice_details" table
 
 ======================
+
+ken - 2/6/2020
+
+- create new invoice and edit invoice forms are unique, they might require their own full page or modal
+- need to have "add phone" button on invoice form, dynamically create a new phone field with JS, and have the back end accept this dynamic shaped form
+- pay button needs to enforce that a payment method was selected (maybe enable/disable depending on value of payment method)
