@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<!-- Cellular Phone Point of Sales System -->
+	<title>Area 51 Emporium</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+
+	<script
+  src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+  crossorigin="anonymous"
+	defer></script>
+
+	<script src="scripts.js" defer></script>
+</head>
+<body>
+
+<!-- Navbar content -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="index.html" class="navbar-brand"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Area 51</a>
+		</div>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="phones.html">Phones</a></li>
+			<li><a href="invoices.html">Invoices</a></li>
+			<li><a href="customers.html">Customers</a></li>
+			<li><a href="carriers.html">Carriers</a></li>
+			<li><a href="paymentmethods.html">Payment Methods</a></li>
+			<li><a href="about.html">About</a></li>
+		</ul>
+	</div>
+</nav>
+
+<div class="container">
+  <h1>Create New Invoice</h1>
+</div>
+
+<div class="jumbotron">
+  <form>
+    <div class="container">
+
+      <u>DATE</u>
+      <div class="row">
+        <div class="col-lg-1">
+          <input type="date" name="date"><br>
+        </div>
+      </div>
+      <br>
+
+      <u>CUSTOMER</u>
+      <div class="row">
+        <div class="col-lg-1">
+          <select name="customer_id">
+            <option value=""> -- </option>
+            <option value="1">Mr. Chang</option>
+            <option value="2">Randy Bullet</option>
+            <option value="3">Vinny Pistone</option>
+            <option value="4">Dequarius Johnson</option>
+            <option value="5">Taco Prince</option>
+            <option value="6">Ramee El-Rahman</option>
+            <option value="7">Uchiha Jones</option>
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <u>PAYMENT METHOD</u>
+      <div class="row">
+        <div class="col-lg-1">
+          <select name="payment_method_id">
+            <option value=""> -- </option>
+            <option value="1">Cash</option>
+            <option value="2">Credit</option>
+            <option value="3">Debit</option>
+            <option value="4">Paypal</option>
+            <option value="5">Venmo</option>
+            <option value="6">Cash App</option>
+            <option value="7">Bitcoin</option>
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <div class="row">
+        <div class="col-lg-2">
+          <label>
+          Invoice Item 1
+            <select name="phone_item_1">
+              <option value=""> -- </option>
+              <option value="1">iPhone 11 Pro Max</option>
+              <option value="2">Samsung Galaxy Note 10+</option>
+              <option value="3">OnePlus 7T Pro</option>
+              <option value="4">Google Pixel 4 XL</option>
+              <option value="5">Motorola Razr Black</option>
+              <option value="6">Sony Xperia 1</option>
+              <option value="7">Huawei P30 Pro</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="col-lg-2 col-lg-offset-2">
+          <label>
+          Carrier
+            <select name="carrier_item_1">
+              <option value=""> -- </option>
+              <option value="1">AT&T</option>
+              <option value="2">Cricket</option>
+              <option value="3">Metro by T-Mobile</option>
+              <option value="4">Mint</option>
+              <option value="5">T-Mobile</option>
+              <option value="6">Sprint</option>
+              <option value="7">Verizon</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-lg-1">
+          <button id="add_phone_form_to_invoice" class="btn btn-primary">Add Phone</button>
+        </div>
+      </div>
+
+
+      <br>
+      <br>
+      <div class="row">
+        <u>SUBTOTAL</u>
+      </div>
+      <div class="row">
+        <u>TAXES</u>
+      </div>
+      <div class="row">
+          <u>TOTAL</u>
+      </div>
+
+      <br>
+      <div class="row text-right">
+        <button type="button" class="btn btn-danger btn-lg">SAVE</button>
+        <button type="button" class="btn btn-success btn-lg">PAY</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+</body>
+</html>
