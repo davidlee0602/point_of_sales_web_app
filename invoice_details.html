@@ -1,147 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<!-- Cellular Phone Point of Sales System -->
+	<meta charset="utf-8"><!-- Cellular Phone Point of Sales System -->
 	<title>Area 51 Emporium - Invoice Details</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="styles.css">
-
-	<script
-	src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-	integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
-	crossorigin="anonymous"
-	defer></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" 
-         defer></script>
-	<script src="scripts.js" defer></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="styles.css" rel="stylesheet" type="text/css">
+	<script defer src="https://code.jquery.com/jquery-3.4.1.slim.min.js">
+	</script>
+	<script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js">
+	</script>
+	<script defer src="scripts.js">
+	</script>
 </head>
 <body>
-
-<!-- Navbar content -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
-		<div class="navbar-header">
-			<a href="index.html" class="navbar-brand"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Area 51</a>
+	<!-- Navbar content -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html"><span aria-hidden="true" class="glyphicon glyphicon-phone"></span> Area 51</a>
+			</div>
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="phones.html">Phones</a>
+				</li>
+				<li>
+					<a href="invoices.html">Invoices</a>
+				</li>
+				<li>
+					<a href="customers.html">Customers</a>
+				</li>
+				<li>
+					<a href="carriers.html">Carriers</a>
+				</li>
+				<li>
+					<a href="paymentmethods.html">Payment Methods</a>
+				</li>
+				<li>
+					<a href="about.html">About</a>
+				</li>
+			</ul>
 		</div>
-		<ul class="nav navbar-nav navbar-right">
-			<li><a href="phones.html">Phones</a></li>
-			<li><a href="invoices.html">Invoices</a></li>
-			<li><a href="customers.html">Customers</a></li>
-			<li><a href="carriers.html">Carriers</a></li>
-			<li><a href="paymentmethods.html">Payment Methods</a></li>
-			<li><a href="about.html">About</a></li>
-		</ul>
-	</div>
-</nav>
-
-<form>
-	      <div class="container">
-	      <!-- Modal -->
-	      <div class="modal fade" id="updateModal" role="dialog">
-	         <div class="modal-dialog">
-	            <!-- Modal content-->
-	            <div class="modal-content">
-	               <div class="modal-header">
-	                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                  <h4 class="modal-title">Update Customer</h4>
-	               </div>
-	               <div class="modal-body">
-	                      <div class="container">
-	                        <u>Invoice ID:</u>
-	                        <div class="row">
-	                           <div class="col-lg-1">
-	                              <input type="text" name="fname" value="1" disabled><br>
-	                           </div>
-	                        </div>
-	                        <br>
-
-	                        <div class="row">
-	                           <div class="col-lg-1">
-	                              Phone<select name="phone_item_1">
-										<option value=""> -- </option>
-										<option value="1">iPhone 11 Pro Max</option>
-										<option value="2">Galaxy Note 10+</option>
-										<option value="3">7T Pro</option>
-										<option value="4">Pixel 4 XL</option>
-										<option value="5">Razr Black</option>
-										<option value="6">Xperia 1</option>
-										<option value="7">P30 Pro</option>
-									</select>
-	                           </div>
-	                           <div class="col-lg-1 col-lg-offset-1">
-	                              Carrier<select name="carrier_item_1">
-												<option value=""> -- </option>
-												<option value="1">AT&T</option>
-												<option value="2">Cricket</option>
-												<option value="3">Metro by T-Mobile</option>
-												<option value="4">Mint</option>
-												<option value="5">T-Mobile</option>
-												<option value="6">Sprint</option>
-												<option value="7">Verizon</option>
-											</select>
-	                           </div>
-	                           <br>
-	                           <div class="col-lg-1 col-lg-offset-1">
-	                              <button type="button" class="btn btn-success btn-sm">ADD TO INVOICE</button>
-	                           </div>
-	                        </div>
-                       
-	                        <br>
-	                        <div class="container">
-      <table style="width: 44%;" class="table table-hover table-bordered">
-               <thead align="Center">
-                  <tr>
-                     <th>Phone</th>
-                     <th>Carrier</th>
-                     <th>Retail($)</th>
-                     <th class="col-xs-2">Delete</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>iPhone 11</td>
-                     <td>Verizon</td>
-                     <td>999.99</td>
-                     <td>
-                        <div class="row text-center">
-                           <button type="button" class="btn btn-danger btn-sm">DELETE</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>Razr Black</td>
-                     <td>T-mobile</td>
-                     <td>1199.99</td>
-                     <td>
-                        <div class="row text-center">
-                           <button type="button" class="btn btn-danger btn-sm">DELETE</button>
-                        </div>
-                     </td>
-                  </tr>
-               </tbody>
-            </table>
-            </div>
-	                     </div>
-	                  <div class="modal-footer">
-	                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">CLOSE</button>
-	                  </div>
-	               </div>
-	            </div>
-	         </div>
-	      </div>
-	  	</div>
-
-      </form>
-      <br>
-
-
-<div class="container">
-	<!-- <div class="col-lg-12"> -->
+	</nav>
+	<form>
+		<div class="container">
+			<!-- Modal -->
+			<div class="modal fade" id="updateModal" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button class="close" data-dismiss="modal" type="button">&times;</button>
+							<h4 class="modal-title">Update Customer</h4>
+						</div>
+						<div class="modal-body">
+							<div class="container">
+								<u>Invoice ID:</u>
+								<div class="row">
+									<div class="col-lg-1">
+										<input disabled name="fname" type="text" value="1"><br>
+									</div>
+								</div><br>
+								<div class="row">
+									<div class="col-lg-1">
+										Phone<select name="phone_item_1">
+											<option value="">
+												--
+											</option>
+											<option value="1">
+												iPhone 11 Pro Max
+											</option>
+											<option value="2">
+												Galaxy Note 10+
+											</option>
+											<option value="3">
+												7T Pro
+											</option>
+											<option value="4">
+												Pixel 4 XL
+											</option>
+											<option value="5">
+												Razr Black
+											</option>
+											<option value="6">
+												Xperia 1
+											</option>
+											<option value="7">
+												P30 Pro
+											</option>
+										</select>
+									</div>
+									<div class="col-lg-1 col-lg-offset-1">
+										Carrier<select name="carrier_item_1">
+											<option value="">
+												--
+											</option>
+											<option value="1">
+												AT&T
+											</option>
+											<option value="2">
+												Cricket
+											</option>
+											<option value="3">
+												Metro by T-Mobile
+											</option>
+											<option value="4">
+												Mint
+											</option>
+											<option value="5">
+												T-Mobile
+											</option>
+											<option value="6">
+												Sprint
+											</option>
+											<option value="7">
+												Verizon
+											</option>
+										</select>
+									</div><br>
+									<div class="col-lg-1 col-lg-offset-1">
+										<button class="btn btn-success btn-sm" type="button">ADD TO INVOICE</button>
+									</div>
+								</div><br>
+								<div class="container">
+									<table class="table table-hover table-bordered" style="width: 44%;">
+										<thead align="center">
+											<tr>
+												<th>Phone</th>
+												<th>Carrier</th>
+												<th>Retail($)</th>
+												<th class="col-xs-2">Delete</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>iPhone 11</td>
+												<td>Verizon</td>
+												<td>999.99</td>
+												<td>
+													<div class="row text-center">
+														<button class="btn btn-danger btn-sm" type="button">DELETE</button>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>Razr Black</td>
+												<td>T-mobile</td>
+												<td>1199.99</td>
+												<td>
+													<div class="row text-center">
+														<button class="btn btn-danger btn-sm" type="button">DELETE</button>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-default btn-sm" data-dismiss="modal" type="button">CLOSE</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form><br>
+	<div class="container">
+		<!-- <div class="col-lg-12"> -->
 		<p><strong>Pending Invoices</strong></p>
 		<div class="jumbotron">
 			<table class="table table-hover table-bordered">
-				<thead align="Center">
+				<thead align="center">
 					<tr>
 						<th>Invoice ID</th>
 						<th>Customer</th>
@@ -160,15 +189,13 @@
 						<td>1069.99</td>
 						<td>
 							<div class="row text-center">
-								<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#updateModal">ADD</button>
+								<button class="btn btn-success btn-sm" data-target="#updateModal" data-toggle="modal" type="button">ADD</button>
 							</div>
 						</td>
 					</tr>
 				</tbody>
-			</table>
-			<br>
-		</div>
-	<!-- </div> -->
-</div>
+			</table><br>
+		</div><!-- </div> -->
+	</div>
 </body>
 </html>
