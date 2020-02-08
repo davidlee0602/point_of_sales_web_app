@@ -1,180 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="utf-8">
-	<!-- Cellular Phone Point of Sales System -->
-	<title>Area 51 Emporium - Carriers</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="styles.css">
-
-	<script
-	src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-	integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
-	crossorigin="anonymous"
-	defer></script>
-
-	<script src="scripts.js" defer></script>
-</head>
-<body>
-
-<!-- Navbar content -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
-		<div class="navbar-header">
-			<a href="index.html" class="navbar-brand"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Area 51</a>
-		</div>
-		<ul class="nav navbar-nav navbar-right">
-			<li><a href="phones.html">Phones</a></li>
-			<li><a href="invoices.html">Invoices</a></li>
-			<li><a href="customers.html">Customers</a></li>
-			<li><a href="carriers.html">Carriers</a></li>
-			<li><a href="paymentmethods.html">Payment Methods</a></li>
-			<li><a href="about.html">About</a></li>
-		</ul>
-	</div>
-</nav>
-
-<!-- Jumbotron - Add form -->
-<div class="container">
-	<!-- div collapseable -->
-	<button class="btn btn-success add-form-btn">Add Carrier</button>
-	<button class="btn btn-danger add-form-cancel hide">Cancel</button>
-	<div class="add-form-collapseable my_collapse">
-		<!-- <div class="col-lg-7"> -->
-			<p><strong>Add Carrier</strong></p>
-			<div class="jumbotron">
-				<form>
-					<div class="container">
-						<u>CARRIER NAME</u>
-						<div class="row">
-							<div class="col-lg-1">
-								<input type="text" name="name"><br>
-							</div>
-						</div>
-
-						<br>
-						<div class="row text-right">
-							<button type="button" class="btn btn-primary btn-lg">SUBMIT</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		<!-- </div> -->
-	</div>
-	<!-- div collapseable -->
-</div>
-
-<br>
-
-<div class="container">
-	<!-- <div class="col-lg-12"> -->
-		<p><strong>Carriers</strong></p>
-		<div class="jumbotron">
-			<table class="table table-hover table-bordered">
-				<thead align="Center">
-					<tr>
-						<th >Name</th>
-						<th class="col-xs-1">Update</th>
-						<th class="col-xs-1">Delete</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>AT&T</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-danger btn-sm">DELETE</button>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>Cricket</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-danger btn-sm">DELETE</button>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>Metro by T-Mobile</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-danger btn-sm">DELETE</button>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>Mint</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-danger btn-sm">DELETE</button>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>T-Mobile</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-danger btn-sm">DELETE</button>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>Sprint</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-danger btn-sm">DELETE</button>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>Verizon</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-danger btn-sm">DELETE</button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<br>
-		</div>
-	<!-- </div> -->
-</div>
-</body>
+   <head>
+      <meta charset="utf-8">
+      <!-- Cellular Phone Point of Sales System -->
+      <title>Area 51 Emporium - Carriers</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="styles.css">
+      <script
+         src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+         integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+         crossorigin="anonymous"
+         defer></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" 
+         defer></script>
+      <script src="scripts.js" defer></script>
+   </head>
+   <body>
+      <!-- Navbar content -->
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+         <div class="container">
+            <div class="navbar-header">
+               <a href="index.html" class="navbar-brand"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Area 51</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+               <li><a href="phones.html">Phones</a></li>
+               <li><a href="invoices.html">Invoices</a></li>
+               <li><a href="customers.html">Customers</a></li>
+               <li><a href="carriers.html">Carriers</a></li>
+               <li><a href="paymentmethods.html">Payment Methods</a></li>
+               <li><a href="about.html">About</a></li>
+            </ul>
+         </div>
+      </nav>
+      <!-- Jumbotron - Add form -->
+      <div class="container">
+         <!-- div collapseable -->
+         <button class="btn btn-success add-form-btn">Add Carrier</button>
+         <button class="btn btn-danger add-form-cancel hide">Cancel</button>
+         <div class="add-form-collapseable my_collapse">
+            <!-- <div class="col-lg-7"> -->
+            <p><strong>Add Carrier</strong></p>
+            <div class="jumbotron">
+               <form>
+                  <div class="container">
+                     <u>CARRIER NAME</u>
+                     <div class="row">
+                        <div class="col-lg-1">
+                           <input type="text" name="name"><br>
+                        </div>
+                     </div>
+                     <br>
+                     <div class="row text-right">
+                        <button type="button" class="btn btn-primary btn-lg">SUBMIT</button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+            <!-- </div> -->
+         </div>
+         <!-- div collapseable -->
+      </div>
+      <br>
+      <form>
+	      <div class="container">
+	      <!-- Modal -->
+	      <div class="modal fade" id="updateModal" role="dialog">
+	         <div class="modal-dialog">
+	            <!-- Modal content-->
+	            <div class="modal-content">
+	               <div class="modal-header">
+	                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                  <h4 class="modal-title">Update Carrier</h4>
+	               </div>
+	               <div class="modal-body">
+	                  <div class="container">
+	                     <u>CARRIER NAME</u>
+	                     <div class="row">
+	                        <div class="col-lg-1">
+	                           <input type="text" name="name"><br>
+	                        </div>
+	                     </div>
+	                  </div>
+	                  <div class="modal-footer">
+	                     <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">SUBMIT</button>
+	                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">CLOSE</button>
+	                  </div>
+	               </div>
+	            </div>
+	         </div>
+	      </div>
+      </form>
+      <div class="container">
+         <!-- <div class="col-lg-12"> -->
+         <p><strong>Carriers</strong></p>
+         <div class="jumbotron">
+            <table class="table table-hover table-bordered">
+               <thead align="Center">
+                  <tr>
+                     <th >Name</th>
+                     <th class="col-xs-1">Update</th>
+                     <th class="col-xs-1">Delete</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>AT&T</td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                        </div>
+                     </td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-danger btn-sm">DELETE</button>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Cricket</td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                        </div>
+                     </td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-danger btn-sm">DELETE</button>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Metro by T-Mobile</td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                        </div>
+                     </td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-danger btn-sm">DELETE</button>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Mint</td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                        </div>
+                     </td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-danger btn-sm">DELETE</button>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>T-Mobile</td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                        </div>
+                     </td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-danger btn-sm">DELETE</button>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Sprint</td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                        </div>
+                     </td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-danger btn-sm">DELETE</button>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Verizon</td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                        </div>
+                     </td>
+                     <td>
+                        <div class="row text-center">
+                           <button type="button" class="btn btn-danger btn-sm">DELETE</button>
+                        </div>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+            <br>
+         </div>
+         <!-- </div> -->
+      </div>
+   </body>
 </html>
