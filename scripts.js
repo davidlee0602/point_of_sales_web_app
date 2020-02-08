@@ -27,55 +27,98 @@ $(function() {
 
   // create new invoice
   let add_phone_form_button = $('#add_phone_form_to_invoice');
+  let phone_count = 1;
 
   add_phone_form_button.click(function(e) {
 
-    console.log($(this).parents('form').children());
-    console.log(createAddPhoneForm());
+    let new_row = createAddPhoneForm();
+
+    $(this).parents('form').find(".phone_form").last().after(new_row);
+
     e.preventDefault();
   });
 
   function createAddPhoneForm() {
-    let row = $("<div></div>");
+    phone_count++;
 
+    //new phone form row
+    let row = $("<div/>");
     row.addClass("row");
+    row.addClass("phone_form");
 
+    //phone select
+     // div
+    let phoneDivText = "Invoice Item " + phone_count;
+    let phoneDiv = $("<div/>");
+    phoneDiv.addClass("col-lg-2");
+     // label
+    let phoneLabel = $("<label/>");
+    phoneLabel.text(phoneDivText);
+     // select
+    let phoneSelectName = "phone_item_" + phone_count;
+    let phoneSelect = $("<select/>");
+    phoneSelect.attr("name", phoneSelectName);
+     // select blank option
+    let blankOption = $("<option/>");
+    blankOption.text("--");
+    blankOption.attr("value", "");
+    blankOption.attr("selected", true);
+    phoneSelect.append(blankOption);
+    //add all phones to select options
+    for (let i = 0; i<window.a51.phones.length; i++) {
+      let phoneOption = $("<option/>", {
+        "value": window.a51.phones[i].id,
+        "data-price": window.a51.phones[i].price
+      })
+
+      phoneOption.text(window.a51.phones[i].name);
+      phoneSelect.append(phoneOption);
+    }
+    // put select inside label, then inside phone column
+    phoneLabel.append(phoneSelect);
+    phoneDiv.append(phoneLabel);
+
+
+    //carrier select
+      // div
+    let carrierDivText = "Carrier";
+    let carrierDiv = $("<div/>");
+    carrierDiv.addClass("col-lg-2");
+    carrierDiv.addClass("col-lg-offset-2");
+      // label
+    let carrierLabel = $("<label/>");
+    carrierLabel.text(carrierDivText);
+    // select
+    let carrierSelectName = "carrier_item_" + phone_count;
+    let carrierSelect = $("<select/>");
+    carrierSelect.attr("name", carrierSelectName);
+      // select blank option
+    let blankOption2 = $("<option/>");
+    blankOption2.text("--");
+    blankOption2.attr("value", "");
+    blankOption2.attr("selected", true);
+    carrierSelect.append(blankOption2);
+    //add all carriers to select options
+    for (let i = 0; i<window.a51.carriers.length; i++) {
+      let carrierOption = $("<option/>", {
+        "value": window.a51.carriers[i].id
+      })
+
+      carrierOption.text(window.a51.carriers[i].name);
+      carrierSelect.append(carrierOption);
+    }
+    // put select inside label, then inside phone column
+    carrierLabel.append(carrierSelect);
+    carrierDiv.append(carrierLabel);
+
+    row.append(phoneDiv);
+    row.append(carrierDiv);
     return row;
   }
 
-  //
-  // '      <div class="row">
-  //         <div class="col-lg-2">
-  //           <label>
-  //           Invoice Item 1
-  //             <select name="phone_item_1">
-  //               <option value=""> -- </option>
-  //               <option value="1">iPhone 11 Pro Max</option>
-  //               <option value="2">Samsung Galaxy Note 10+</option>
-  //               <option value="3">OnePlus 7T Pro</option>
-  //               <option value="4">Google Pixel 4 XL</option>
-  //               <option value="5">Motorola Razr Black</option>
-  //               <option value="6">Sony Xperia 1</option>
-  //               <option value="7">Huawei P30 Pro</option>
-  //             </select>
-  //           </label>
-  //         </div>
-  //
-  //         <div class="col-lg-2 col-lg-offset-2">
-  //           <label>
-  //           Carrier
-  //             <select name="carrier_item_1">
-  //               <option value=""> -- </option>
-  //               <option value="1">AT&T</option>
-  //               <option value="2">Cricket</option>
-  //               <option value="3">Metro by T-Mobile</option>
-  //               <option value="4">Mint</option>
-  //               <option value="5">T-Mobile</option>
-  //               <option value="6">Sprint</option>
-  //               <option value="7">Verizon</option>
-  //             </select>
-  //           </label>
-  //         </div>
-  //       </div>';
+  // when click to save invoice, get all form fields
+  $("#save_invoice_button").click(function() {
+    console.log("form stuff", $(this).parents().find("form").first().find(":input"));
+  });
 
 });
