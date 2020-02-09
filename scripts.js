@@ -27,6 +27,7 @@ $(function() {
 
 
   // invoices
+  // NOTE: the first .phone_form in invoices is the reference point, make sure there is always at least 1
 
   // create new invoice
   let add_phone_form_button = $('.add_phone_form_to_invoice');
@@ -73,7 +74,7 @@ $(function() {
 
       // populate invoice with invoice data
       if (selected_invoice) {
-        phone_count = 1;      // reset phone count for subsequent edit invoice selections
+        resetAddPhoneForms();
         updateEditInvoiceForm(selected_invoice);
       } else {
         console.log("blank"); // reset invoice fields ?? or nah
@@ -168,7 +169,17 @@ $(function() {
     return row;
   }
 
-  function removeAddPhoneForm() {}
+  function resetAddPhoneForms() {
+    // reset global phone_count for subsequent phone form additions
+    phone_count = 1;
+
+    // remove all phone forms except the first one (the first phone form is the reference point)
+    $('.phone_form:not(:first)').remove();
+
+    // reset first phone form
+    $('.phone_form:first').find('select[name="phone_item_1"]').find('option[value=""]').prop("selected", true);
+    $('.phone_form:first').find('select[name="carrier_item_1"]').find('option[value=""]').prop("selected", true);
+  }
 
   function updateEditInvoiceForm(selected_invoice) {
     let edit_invoice_form = $('#edit_invoice_form');
@@ -198,39 +209,25 @@ $(function() {
       first_carrier.find('option[value="' + selected_invoice.phones[0].carrier_id + '"]').prop("selected", true);
 
       // cache phone form rows to add subsequent phone forms
-      let phone_forms = first_phone.parents('div.phone_form');
+      let phone_forms = first_phone.parents('div.phone_form').last();
 
       // populate all other phones
       for (let i = 1; i < selected_invoice.phones.length; i++) {
         let new_phone_row = createAddPhoneForm();
 
-
-        // console.log(new_phone_row.find('select[name="' + "phone_item_"+i + '"]'))
-        // console.log('select[name="' + "phone_item_"+i + '"]');
-        // console.log(new_phone_row.first())
-
         // populate selected phone detail
-        // console.log(new_phone_row.find('select[name="' + "phone_item_"+ i + '"]'))
-
-        console.log(new_phone_row.find('div').first().find('option[value="' + selected_invoice.phones[i].phone_id + '"]'));
-
-        new_phone_row.find('div').first().find('option[value="' + selected_invoice.phones[i].phone_id + '"]').prop("selected", true);
-        new_phone_row.find('div').last().find('option[value="' + selected_invoice.phones[i].carrier_id + '"]').prop("selected", true);
-
-        // new_phone_row.find('select[name="' + "phone_item_"+i + '"]')
-        // .filter('option[value="' + selected_invoice.phones[i].phone_id + '"]').prop("selected", true);
-
-        // let phone_select = new_phone_row.find('select[name="' + "phone_item_"+i + '"]');
-        // phone_select.end().find('option[value="' + selected_invoice.phones[i].phone_id + '"]').prop("selected", true);
-
-        // new_phone_row.find('select[name="' + "phone_item_"+i + '"] option[value="' + selected_invoice.phones[i].phone_id + '"]').prop("selected", true);
-        // .find('option[value="' + selected_invoice.phones[i].phone_id + '"]').prop("selected", true);
+        new_phone_row.find('select[name="' + "phone_item_"+(i+1) + '"]')
+        .find('option[value="' + selected_invoice.phones[i].phone_id + '"]').prop("selected", true);
 
         // populate selected carrier detail
-        // new_phone_row.find('select[name="' + "carrier_item_"+i + '"]').end()
-        // .find('option[value="' + selected_invoice.phones[i].carrier_id + '"]').prop("selected", true);
+        new_phone_row.find('select[name="' + "carrier_item_"+(i+1) + '"]')
+        .find('option[value="' + selected_invoice.phones[i].carrier_id + '"]').prop("selected", true);
 
-        phone_forms.last().after(new_phone_row);
+        // insert phone into invoice
+        phone_forms.after(new_phone_row);
+
+        // move phone_form pointer down after this new input
+        phone_forms = phone_forms.next();
       }
     }
   }
