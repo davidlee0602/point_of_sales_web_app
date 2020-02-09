@@ -40,7 +40,7 @@
 </div>
 
 <div class="jumbotron">
-  <form>
+  <form id="edit_invoice_form">
     <div class="container">
 
 			<u>INVOICE NUMBER</u>
@@ -56,9 +56,9 @@
 			<u>STATUS</u>
 			<div class="row">
 					<div class="col-lg-1">
-						<select>
-							<option>UNPAID</option>
-							<option>PAID</option>
+						<select name="status">
+							<option value=0>UNPAID</option>
+							<option value=1>PAID</option>
 						</select>
 					</div>
 			</div>
@@ -77,13 +77,15 @@
         <div class="col-lg-1">
           <select name="customer_id">
             <option value=""> -- </option>
-            <option value="1">Mr. Chang</option>
-            <option value="2">Randy Bullet</option>
-            <option value="3">Vinny Pistone</option>
-            <option value="4">Dequarius Johnson</option>
-            <option value="5">Taco Prince</option>
-            <option value="6">Ramee El-Rahman</option>
-            <option value="7">Uchiha Jones</option>
+						<option value="1">David Lee</option>
+						<option value="2">Huy Nguyen</option>
+            <option value="3">Mr. Chang</option>
+            <option value="4">Randy Bullet</option>
+            <option value="5">Vinny Pistone</option>
+            <option value="6">Dequarius Johnson</option>
+            <option value="7">Taco Prince</option>
+            <option value="8">Ramee El-Rahman</option>
+            <option value="9">Uchiha Jones</option>
           </select>
         </div>
       </div>

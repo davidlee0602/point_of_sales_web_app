@@ -73,7 +73,8 @@ $(function() {
 
       // populate invoice with invoice data
       if (selected_invoice) {
-        console.log("yaman", selected_invoice)
+        // phone_count = selected_invoice.phones.length;
+        updateEditInvoiceForm(selected_invoice);
       } else {
         console.log("blank"); // reset invoice fields ?? or nah
       }
@@ -113,7 +114,7 @@ $(function() {
     let blankOption = $("<option/>");
     blankOption.text("--");
     blankOption.attr("value", "");
-    blankOption.attr("selected", true);
+    blankOption.prop("selected", true);
     phoneSelect.append(blankOption);
     //add all phones to select options
     for (let i = 0; i<window.a51.phones.length; i++) {
@@ -147,7 +148,7 @@ $(function() {
     let blankOption2 = $("<option/>");
     blankOption2.text("--");
     blankOption2.attr("value", "");
-    blankOption2.attr("selected", true);
+    blankOption2.prop("selected", true);
     carrierSelect.append(blankOption2);
     //add all carriers to select options
     for (let i = 0; i<window.a51.carriers.length; i++) {
@@ -165,6 +166,35 @@ $(function() {
     row.append(phoneDiv);
     row.append(carrierDiv);
     return row;
+  }
+
+  function updateEditInvoiceForm(selected_invoice) {
+    let edit_invoice_form = $('#edit_invoice_form');
+    let status = $('select[name="status"]');
+    let date = $('input[name="date"]');
+    let customer = $('select[name="customer_id"]')
+    let payment = $('select[name="payment_method_id"]');
+    let first_phone = $('select[name="phone_item_1"]');
+    let first_carrier = $('select[name="carrier_item_1"]');
+
+    // STATUS
+    status.find('option[value="' + selected_invoice.invoice_paid + '"]').prop("selected", true);
+
+    // DATE
+    date.val(selected_invoice.date);
+
+    // customer name
+    customer.find('option[value="' + selected_invoice.customer_id + '"]').prop("selected", true);
+
+    // payment method
+    payment.find('option[value="' + selected_invoice.payment_method_id + '"]').prop("selected", true);
+
+    // phones
+    if (selected_invoice.phones.length) {
+      // populate first phone and carrier
+      first_phone.find('option[value="' + selected_invoice.phones[0].phone_id + '"]').prop("selected", true);
+      first_carrier.find('option[value="' + selected_invoice.phones[0].carrier_id + '"]').prop("selected", true);
+    }
   }
 
   // when click to save invoice, get all form fields
