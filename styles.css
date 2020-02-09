@@ -7,6 +7,10 @@ body{
   	-o-background-size: cover;
 }
 
+a:visited {
+	color: inherit;
+}
+
 .jumbotron{
 	opacity: 0.9;
 }
