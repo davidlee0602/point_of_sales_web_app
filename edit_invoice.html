@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<!-- Cellular Phone Point of Sales System -->
-	<title>Area 51 Emporium - New Invoice</title>
+	<title>Area 51 Emporium - Edit Invoice</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="styles.css">
 
@@ -36,12 +36,33 @@
 </nav>
 
 <div class="container">
-  <h1>Create New Invoice</h1>
+  <h1>Edit Invoice</h1>
 </div>
 
 <div class="jumbotron">
   <form>
     <div class="container">
+
+			<u>INVOICE NUMBER</u>
+			<div class="row">
+					<div class="col-lg-1">
+						<select id="edit_invoice_number">
+							<option value="" selected> -- </option>
+						</select>
+					</div>
+			</div>
+			<br>
+
+			<u>STATUS</u>
+			<div class="row">
+					<div class="col-lg-1">
+						<select>
+							<option>UNPAID</option>
+							<option>PAID</option>
+						</select>
+					</div>
+			</div>
+			<br>
 
       <u>DATE</u>
       <div class="row">

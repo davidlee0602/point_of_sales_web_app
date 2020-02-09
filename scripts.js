@@ -25,12 +25,63 @@ $(function() {
     $(this).next().css({width: 0, height: 0});
   })
 
+
+  // invoices
+
   // create new invoice
-  let add_phone_form_button = $('#add_phone_form_to_invoice');
+  let add_phone_form_button = $('.add_phone_form_to_invoice');
+  let invoice_page_regex = /edit_invoice/g;
   let phone_count = 1;
 
-  add_phone_form_button.click(function(e) {
+  // search url path to see if this is edit_invoice page
+  let is_edit_invoice = window.location.pathname.match(invoice_page_regex);
 
+  //  edit invoice
+
+  if (is_edit_invoice) {
+    // invoice_id_select
+    let invoice_id_select = $('#edit_invoice_number');
+
+    // populate invoice id selection
+    if (typeof window.a51.invoices != "undefined") {
+      for (let i = 0; i < window.a51.invoices.length; i++) {
+        if (!window.a51.invoices[i].invoice_paid) {
+          let id_option = $('<option/>', {
+            'value': window.a51.invoices[i].id
+          })
+
+          id_option.text(window.a51.invoices[i].id + " -- " + window.a51.invoices[i].customer_name);
+          invoice_id_select.append(id_option);
+        }
+      }
+    }
+
+    // add event listener to invoice id selection
+    invoice_id_select.change(function() {
+      let chosen_invoice_id = $(this).val();
+      let selected_invoice;
+
+      // get matching invoice data for selected invoice id
+      if (typeof window.a51.invoices != "undefined") {
+        for (let i = 0; i < window.a51.invoices.length; i++) {
+          if (window.a51.invoices[i].id == chosen_invoice_id) {
+            selected_invoice = window.a51.invoices[i];
+            break;
+          }
+        }
+      }
+
+      // populate invoice with invoice data
+      if (selected_invoice) {
+        console.log("yaman", selected_invoice)
+      } else {
+        console.log("blank"); // reset invoice fields ?? or nah
+      }
+    });
+  }
+
+  // event listener to button add new phone forms to invoices (both new and edit)
+  add_phone_form_button.click(function(e) {
     let new_row = createAddPhoneForm();
 
     $(this).parents('form').find(".phone_form").last().after(new_row);
