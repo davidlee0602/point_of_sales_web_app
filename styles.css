@@ -57,6 +57,16 @@ table, th, td {
 
 #updateModal {
 
-   top: 20%; 
+   top: 20%;
 
+}
+
+.table-search {
+	margin: 0 20px 20px 0;
+	border: 2px solid gray;
+	border-radius: 5px;
+}
+
+.table-search-icon {
+	margin-right: 8px;
 }

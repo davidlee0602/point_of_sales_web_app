@@ -11,7 +11,7 @@
          integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
          crossorigin="anonymous"
          defer></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" 
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
          defer></script>
       <script src="scripts.js" defer></script>
    </head>
@@ -94,6 +94,13 @@
          <!-- <div class="col-lg-12"> -->
          <p><strong>Payment Methods</strong></p>
          <div class="jumbotron">
+           <!-- search bar -->
+           <div class="row pull-right input-group">
+             <span class="glyphicon glyphicon-search table-search-icon">
+             </span>
+             <input class="table-search" type="text" placeholder="search...">
+           </div>
+
             <table class="table table-hover table-bordered">
                <thead align="Center">
                   <tr>
@@ -102,7 +109,7 @@
                      <th class="col-xs-1">Delete</th>
                   </tr>
                </thead>
-               <tbody>
+               <tbody class="table-searchable">
                   <tr>
                      <td>Cash</td>
                      <td>

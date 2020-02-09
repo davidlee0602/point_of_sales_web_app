@@ -237,4 +237,18 @@ $(function() {
     console.log("form stuff", $(this).parents().find("form").first().find(":input"));
   });
 
+
+  // search/filter functionality
+  $('.table-search').first().on("keyup", function() {
+    //grab input value
+    let value = $(this).val().toLowerCase();
+
+    // filter table rows by input value
+    $('input.table-search').parent().next()
+    .find('.table-searchable tr')
+    .filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    })
+  });
+
 });
