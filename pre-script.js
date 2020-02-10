@@ -23,6 +23,7 @@ $(function() {
   ];
 
   // this custom object will be built on the back end
+  // TODO: add detail_id on phone list (invoice_details id to update invoice details)
   a51["invoices"] = [
     {
       id: 1,

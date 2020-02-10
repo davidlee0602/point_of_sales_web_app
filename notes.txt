@@ -30,3 +30,12 @@ ken - 2/6/2020
 - create new invoice and edit invoice forms are unique, they might require their own full page or modal
 - need to have "add phone" button on invoice form, dynamically create a new phone field with JS, and have the back end accept this dynamic shaped form
 - pay button needs to enforce that a payment method was selected (maybe enable/disable depending on value of payment method)
+
+2/9/2020
+(maybe, or just straight delete or update without filtering which ones have changed, might waste processes vs. filtering to update specific ones)
+edit_invoice hidden field flags. compare changes in front end since data already there
+  - is_new
+  - is_delete
+  - is_update
+
+User can't pay until payment method is set

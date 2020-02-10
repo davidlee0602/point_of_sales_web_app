@@ -239,6 +239,7 @@ $(function() {
 
 
   // search/filter functionality
+  // citation: https://www.w3schools.com/bootstrap/bootstrap_filters.asp
   $('.table-search').first().on("keyup", function() {
     //grab input value
     let value = $(this).val().toLowerCase();
