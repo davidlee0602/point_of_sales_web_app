@@ -70,3 +70,12 @@ table, th, td {
 .table-search-icon {
 	margin-right: 8px;
 }
+
+.resize_img{
+    width:35px; /* you can use % */
+    height: auto;
+    display: block;
+  	margin-left: auto;
+  	margin-right: auto;
+  	
+}
