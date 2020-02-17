@@ -50,7 +50,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button class="close" data-dismiss="modal" type="button">&times;</button>
-							<h4 class="modal-title">Update Customer</h4>
+							<h4 class="modal-title">Update Customer Invoice</h4>
 						</div>
 						<div class="modal-body">
 							<div class="container">
@@ -125,6 +125,7 @@
 									<table class="table table-hover table-bordered" style="width: 44%;">
 										<thead align="center">
 											<tr>
+												<th>Invoice Detail ID</th>
 												<th>Phone</th>
 												<th>Carrier</th>
 												<th>Retail($)</th>
@@ -133,6 +134,7 @@
 										</thead>
 										<tbody>
 											<tr>
+												<td>1</td>
 												<td>iPhone 11</td>
 												<td>Verizon</td>
 												<td>999.99</td>
@@ -143,6 +145,7 @@
 												</td>
 											</tr>
 											<tr>
+												<td>2</td>
 												<td>Razr Black</td>
 												<td>T-mobile</td>
 												<td>1199.99</td>
@@ -167,10 +170,10 @@
 	</form><br>
 	<div class="container">
 		<!-- <div class="col-lg-12"> -->
-		<p><strong>Pending Invoices</strong></p>
+		<p><strong>Invoice Details</strong></p>
 		<div class="jumbotron">
 			<!-- search bar -->
-			<div class="row pull-right input-group">
+			<div class="row pull-right input-group hide">
 				<span class="glyphicon glyphicon-search table-search-icon">
 				</span>
 				<input class="table-search" type="text" placeholder="search...">
@@ -180,6 +183,7 @@
 				<thead align="center">
 					<tr>
 						<th>Invoice ID</th>
+						<th>Customer ID</th>
 						<th>Customer</th>
 						<th>Date</th>
 						<th>Paid</th>
@@ -189,6 +193,7 @@
 				</thead>
 				<tbody class="table-searchable">
 					<tr>
+						<td>1</td>
 						<td>1</td>
 						<td>David Lee</td>
 						<td>2020-02-07</td>
