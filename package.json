@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/davidlee0602/cs340_project#readme",
   "dependencies": {
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "forever": "^2.0.0",
+    "mysql": "^2.18.1"
   }
 }
