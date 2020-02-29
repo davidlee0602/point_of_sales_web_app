@@ -1,0 +1,20 @@
+{
+  "name": "cs340_project",
+  "version": "1.0.0",
+  "description": "cs340 Retail Store Point of Sales System",
+  "main": "pre-script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidlee0602/cs340_project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidlee0602/cs340_project/issues"
+  },
+  "homepage": "https://github.com/davidlee0602/cs340_project#readme"
+}
