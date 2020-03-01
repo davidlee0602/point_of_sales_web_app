@@ -11,6 +11,13 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT);
 app.use(express.static('public'));
 
+// handlebars helpers
+handlebars.handlebars.registerHelper('formatDate', (dateString) => {
+  return new handlebars.SafeString(
+    moment(dateString).format('YYYY-MM-DD')
+  )
+});
+
 app.get("/", (req, res) => {
     res.render('home', {title: 'AREA 51'});
 });
@@ -28,7 +35,26 @@ app.get("/new_invoice", (req, res) => {
 });
 
 app.get("/invoices", (req, res) => {
-    res.render('invoices');
+    let context = {};
+    context.title = 'AREA 51 - Invoices';
+
+    let query =
+    `SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
+     c.customer_id, c.first_name, c.last_name, p.name
+    FROM invoices i
+    JOIN customers c ON
+    c.customer_id = i.customer_id
+    LEFT JOIN payment_methods p ON
+    p.payment_method_id = i.payment_method_id`;
+
+    mysql.pool.query(query, (err, results, fields) => {
+      if (err) next();
+      console.log(results);
+
+      context.rows = results;
+
+      res.render('invoices', context);
+    });
 });
 
 app.get("/invoice_details", (req, res) => {
@@ -50,6 +76,17 @@ app.get("/carriers", (req, res) => {
 app.get("/about", (req, res) => {
     res.render('about');
 });
+
+app.use((req, res) => {
+  res.status(404);
+  res.render('404');
+})
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500);
+  res.render('500');
+})
 
 app.listen(app.get('port'), function() {
   console.log("server starting on port", app.get('port'));
