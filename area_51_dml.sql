@@ -37,7 +37,7 @@ SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
 FROM invoices i
 JOIN customers c ON
 c.customer_id = i.customer_id
-JOIN payment_methods p ON
+LEFT JOIN payment_methods p ON
 p.payment_method_id = i.payment_method_id;
 
 -- READ/SELECT invoices (filter view)
@@ -46,7 +46,7 @@ SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
 FROM invoices i
 JOIN customers c ON
 c.customer_id = i.customer_id
-JOIN payment_methods p ON
+LEFT JOIN payment_methods p ON
 p.payment_method_id = i.payment_method_id
 WHERE :attribute LIKE %:keyword%; -- this would require some conditional branching for different types of attributes in the backend code
 
