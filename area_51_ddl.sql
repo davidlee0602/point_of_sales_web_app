@@ -14,8 +14,8 @@ CREATE TABLE phones (
   make VARCHAR(255) NOT NULL,
   model VARCHAR(255) NOT NULL,
   image_url VARCHAR(255) NOT NULL,
-  purchase_cost DECIMAL(3, 2) NOT NULL,
-  retail_cost DECIMAL(3, 2) NOT NULL
+  purchase_cost DECIMAL(20, 2) NOT NULL,
+  retail_cost DECIMAL(20, 2) NOT NULL
 )ENGINE=InnoDB;
 
 -- customers
@@ -47,7 +47,7 @@ CREATE TABLE carriers (
 CREATE TABLE invoices (
   invoice_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   invoice_date DATE NOT NULL, /*Changed date to invoice_date due to reserved keyword conflict */
-  total_due DECIMAL(3, 2) DEFAULT '0.00', /*Changed NOT NULL to DEFAULT '0.00' due to circular reference in the initial insert into invoices */
+  total_due DECIMAL(20, 2) DEFAULT '0.00', /*Changed NOT NULL to DEFAULT '0.00' due to circular reference in the initial insert into invoices */
   invoice_paid BOOLEAN NOT NULL DEFAULT false,
   payment_method_id INT,
   customer_id INT NOT NULL,
