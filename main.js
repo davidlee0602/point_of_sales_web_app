@@ -12,7 +12,7 @@ app.set('port', process.env.PORT);
 app.use(express.static('public'));
 
 app.get("/", (req, res) => {
-    res.render('home');
+    res.render('home', {title: 'AREA 51'});
 });
 
 app.get("/phones", (req, res) => {
@@ -50,3 +50,7 @@ app.get("/carriers", (req, res) => {
 app.get("/about", (req, res) => {
     res.render('about');
 });
+
+app.listen(app.get('port'), function() {
+  console.log("server starting on port", app.get('port'));
+})
