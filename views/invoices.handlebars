@@ -57,7 +57,7 @@
             <td>{{invoice_id}}</td>
             <td>{{customer_id}}</td>
             <td>{{first_name}} {{last_name}}</td>
-            <td>{{invoice_date.toLocaleDateString('EU')}}</td>
+            <td>{{formatDate invoice_date)}}</td>
             <td>
               {{#if invoice_paid}}
                 TRUE
