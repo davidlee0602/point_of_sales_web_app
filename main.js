@@ -1,23 +1,26 @@
 // main.js
-let moment = require('moment');
+// let moment = require('moment');
 let express = require('express');
 let mysql = require('./dbcon.js');
+let bodyParser = require('body-parser');
 let app = express();
-let handlebars = require('express-handlebars').create({defaultLayout:'main'});
 const dotenv = require('dotenv');
 dotenv.config();
 
+let handlebars = require('express-handlebars').create({defaultLayout:'main'});
+
+app.use(bodyParser.urlencoded({extended: true}));
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT);
 app.use(express.static('public'));
 
 // handlebars helpers
-handlebars.handlebars.registerHelper('formatDate', (dateString) => {
-  return new handlebars.SafeString(
-    moment(dateString).format('YYYY-MM-DD')
-  )
-});
+// handlebars.handlebars.registerHelper('formatDate', (dateString) => {
+//   return new handlebars.SafeString(
+//     moment(dateString).format('YYYY-MM-DD')
+//   )
+// });
 
 app.get("/", (req, res) => {
     res.render('home', {title: 'AREA 51'});
@@ -49,8 +52,7 @@ app.get("/invoices", (req, res) => {
     p.payment_method_id = i.payment_method_id`;
 
     mysql.pool.query(query, (err, results, fields) => {
-      if (err) next();
-      console.log(results);
+      if (err) next(err);
 
       context.rows = results;
 
@@ -67,7 +69,43 @@ app.get("/edit_invoice", (req, res) => {
 });
 
 app.get("/customers", (req, res) => {
-    res.render('customers');
+  //show all customers
+  let context = {};
+  context.title = 'AREA 51 - Customers';
+
+  let query = `SELECT * FROM customers;`;
+
+  mysql.pool.query(query, (err, results, fields) => {
+    if (err) next(err);
+
+    context.rows = results;
+
+    res.render('customers', context);
+  });
+});
+
+app.post("/customers", (req, res) => {
+  // create new customer
+  let data = [
+    req.body.fname,
+    req.body.lname,
+    req.body.street,
+    req.body.city,
+    req.body.state,
+    req.body.zip,
+    req.body.phone,
+    req.body.email
+  ]
+
+  let query =
+  `INSERT INTO customers
+  (first_name, last_name, street, city, state, zip, phone, email)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+  mysql.pool.query(query, data, (err, results, fields) => {
+    if (err) next(err);
+    res.redirect('/customers');
+  })
 });
 
 app.get("/carriers", (req, res) => {
