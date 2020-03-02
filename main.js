@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 
 app.get("/phones", (req, res) => {
 	var context = {};
-	
+
   	mysql.pool.query('SELECT * FROM phones',
   		(err, rows, result)=> {
 	        if(err) throw err;
@@ -38,13 +38,13 @@ app.get("/phones", (req, res) => {
 	        }
 	        context.results = storage;
          	res.render('phones', context);
-    	});   
+    	});
 });
 
 app.get("/add_phone", (req, res, next) => {
 	var context = {};
 	mysql.pool.query('INSERT INTO phones (`make`,`model`,`image_url`,`purchase_cost`,`retail_cost`) VALUES (?,?,?,?,?)',
-  		[req.query.make, req.query.model, req.query.image_url, req.query.purchase_cost, req.query.retail_cost], 
+  		[req.query.make, req.query.model, req.query.image_url, req.query.purchase_cost, req.query.retail_cost],
   		function(err, result){
 		    if(err){
 		      next(err);
@@ -172,13 +172,13 @@ app.get("/carriers", (req, res) => {
 	        }
 	        context.results = storage;
          	res.render('carriers', context);
-    	});   
+    	});
 });
 
 app.get("/add_carrier", (req, res, next) => {
 	var context = {};
 	mysql.pool.query('INSERT INTO carriers (`name`) VALUES (?)',
-  		[req.query.name], 
+  		[req.query.name],
   		function(err, result){
 		    if(err){
 		      next(err);

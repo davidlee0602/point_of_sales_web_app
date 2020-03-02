@@ -1,0 +1,136 @@
+<div class="container">
+  <h1>Edit Invoice</h1>
+</div>
+
+<div class="jumbotron">
+  <form id="edit_invoice_form">
+    <div class="container">
+
+			<u>INVOICE NUMBER</u>
+			<div class="row">
+					<div class="col-lg-1">
+						<select id="edit_invoice_number">
+							<option value="" selected> -- </option>
+						</select>
+					</div>
+			</div>
+			<br>
+
+			<u>STATUS</u>
+			<div class="row">
+					<div class="col-lg-1">
+						<select name="status">
+							<option value=0>UNPAID</option>
+							<option value=1>PAID</option>
+						</select>
+					</div>
+			</div>
+			<br>
+
+      <u>DATE</u>
+      <div class="row">
+        <div class="col-lg-1">
+          <input type="date" name="date"><br>
+        </div>
+      </div>
+      <br>
+
+      <u>CUSTOMER</u>
+      <div class="row">
+        <div class="col-lg-1">
+          <select name="customer_id">
+            <option value=""> -- </option>
+						<option value="1">1 -- David Lee</option>
+						<option value="2">2 -- Huy Nguyen</option>
+            <option value="3">3 -- Mr. Chang</option>
+            <option value="4">4 -- Randy Bullet</option>
+            <option value="5">5 -- Vinny Pistone</option>
+            <option value="6">6 -- Dequarius Johnson</option>
+            <option value="7">7 -- Taco Prince</option>
+            <option value="8">8 -- Ramee El-Rahman</option>
+            <option value="9">9 -- Uchiha Jones</option>
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <u>PAYMENT METHOD</u>
+      <div class="row">
+        <div class="col-lg-1">
+          <select name="payment_method_id">
+            <option value=""> -- </option>
+            <option value="1">Cash</option>
+            <option value="2">Credit</option>
+            <option value="3">Debit</option>
+            <option value="4">Paypal</option>
+            <option value="5">Venmo</option>
+            <option value="6">Cash App</option>
+            <option value="7">Bitcoin</option>
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <div class="row phone_form">
+        <div class="col-lg-2">
+          <label>
+          Invoice Item 1
+            <select name="phone_item_1">
+              <option value=""> -- </option>
+              <option value="1">iPhone 11 Pro Max</option>
+              <option value="2">Samsung Galaxy Note 10+</option>
+              <option value="3">OnePlus 7T Pro</option>
+              <option value="4">Google Pixel 4 XL</option>
+              <option value="5">Motorola Razr Black</option>
+              <option value="6">Sony Xperia 1</option>
+              <option value="7">Huawei P30 Pro</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="col-lg-2 col-lg-offset-2">
+          <label>
+          Carrier
+            <select name="carrier_item_1">
+              <option value=""> -- </option>
+              <option value="1">AT&T</option>
+              <option value="2">Cricket</option>
+              <option value="3">Metro by T-Mobile</option>
+              <option value="4">Mint</option>
+              <option value="5">T-Mobile</option>
+              <option value="6">Sprint</option>
+              <option value="7">Verizon</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-lg-1">
+          <button class="btn btn-primary add_phone_form_to_invoice">Add Phone</button>
+        </div>
+      </div>
+
+
+      <br>
+      <br>
+      <div class="row">
+        <u>SUBTOTAL</u>
+      </div>
+      <div class="row">
+        <u>TAXES</u>
+      </div>
+      <div class="row">
+          <u>TOTAL</u>
+      </div>
+
+      <br>
+      <div class="row text-right">
+        <button id="save_invoice_button" type="button" class="btn btn-danger btn-lg">SAVE</button>
+        <button type="button" class="btn btn-success btn-lg">PAY</button>
+      </div>
+    </div>
+  </form>
+</div>
