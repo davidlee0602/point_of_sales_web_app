@@ -31,14 +31,38 @@ app.get("/phones", (req, res) => {
 });
 
 app.get("/paymentmethods", (req, res) => {
-    res.render('paymentmethods');
+    // show all payment methods
+    let context = {}
+    context.title = 'AREA 51 - Payment Methods';
+
+    let query = `SELECT * FROM payment_methods`;
+
+    mysql.pool.query(query, (err, results, fields) => {
+      if (err) next(err);
+
+      context.rows = results;
+
+      res.render('paymentmethods', context);
+    })
 });
+
+app.post("/paymentmethods", (req, res) => {
+  // create new payment method
+  let query = `INSERT INTO payment_methods (name) VALUES (?)`;
+
+  mysql.pool.query(query, req.body.name, (err, results, fields) => {
+    if (err) next(err);
+
+    res.redirect('paymentmethods');
+  });
+})
 
 app.get("/new_invoice", (req, res) => {
     res.render('new_invoice');
 });
 
 app.get("/invoices", (req, res) => {
+    // show all invoices and accompanying data
     let context = {};
     context.title = 'AREA 51 - Invoices';
 

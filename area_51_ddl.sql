@@ -34,7 +34,7 @@ CREATE TABLE customers (
 -- payment methods
 CREATE TABLE payment_methods (
   payment_method_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL
+  name VARCHAR(255) UNIQUE NOT NULL
 )ENGINE=InnoDB;
 
 -- carriers
