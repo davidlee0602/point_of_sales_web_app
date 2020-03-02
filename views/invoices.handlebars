@@ -1,0 +1,146 @@
+<!-- Add form -->
+<div class="container">
+	<button class="btn btn-success"><a href="/new_invoice">Add Invoice</a></button>
+</div>
+
+<br>
+
+<div class="container">
+	<!-- <div class="col-lg-12"> -->
+		<p><strong>Invoices</strong></p>
+		<div class="jumbotron">
+
+			<!-- class requirement search bar -->
+			<div class="row pull-right">
+				<span class="glyphicon glyphicon-search table-search-icon">
+				</span>
+
+				<select class="table-search">
+					<option>Filter by .. </option>
+					<option>Invoice ID</option>
+					<option>Customer ID</option>
+					<option>Customer Name</option>
+					<option>Date</option>
+					<option>Paid</option>
+					<option>Payment Method</option>
+				</select>
+
+				<select class="table-search hide">
+				</select>
+				<input class="table-search" type="text" placeholder="search...">
+			</div>
+
+			<!-- search bar -->
+			<div class="row pull-right input-group hide">
+				<span class="glyphicon glyphicon-search table-search-icon">
+				</span>
+				<input class="table-search" type="text" placeholder="search...">
+			</div>
+
+      <!-- table -->
+			<table class="table table-hover table-bordered">
+				<thead align="Center">
+					<tr>
+						<th>Invoice ID</th>
+						<th>Customer ID</th>
+						<th>Customer</th>
+						<th>Date</th>
+						<th>Paid</th>
+						<th>Payment Method</th>
+						<th>Total Due</th>
+						<th class="col-xs-4" colspan="4">Actions</th>
+					</tr>
+				</thead>
+				<tbody class="table-searchable">
+          {{#each rows}}
+          <tr>
+            <td>{{invoice_id}}</td>
+            <td>{{customer_id}}</td>
+            <td>{{first_name}} {{last_name}}</td>
+            <td>{{invoice_date}}</td>
+            <td>
+              {{#if invoice_paid}}
+                TRUE
+              {{else}}
+                FALSE
+              {{/if}}
+            </td>
+            <td>
+              {{#if name}}
+                {{name}}
+              {{else}}
+                UNPAID
+              {{/if}}
+            </td>
+            <td>{{total_due}}</td>
+            <td>
+              <div class="row text-center">
+                <button type="button" class="btn btn-success btn-sm">PAY</button>
+              </div>
+            </td>
+            <td>
+              <div class="row text-center">
+                <button type="button" class="btn btn-info btn-sm">VIEW</button>
+              </div>
+            </td>
+            <td>
+              <div class="row text-center">
+                <button type="button" class="btn btn-warning btn-sm">UPDATE</button>
+              </div>
+            </td>
+          </tr>
+          {{/each}}
+
+					<!-- <tr>
+						<td>1</td>
+						<td>1</td>
+						<td>David Lee</td>
+						<td>2020-02-07</td>
+						<td>FALSE</td>
+						<td>Cash</td>
+						<td>3497.00</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-success btn-sm">PAY</button>
+							</div>
+						</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-info btn-sm">VIEW</button>
+							</div>
+						</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>2</td>
+						<td>Ken Nguyen</td>
+						<td>2020-01-30</td>
+						<td>TRUE</td>
+						<td>Credit</td>
+						<td>2329.00</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-success btn-sm">PAY</button>
+							</div>
+						</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-info btn-sm">VIEW</button>
+							</div>
+						</td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
+							</div>
+						</td>
+					</tr> -->
+				</tbody>
+			</table>
+			<br>
+		</div>
+	<!-- </div> -->
