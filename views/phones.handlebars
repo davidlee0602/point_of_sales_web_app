@@ -1,0 +1,163 @@
+<!-- Jumbotron - Add form -->
+<div class="container">
+   <!-- div collapseable -->
+   <button class="btn btn-success add-form-btn">Add Phone</button>
+   <button class="btn btn-danger add-form-cancel hide">Cancel</button>
+   <div class="add-form-collapseable my_collapse">
+      <!-- <div class="col-lg-7"> -->
+      <p><strong>Add Phone</strong></p>
+      <div class="jumbotron">
+         <form action="/add_phone" method="get">
+            <div class="container">
+               <u>MAKE</u>
+               <div class="row">
+                  <div class="col-lg-1">
+                     <input type="text" name="make" id="make_input"><br>
+                  </div>
+               </div>
+               <br>
+               <u>MODEL</u>
+               <div class="row">
+                  <div class="col-lg-1">
+                     <input type="text" name="model" id="model_input"><br>
+                  </div>
+               </div>
+               <br>
+               <u>IMAGE URL</u>
+               <div class="row">
+                  <div class="col-lg-1">
+                     <input type="text" name="image_url" id="image_url"><br>
+                  </div>
+               </div>
+               <br>
+               <u>PURCHASE COST</u>
+               <div class="row">
+                  <div class="col-lg-1">
+                     <input type="number" name="purchase_cost" id="purchase_cost"><br>
+                  </div>
+               </div>
+               <br>
+               <u>RETAIL COST</u>
+               <div class="row">
+                  <div class="col-lg-1">
+                     <input type="number" name="retail_cost" id="retail_cost"><br>
+                  </div>
+               </div>
+               <br>
+               <div class="row text-right">
+                  <button type="submit" class="btn btn-primary btn-lg" id="submit_new_phone">SUBMIT</button>
+               </div>
+            </div>
+         </form>
+      </div>
+      <!-- </div> -->
+   </div>
+   <!-- div collapseable -->
+</div>
+<br>
+<form>
+   <div class="container">
+   <!-- Modal -->
+   <div class="modal fade" id="updateModal" role="dialog">
+      <div class="modal-dialog">
+         <!-- Modal content-->
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title">Update Customer</h4>
+            </div>
+            <div class="modal-body">
+               <div class="container">
+                  <div class="container">
+                     <u>MAKE</u>
+                     <div class="row">
+                        <div class="col-lg-1">
+                           <input type="text" name="make" id="make_input"><br>
+                        </div>
+                     </div>
+                     <br>
+                     <u>MODEL</u>
+                     <div class="row">
+                        <div class="col-lg-1">
+                           <input type="text" name="model" id="model_input"><br>
+                        </div>
+                     </div>
+                     <br>
+                     <u>IMAGE URL</u>
+                     <div class="row">
+                        <div class="col-lg-1">
+                           <input type="text" name="image_url" id="image_url_input"><br>
+                        </div>
+                     </div>
+                     <br>
+                     <u>PURCHASE COST</u>
+                     <div class="row">
+                        <div class="col-lg-1">
+                           <input type="number" name="purchase_cost" id="purchase_cost_input"><br>
+                        </div>
+                     </div>
+                     <br>
+                     <u>RETAIL COST</u>
+                     <div class="row">
+                        <div class="col-lg-1">
+                           <input type="number" name="retail_cost" id="retail_cost_input"><br>
+                        </div>
+                     </div>
+                     <br>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">SUBMIT</button>
+                  <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">CLOSE</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</form>
+<div class="container">
+   <!-- <div class="col-lg-12"> -->
+   <p><strong>Phones</strong></p>
+   <div class="jumbotron">
+
+     <!-- search bar -->
+     <div class="row pull-right input-group hide">
+       <span class="glyphicon glyphicon-search table-search-icon">
+       </span>
+       <input class="table-search" type="text" placeholder="search...">
+     </div>
+
+      <table class="table table-hover table-bordered">
+         <thead align="Center">
+            <tr>
+               <th>Make</th>
+               <th>Model</th>
+               <th>Image</th>
+               <th>Purchase $</th>
+               <th>Retail $</th>
+               <th>Update</th>
+            </tr>
+         </thead>
+         <tbody class="table-searchable">
+            {{#if results}}
+            {{#each results}}
+            <tr>
+                <td>{{this.make}}</td>
+                <td>{{this.model}}</td>
+                <td>{{this.image}}</td>
+                <td>{{this.purchase}}</td>
+                <td>{{this.retail}}</td>
+                <td>
+                  <div class="row text-center">
+                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                  </div>
+               </td>
+            </tr>
+            {{/each}}
+            {{/if}}
+         </tbody>
+      </table>
+      <br>
+   </div>
+   <!-- </div> -->
+</div>

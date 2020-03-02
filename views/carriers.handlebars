@@ -1,0 +1,95 @@
+<!-- Jumbotron - Add form -->
+<div class="container">
+<!-- div collapseable -->
+<button class="btn btn-success add-form-btn">Add Carrier</button>
+<button class="btn btn-danger add-form-cancel hide">Cancel</button>
+<div class="add-form-collapseable my_collapse">
+   <!-- <div class="col-lg-7"> -->
+   <p><strong>Add Carrier</strong></p>
+   <div class="jumbotron">
+      <form action="/add_carrier" method="get">
+         <div class="container">
+            <u>CARRIER NAME</u>
+            <div class="row">
+               <div class="col-lg-1">
+                  <input type="text" name="name"><br>
+               </div>
+            </div>
+            <br>
+            <div class="row text-right">
+               <button type="submit" class="btn btn-primary btn-lg" id="submit_new_carrier">SUBMIT</button>
+            </div>
+         </div>
+      </form>
+   </div>
+   <!-- </div> -->
+</div>
+<!-- div collapseable -->
+</div>
+<br>
+<form>
+<div class="container">
+<!-- Modal -->
+<div class="modal fade" id="updateModal" role="dialog">
+   <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Update Carrier</h4>
+         </div>
+         <div class="modal-body">
+            <div class="container">
+               <u>CARRIER NAME</u>
+               <div class="row">
+                  <div class="col-lg-1">
+                     <input type="text" name="name"><br>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">SUBMIT</button>
+               <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">CLOSE</button>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+</form>
+<div class="container">
+<!-- <div class="col-lg-12"> -->
+<p><strong>Carriers</strong></p>
+<div class="jumbotron">
+  <!-- search bar -->
+  <div class="row pull-right input-group hide">
+    <span class="glyphicon glyphicon-search table-search-icon">
+    </span>
+    <input class="table-search" type="text" placeholder="search...">
+  </div>
+
+   <table class="table table-hover table-bordered">
+      <thead align="Center">
+         <tr>
+            <th >Name</th>
+            <th class="col-xs-1">Update</th>
+         </tr>
+      </thead>
+      <tbody class="table-searchable">
+         {{#if results}}
+            {{#each results}}
+            <tr>
+                <td>{{this.name}}</td>
+                <td>
+                  <div class="row text-center">
+                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                  </div>
+               </td>
+            </tr>
+         {{/each}}
+         {{/if}}
+      </tbody>
+   </table>
+   <br>
+</div>
+<!-- </div> -->
+</div>

@@ -27,7 +27,36 @@ app.get("/", (req, res) => {
 });
 
 app.get("/phones", (req, res) => {
-    res.render('phones');
+	var context = {};
+	
+  	mysql.pool.query('SELECT * FROM phones',
+  		(err, rows, result)=> {
+	        if(err) throw err;
+	        var storage = [];
+	        for(var i in rows){
+	            storage.push({"make": rows[i].make, "model": rows[i].model, "image": rows[i].image_url, "purchase": rows[i].purchase_cost, "retail": rows[i].retail_cost})
+	        }
+	        context.results = storage;
+         	res.render('phones', context);
+    	});   
+});
+
+app.get("/add_phone", (req, res, next) => {
+	var context = {};
+	mysql.pool.query('INSERT INTO phones (`make`,`model`,`image_url`,`purchase_cost`,`retail_cost`) VALUES (?,?,?,?,?)',
+  		[req.query.make, req.query.model, req.query.image_url, req.query.purchase_cost, req.query.retail_cost], 
+  		function(err, result){
+		    if(err){
+		      next(err);
+		      return;
+		    }
+		    context.make = req.query.make;
+		    context.model = req.query.model;
+		    context.image_url = req.query.image_url;
+		    context.purchase_cost = req.query.purchase_cost;
+		    context.retail_cost = req.query.retail_cost;
+		    res.redirect('/phones');
+	  	});
 });
 
 app.get("/paymentmethods", (req, res) => {
@@ -133,7 +162,31 @@ app.post("/customers", (req, res) => {
 });
 
 app.get("/carriers", (req, res) => {
-    res.render('carriers');
+	var context = {};
+	mysql.pool.query('SELECT * FROM carriers',
+  		(err, rows, result)=> {
+	        if(err) throw err;
+	        var storage = [];
+	        for(var i in rows){
+	            storage.push({"name": rows[i].name})
+	        }
+	        context.results = storage;
+         	res.render('carriers', context);
+    	});   
+});
+
+app.get("/add_carrier", (req, res, next) => {
+	var context = {};
+	mysql.pool.query('INSERT INTO carriers (`name`) VALUES (?)',
+  		[req.query.name], 
+  		function(err, result){
+		    if(err){
+		      next(err);
+		      return;
+		    }
+		    context.name = req.query.name;
+		    res.redirect('/carriers');
+	  	});
 });
 
 app.get("/about", (req, res) => {
