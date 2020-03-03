@@ -27,12 +27,12 @@ app.get("/", (req, res) => {
     res.render('home', {title: 'AREA 51'});
 });
 
-app.get("/phones", (req, res) => {
+app.get("/phones", (req, res, next) => {
 	var context = {};
 
   	mysql.pool.query('SELECT * FROM phones',
   		(err, rows, result)=> {
-	        if(err) throw err;
+	        if(err) next(err);
 	        var storage = [];
 	        for(var i in rows){
 	            storage.push({"make": rows[i].make, "model": rows[i].model, "image": rows[i].image_url, "purchase": rows[i].purchase_cost, "retail": rows[i].retail_cost})
@@ -60,7 +60,7 @@ app.get("/add_phone", (req, res, next) => {
 	  	});
 });
 
-app.get("/paymentmethods", (req, res) => {
+app.get("/paymentmethods", (req, res, next) => {
     // show all payment methods
     let context = {}
     context.title = 'AREA 51 - Payment Methods';
@@ -76,7 +76,7 @@ app.get("/paymentmethods", (req, res) => {
     })
 });
 
-app.post("/paymentmethods", (req, res) => {
+app.post("/paymentmethods", (req, res, next) => {
   // create new payment method
   let query = `INSERT INTO payment_methods (name) VALUES (?)`;
 
@@ -87,7 +87,7 @@ app.post("/paymentmethods", (req, res) => {
   });
 })
 
-app.get("/new_invoice", (req, res) => {
+app.get("/new_invoice", (req, res, next) => {
   let context = {};
   context.title = 'AREA 51 - Create New Invoice';
 
@@ -187,27 +187,106 @@ app.get("/new_invoice", (req, res) => {
 
 });
 
-app.post("/new_invoice", (req, res) => {
+app.post("/new_invoice", (req, res, next) => {
   // INSERT INTO invoices (invoice_date, invoice_paid, payment_method_id, customer_id) VALUES (:invoice_date_input, :invoice_paid_input, :payment_method_id_input, :customer_id_input);
   //   /*FOR EACH Phone & Carrier ADDITION*/
   //   /*this_invoice_id_value will store the invoice_id that was created*/
   //   INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (:this_invoice_id_value, :phone_id_dropdown_value, :carrier_id_dropdown_value);
   //   UPDATE invoices
-  //     SET total_due = (SELECT SUM(phones.retail_cost) FROM phones
+  //     SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
   //                       JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
-  //                       WHERE invoice_details.invoice_id = (:this_invoice_id_value)),
+  //                       WHERE invoice_details.invoice_id = (:this_invoice_id_value))
   //     WHERE invoices.invoice_id = (:this_invoice_id_value);
 
+  // SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones JOIN invoice_details ON phones.phone_id = invoice_details.phone_id WHERE invoice_details.invoice_id = 5;
+
+  // queries
   let new_invoice_query =
   `INSERT INTO invoices (invoice_date, invoice_paid, payment_method_id, customer_id)
   VALUES (?, ?, ?, ?)`;
 
-  // new Promise((resolve, reject) => {
-  //
-  // })
+  let new_invoice_details_query =
+  `INSERT INTO invoice_details (invoice_id, phone_id, carrier_id)
+  VALUES (?, ?, ?);`;
+
+  let update_invoice_total_due_query =
+  `UPDATE invoices SET total_due =
+  (SELECT IFNULL(SUM(phones.retail_cost), 0.00)
+  FROM phones JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
+  WHERE invoice_details.invoice_id = ?)
+  WHERE invoices.invoice_id = ?`;
+
+  // data
+  let invoice_data = {};
+  invoice_data.date = req.body.date;
+  invoice_data.pay = req.body.pay;
+  invoice_data.payment = req.body.payment ? req.body.payment : NULL;
+  invoice_data.customer_id = req.body.customer_id;
+
+  let invoice_items = req.body.invoice_items;
+
+  // database actions
+  new Promise((resolve, reject) => {
+    //create new invoice
+    mysql.pool.query(new_invoice_query, [invoice_data.date, invoice_data.pay, invoice_data.payment, invoice_data.customer_id], (err, results, fields) => {
+      if (err) next(err);
+
+      let new_invoice_id = results.insertId;
+      resolve(new_invoice_id);
+    })
+  })
+  .then((new_invoice_id) => {
+    return new Promise((resolve, reject) => {
+      //create invoice details (phones and carriers)
+      if (Object.entries(invoice_items).length > 0) {
+        let promises = [];
+
+        function createInvoiceDetails(invoice_id, phone_id, carrier_id) {
+          return new Promise((resolve, reject) => {
+            mysql.pool.query(new_invoice_details_query, [new_invoice_id, phone_id, carrier_id], (err, results, fields) => {
+              if (err) reject(err);
+
+              resolve();
+            })
+          })
+        }
+
+        // make promise for all invoice_details inserts
+        for (let key in invoice_items) {
+          promises.push(createInvoiceDetails(new_invoice_id, invoice_items[key].phone_id, invoice_items[key].carrier_id));
+        }
+
+        // insert all invoice details at once with Promise.all
+        Promise.all(promises)
+        .then(() => {
+          resolve(new_invoice_id);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+      }
+    });
+  })
+  .then((new_invoice_id) => {
+    return new Promise((resolve, reject) => {
+      //update invoice total due
+      mysql.pool.query(update_invoice_total_due_query, [new_invoice_id, new_invoice_id], (err, results, fields) => {
+        if (err) reject(err);
+
+        resolve();
+      })
+    })
+  })
+  .then(() => {
+    // return success
+    res.json({status: 200});
+  })
+  .catch((error) => {
+    next(error);
+  });
 })
 
-app.get("/invoices", (req, res) => {
+app.get("/invoices", (req, res, next) => {
     // show all invoices and accompanying data
     let context = {};
     context.title = 'AREA 51 - Invoices';
@@ -230,16 +309,16 @@ app.get("/invoices", (req, res) => {
     });
 });
 
-app.get("/invoice_details", (req, res) => {
+app.get("/invoice_details", (req, res, next) => {
     res.render('invoice_details');
 });
 
-app.get("/edit_invoice", (req, res) => {
+app.get("/edit_invoice", (req, res, next) => {
     let invoices_query;
     res.render('edit_invoice');
 });
 
-app.get("/customers", (req, res) => {
+app.get("/customers", (req, res, next) => {
   //show all customers
   let context = {};
   context.title = 'AREA 51 - Customers';
@@ -255,7 +334,7 @@ app.get("/customers", (req, res) => {
   });
 });
 
-app.post("/customers", (req, res) => {
+app.post("/customers", (req, res, next) => {
   // create new customer
   let data = [
     req.body.fname,
@@ -279,11 +358,11 @@ app.post("/customers", (req, res) => {
   })
 });
 
-app.get("/carriers", (req, res) => {
+app.get("/carriers", (req, res, next) => {
 	var context = {};
 	mysql.pool.query('SELECT * FROM carriers',
   		(err, rows, result)=> {
-	        if(err) throw err;
+	        if(err) next(err);
 	        var storage = [];
 	        for(var i in rows){
 	            storage.push({"name": rows[i].name})

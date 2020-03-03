@@ -242,7 +242,7 @@ $(function() {
     // console.log("form stuff", $(this).parents().find("form").first().find(":input"));
     let date = $("[name='date']").val();
     let customer_id = $("[name='customer_id']").val();
-    let payment_method_id = $("[name='payment_method_id']").val();
+    let payment_method_id = $("[name='payment_method_id']").val() ? $("[name='payment_method_id']").val() : false;
     let pay = false;
 
     //phones and carriers
@@ -284,8 +284,15 @@ $(function() {
           payment: payment_method_id,
           customer_id: customer_id,
           invoice_items: invoice_items
-        })
-      });
+        }),
+      })
+      .done((data, status) => {
+        window.alert("Success!");
+        window.location= "/invoices";
+      })
+
+    } else {
+      window.alert("Missing date or customer id!");
     }
 
     e.preventDefault();
