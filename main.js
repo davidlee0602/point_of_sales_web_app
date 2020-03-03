@@ -10,6 +10,7 @@ dotenv.config();
 let handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT);
@@ -185,6 +186,26 @@ app.get("/new_invoice", (req, res) => {
     })
 
 });
+
+app.post("/new_invoice", (req, res) => {
+  // INSERT INTO invoices (invoice_date, invoice_paid, payment_method_id, customer_id) VALUES (:invoice_date_input, :invoice_paid_input, :payment_method_id_input, :customer_id_input);
+  //   /*FOR EACH Phone & Carrier ADDITION*/
+  //   /*this_invoice_id_value will store the invoice_id that was created*/
+  //   INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (:this_invoice_id_value, :phone_id_dropdown_value, :carrier_id_dropdown_value);
+  //   UPDATE invoices
+  //     SET total_due = (SELECT SUM(phones.retail_cost) FROM phones
+  //                       JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
+  //                       WHERE invoice_details.invoice_id = (:this_invoice_id_value)),
+  //     WHERE invoices.invoice_id = (:this_invoice_id_value);
+
+  let new_invoice_query =
+  `INSERT INTO invoices (invoice_date, invoice_paid, payment_method_id, customer_id)
+  VALUES (?, ?, ?, ?)`;
+
+  // new Promise((resolve, reject) => {
+  //
+  // })
+})
 
 app.get("/invoices", (req, res) => {
     // show all invoices and accompanying data
