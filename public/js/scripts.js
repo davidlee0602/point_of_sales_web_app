@@ -108,8 +108,10 @@ $(function() {
     let phoneLabel = $("<label/>");
     phoneLabel.text(phoneDivText);
      // select
+    let phoneSelectClass = "invoice_phones";
     let phoneSelectName = "phone_item_" + phone_count;
     let phoneSelect = $("<select/>");
+    phoneSelect.addClass(phoneSelectClass);
     phoneSelect.attr("name", phoneSelectName);
      // select blank option
     let blankOption = $("<option/>");
@@ -142,8 +144,10 @@ $(function() {
     let carrierLabel = $("<label/>");
     carrierLabel.text(carrierDivText);
     // select
+    let carrierSelectClass = "invoice_carriers";
     let carrierSelectName = "carrier_item_" + phone_count;
     let carrierSelect = $("<select/>");
+    carrierSelect.addClass(carrierSelectClass);
     carrierSelect.attr("name", carrierSelectName);
       // select blank option
     let blankOption2 = $("<option/>");
@@ -160,7 +164,8 @@ $(function() {
       carrierOption.text(window.a51.carriers[i].name);
       carrierSelect.append(carrierOption);
     }
-    // put select inside label, then inside phone column
+    // put a break after carrier label, a select inside label, then inside phone column
+    carrierLabel.append($("<br/>"));
     carrierLabel.append(carrierSelect);
     carrierDiv.append(carrierLabel);
 
@@ -233,9 +238,60 @@ $(function() {
   }
 
   // when click to save invoice, get all form fields
-  $("#save_invoice_button").click(function() {
-    console.log("form stuff", $(this).parents().find("form").first().find(":input"));
+  $("#save_invoice_button").click(function(e) {
+    // console.log("form stuff", $(this).parents().find("form").first().find(":input"));
+    let date = $("[name='date']").val();
+    let customer_id = $("[name='customer_id']").val();
+    let payment_method_id = $("[name='payment_method_id']").val();
+    let pay = false;
+
+    //phones and carriers
+    let invoice_items = {};
+    let invoice_phones = $(".invoice_phones");
+    let invoice_carriers = $(".invoice_carriers");
+
+    invoice_phones.each(function(index) {
+      invoice_items[index+1] = {};
+      invoice_items[index+1].phone_id = this.value;
+    });
+
+    invoice_carriers.each(function(index) {
+      invoice_items[index+1].carrier_id = this.value;
+    })
+
+    // clean up invoice_items of null phones or null carriers
+    let id_to_delete = [];
+    for (const id in invoice_items) {
+      if (!invoice_items[id].phone_id || !invoice_items[id].carrier_id) {
+        id_to_delete.push(id);
+      }
+    }
+    for (let i = 0, k = id_to_delete.length; i<k; i++) {
+      let to_delete = id_to_delete[i];
+      delete invoice_items[to_delete];
+    }
+
+    // send data to server
+    if (date && customer_id) {
+      $.ajax({
+        type: "POST",
+        url: "/new_invoice",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+          date: date,
+          pay: pay,
+          payment: payment_method_id,
+          customer_id: customer_id,
+          invoice_items: invoice_items
+        })
+      });
+    }
+
+    e.preventDefault();
   });
+
+  // when click to pay invoice from /new_invoice
 
 
   // search/filter functionality

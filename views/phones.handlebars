@@ -12,35 +12,35 @@
                <u>MAKE</u>
                <div class="row">
                   <div class="col-lg-1">
-                     <input type="text" name="make" id="make_input"><br>
+                     <input type="text" name="make" id="make_input" required><br>
                   </div>
                </div>
                <br>
                <u>MODEL</u>
                <div class="row">
                   <div class="col-lg-1">
-                     <input type="text" name="model" id="model_input"><br>
+                     <input type="text" name="model" id="model_input" required><br>
                   </div>
                </div>
                <br>
                <u>IMAGE URL</u>
                <div class="row">
                   <div class="col-lg-1">
-                     <input type="text" name="image_url" id="image_url"><br>
+                     <input type="text" name="image_url" id="image_url" required><br>
                   </div>
                </div>
                <br>
                <u>PURCHASE COST</u>
                <div class="row">
                   <div class="col-lg-1">
-                     <input type="number" name="purchase_cost" id="purchase_cost"><br>
+                     <input type="number" name="purchase_cost" id="purchase_cost" required><br>
                   </div>
                </div>
                <br>
                <u>RETAIL COST</u>
                <div class="row">
                   <div class="col-lg-1">
-                     <input type="number" name="retail_cost" id="retail_cost"><br>
+                     <input type="number" name="retail_cost" id="retail_cost" required><br>
                   </div>
                </div>
                <br>
@@ -72,35 +72,35 @@
                      <u>MAKE</u>
                      <div class="row">
                         <div class="col-lg-1">
-                           <input type="text" name="make" id="make_input"><br>
+                           <input type="text" name="make" id="make_input" required><br>
                         </div>
                      </div>
                      <br>
                      <u>MODEL</u>
                      <div class="row">
                         <div class="col-lg-1">
-                           <input type="text" name="model" id="model_input"><br>
+                           <input type="text" name="model" id="model_input" required><br>
                         </div>
                      </div>
                      <br>
                      <u>IMAGE URL</u>
                      <div class="row">
                         <div class="col-lg-1">
-                           <input type="text" name="image_url" id="image_url_input"><br>
+                           <input type="text" name="image_url" id="image_url_input" required><br>
                         </div>
                      </div>
                      <br>
                      <u>PURCHASE COST</u>
                      <div class="row">
                         <div class="col-lg-1">
-                           <input type="number" name="purchase_cost" id="purchase_cost_input"><br>
+                           <input type="number" name="purchase_cost" id="purchase_cost_input" required><br>
                         </div>
                      </div>
                      <br>
                      <u>RETAIL COST</u>
                      <div class="row">
                         <div class="col-lg-1">
-                           <input type="number" name="retail_cost" id="retail_cost_input"><br>
+                           <input type="number" name="retail_cost" id="retail_cost_input" required><br>
                         </div>
                      </div>
                      <br>
@@ -144,7 +144,7 @@
             <tr>
                 <td>{{this.make}}</td>
                 <td>{{this.model}}</td>
-                <td>{{this.image}}</td>
+                <td><img class="resize_img" src="/images/{{this.image}}" alt="{{this.make}} {{this.model}}"></td>
                 <td>{{this.purchase}}</td>
                 <td>{{this.retail}}</td>
                 <td>
