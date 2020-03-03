@@ -87,7 +87,103 @@ app.post("/paymentmethods", (req, res) => {
 })
 
 app.get("/new_invoice", (req, res) => {
-    res.render('new_invoice');
+  let context = {};
+  context.title = 'AREA 51 - Create New Invoice';
+
+  let phones_query = `SELECT * FROM phones`;
+  let carriers_query = `SELECT * FROM carriers`;
+  let customers_query = `SELECT * FROM customers`;
+  let paymentmethods_query = `SELECT * FROM payment_methods`;
+
+  // query phones, carriers, customers, and payment methods
+
+  new Promise((resolve, reject) => {
+      //get phones
+      mysql.pool.query(phones_query, (err, results, fields)=>{
+        if (err) reject(err);
+
+        let phones = [];
+        let phone_detail = {}
+        for (let i = 0, k = results.length; i<k; i++) {
+          let phone = results[i];
+          phone_detail = {};
+          phone_detail.id = phone.phone_id;
+          phone_detail.name = phone.make + " " + phone.model;
+          phone_detail.price = phone.retail_cost;
+          phones.push(phone_detail);
+        }
+        context.phones = phones;
+        resolve();
+      });
+    })
+    .then(() => {
+      // get carriers
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(carriers_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          let carriers = [];
+          let carrier_detail = {};
+          for (let i = 0, k = results.length; i<k; i++) {
+            let carrier = results[i];
+            carrier_detail = {};
+            carrier_detail.id = carrier.carrier_id;
+            carrier_detail.name = carrier.name;
+            carriers.push(carrier_detail);
+          }
+          context.carriers = carriers;
+          resolve();
+        })
+      })
+    })
+    .then(() => {
+      // get customers
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(customers_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          let customers = [];
+          let customer_detail = {};
+          for (let i = 0, k = results.length; i<k; i++) {
+            let customer = results[i];
+            customer_detail = {};
+            customer_detail.id = customer.customer_id;
+            customer_detail.name = customer.first_name + " " + customer.last_name;
+            customers.push(customer_detail);
+          }
+          context.customers = customers;
+          resolve();
+        })
+      })
+    })
+    .then(() => {
+      // get payment methods
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(paymentmethods_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          let paymentmethods = [];
+          let paymentmethod_detail = {};
+          for (let i = 0, k = results.length; i<k; i++) {
+            let paymentmethod = results[i];
+            paymentmethod_detail = {};
+            paymentmethod_detail.id = paymentmethod.payment_method_id;
+            paymentmethod_detail.name = paymentmethod.name;
+            paymentmethods.push(paymentmethod_detail);
+          }
+          context.paymentmethods = paymentmethods;
+          resolve();
+        })
+      })
+    })
+    .then(() => {
+      // render page
+      res.render('new_invoice', context);
+    })
+    .catch((error) => {
+      next(error);
+    })
+
 });
 
 app.get("/invoices", (req, res) => {
@@ -118,6 +214,7 @@ app.get("/invoice_details", (req, res) => {
 });
 
 app.get("/edit_invoice", (req, res) => {
+    let invoices_query;
     res.render('edit_invoice');
 });
 

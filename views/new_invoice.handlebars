@@ -19,13 +19,9 @@
         <div class="col-lg-1">
           <select name="customer_id" required>
             <option value=""> -- </option>
-            <option value="1">1 -- Mr. Chang</option>
-            <option value="2">2 -- Randy Bullet</option>
-            <option value="3">3 -- Vinny Pistone</option>
-            <option value="4">4 -- Dequarius Johnson</option>
-            <option value="5">5 -- Taco Prince</option>
-            <option value="6">6 -- Ramee El-Rahman</option>
-            <option value="7">7 -- Uchiha Jones</option>
+            {{#each customers}}
+            <option value="{{id}}">{{id}} -- {{name}}</option>
+            {{/each}}
           </select>
         </div>
       </div>
@@ -36,13 +32,9 @@
         <div class="col-lg-1">
           <select name="payment_method_id">
             <option value=""> -- </option>
-            <option value="1">Cash</option>
-            <option value="2">Credit</option>
-            <option value="3">Debit</option>
-            <option value="4">Paypal</option>
-            <option value="5">Venmo</option>
-            <option value="6">Cash App</option>
-            <option value="7">Bitcoin</option>
+            {{#each paymentmethods}}
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
           </select>
         </div>
       </div>
@@ -54,13 +46,9 @@
           Invoice Item 1
             <select name="phone_item_1">
               <option value=""> -- </option>
-              <option value="1">iPhone 11 Pro Max</option>
-              <option value="2">Samsung Galaxy Note 10+</option>
-              <option value="3">OnePlus 7T Pro</option>
-              <option value="4">Google Pixel 4 XL</option>
-              <option value="5">Motorola Razr Black</option>
-              <option value="6">Sony Xperia 1</option>
-              <option value="7">Huawei P30 Pro</option>
+              {{#each phones}}
+              <option value="{{id}}">{{name}}</option>
+              {{/each}}
             </select>
           </label>
         </div>
@@ -68,15 +56,12 @@
         <div class="col-lg-2 col-lg-offset-2">
           <label>
           Carrier
+            <br>
             <select name="carrier_item_1">
               <option value=""> -- </option>
-              <option value="1">AT&T</option>
-              <option value="2">Cricket</option>
-              <option value="3">Metro by T-Mobile</option>
-              <option value="4">Mint</option>
-              <option value="5">T-Mobile</option>
-              <option value="6">Sprint</option>
-              <option value="7">Verizon</option>
+              {{#each carriers}}
+              <option value="{{id}}">{{name}}</option>
+              {{/each}}
             </select>
           </label>
         </div>
@@ -86,7 +71,7 @@
       <br>
       <div class="row">
         <div class="col-lg-1">
-          <button class="btn btn-primary add_phone_form_to_invoice">Add Phone</button>
+          <button type="button" class="btn btn-primary add_phone_form_to_invoice">Add Phone</button>
         </div>
       </div>
 
@@ -111,3 +96,45 @@
     </div>
   </form>
 </div>
+
+<script>
+  window.a51 = {};
+  a51["phones"] = [];
+  a51["carriers"] = [];
+  a51["customers"] = [];
+  a51["paymentmethods"] = [];
+
+  let phone_detail = {};
+  {{#each phones}}
+    phone_detail = {};
+    phone_detail.id = {{this.id}};
+    phone_detail.name = "{{this.name}}";
+    phone_detail.price = {{this.price}};
+    a51.phones.push(phone_detail);
+  {{/each}}
+
+  let carrier_detail = {};
+  {{#each carriers}}
+    carrier_detail = {};
+    carrier_detail.id = {{this.id}};
+    carrier_detail.name = "{{this.name}}";
+    a51.carriers.push(carrier_detail);
+  {{/each}}
+
+  let customer_detail = {};
+  {{#each customers}}
+    customer_detail = {};
+    customer_detail.id = {{this.id}};
+    customer_detail.name = "{{this.name}}";
+    a51.customers.push(customer_detail);
+  {{/each}}
+
+  let paymentmethod_detail = {}
+  {{#each paymentmethods}}
+    paymentmethod_detail = {};
+    paymentmethod_detail.id = {{this.id}};
+    paymentmethod_detail.name = "{{this.name}}";
+    a51.paymentmethods.push(paymentmethod_detail);
+  {{/each}}
+
+</script>

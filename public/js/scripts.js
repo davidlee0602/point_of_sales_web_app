@@ -160,7 +160,8 @@ $(function() {
       carrierOption.text(window.a51.carriers[i].name);
       carrierSelect.append(carrierOption);
     }
-    // put select inside label, then inside phone column
+    // put a break after carrier label, a select inside label, then inside phone column
+    carrierLabel.append($("<br/>"));
     carrierLabel.append(carrierSelect);
     carrierDiv.append(carrierLabel);
 
