@@ -9,7 +9,7 @@ INSERT INTO phones (make, model, image_url, purchase_cost, retail_cost) VALUES (
 -- CREATE customers http://web.engr.oregonstate.edu/~leed8/customers.html
 INSERT INTO customers (first_name, last_name, street, city, state, zip, phone, email) VALUES (:first_name_input, :last_name_input, :street_input, :city_input, :state_input, :zip_input, :phone_input, :email_input);
 -- CREATE invoices http://web.engr.oregonstate.edu/~leed8/new_invoice.html
-INSERT INTO invoices (invoice_date, invoice_paid, payment_method_id, customer_id) VALUES (:invoice_date_input, :invoice_paid_input, :payment_method_id_input, :customer_id_input);
+INSERT INTO invoices (invoice_date, invoice_paid, customer_id, payment_method_id) VALUES (:invoice_date_input, :invoice_paid_input, :customer_id_input, :payment_method_id_input);
   /*FOR EACH Phone & Carrier ADDITION*/
   /*this_invoice_id_value will store the invoice_id that was created*/
   INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (:this_invoice_id_value, :phone_id_dropdown_value, :carrier_id_dropdown_value);
@@ -38,7 +38,8 @@ FROM invoices i
 JOIN customers c ON
 c.customer_id = i.customer_id
 LEFT JOIN payment_methods p ON
-p.payment_method_id = i.payment_method_id;
+p.payment_method_id = i.payment_method_id
+ORDER BY i.invoice_id ASC;
 
 -- READ/SELECT invoices (filter view)
 SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
@@ -48,7 +49,8 @@ JOIN customers c ON
 c.customer_id = i.customer_id
 LEFT JOIN payment_methods p ON
 p.payment_method_id = i.payment_method_id
-WHERE :attribute LIKE %:keyword%; -- this would require some conditional branching for different types of attributes in the backend code
+WHERE :attribute LIKE %:keyword% -- this would require some conditional branching for different types of attributes in the backend code
+ORDER BY i.invoice_id ASC;
 
 -- READ/SELECT invoice_details
 SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
@@ -67,7 +69,8 @@ d.invoice_id = i.invoice_id
 JOIN phones ph ON
 ph.phone_id = d.phone_id
 JOIN carriers cr ON
-cr.carrier_id = d.carrier_id;
+cr.carrier_id = d.carrier_id
+ORDER BY i.invoice_id ASC;
 
 -- READ/SELECT payment_methods
 SELECT * FROM payment_methods;

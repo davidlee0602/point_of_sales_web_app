@@ -237,13 +237,17 @@ $(function() {
     }
   }
 
-  // when click to save invoice, get all form fields
-  $("#save_invoice_button").click(function(e) {
-    // console.log("form stuff", $(this).parents().find("form").first().find(":input"));
+  function processCreateNewInvoiceForm(is_pay) {
     let date = $("[name='date']").val();
     let customer_id = $("[name='customer_id']").val();
     let payment_method_id = $("[name='payment_method_id']").val() ? $("[name='payment_method_id']").val() : false;
-    let pay = false;
+    let pay = is_pay;
+
+    // check if payment method is chosen before paying
+    if (pay && !payment_method_id) {
+      window.alert("You need to choose a payment method before you can pay!");
+      return;
+    }
 
     //phones and carriers
     let invoice_items = {};
@@ -292,13 +296,26 @@ $(function() {
       })
 
     } else {
-      window.alert("Missing date or customer id!");
+      window.alert("Missing date or customer!");
     }
+  }
+
+  // when click to save invoice, get all form fields
+  $("#save_invoice_button").click(function(e) {
+    // console.log("form stuff", $(this).parents().find("form").first().find(":input"));
+    let is_pay = false;
+    processCreateNewInvoiceForm(is_pay);
 
     e.preventDefault();
   });
 
   // when click to pay invoice from /new_invoice
+  $("#pay_invoice_button").click(function(e) {
+    let is_pay = true;
+    processCreateNewInvoiceForm(is_pay);
+
+    e.preventDefault();
+  });
 
 
   // search/filter functionality

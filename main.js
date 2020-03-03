@@ -188,22 +188,14 @@ app.get("/new_invoice", (req, res, next) => {
 });
 
 app.post("/new_invoice", (req, res, next) => {
-  // INSERT INTO invoices (invoice_date, invoice_paid, payment_method_id, customer_id) VALUES (:invoice_date_input, :invoice_paid_input, :payment_method_id_input, :customer_id_input);
-  //   /*FOR EACH Phone & Carrier ADDITION*/
-  //   /*this_invoice_id_value will store the invoice_id that was created*/
-  //   INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (:this_invoice_id_value, :phone_id_dropdown_value, :carrier_id_dropdown_value);
-  //   UPDATE invoices
-  //     SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
-  //                       JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
-  //                       WHERE invoice_details.invoice_id = (:this_invoice_id_value))
-  //     WHERE invoices.invoice_id = (:this_invoice_id_value);
-
-  // SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones JOIN invoice_details ON phones.phone_id = invoice_details.phone_id WHERE invoice_details.invoice_id = 5;
-
   // queries
-  let new_invoice_query =
-  `INSERT INTO invoices (invoice_date, invoice_paid, payment_method_id, customer_id)
+  let new_invoice_query_with_payment =
+  `INSERT INTO invoices (invoice_date, invoice_paid, customer_id, payment_method_id)
   VALUES (?, ?, ?, ?)`;
+
+  let new_invoice_query_null_payment =
+  `INSERT INTO invoices (invoice_date, invoice_paid, customer_id, payment_method_id)
+  VALUES (?, ?, ?, NULL)`;
 
   let new_invoice_details_query =
   `INSERT INTO invoice_details (invoice_id, phone_id, carrier_id)
@@ -220,15 +212,17 @@ app.post("/new_invoice", (req, res, next) => {
   let invoice_data = {};
   invoice_data.date = req.body.date;
   invoice_data.pay = req.body.pay;
-  invoice_data.payment = req.body.payment ? req.body.payment : NULL;
   invoice_data.customer_id = req.body.customer_id;
+  invoice_data.payment = req.body.payment ? req.body.payment : null;
 
   let invoice_items = req.body.invoice_items;
+
+  let new_invoice_query = invoice_data.payment ? new_invoice_query_with_payment : new_invoice_query_null_payment;
 
   // database actions
   new Promise((resolve, reject) => {
     //create new invoice
-    mysql.pool.query(new_invoice_query, [invoice_data.date, invoice_data.pay, invoice_data.payment, invoice_data.customer_id], (err, results, fields) => {
+    mysql.pool.query(new_invoice_query, [invoice_data.date, invoice_data.pay, invoice_data.customer_id, invoice_data.payment], (err, results, fields) => {
       if (err) next(err);
 
       let new_invoice_id = results.insertId;
@@ -298,7 +292,8 @@ app.get("/invoices", (req, res, next) => {
     JOIN customers c ON
     c.customer_id = i.customer_id
     LEFT JOIN payment_methods p ON
-    p.payment_method_id = i.payment_method_id`;
+    p.payment_method_id = i.payment_method_id
+    ORDER BY i.invoice_id ASC`;
 
     mysql.pool.query(query, (err, results, fields) => {
       if (err) next(err);
