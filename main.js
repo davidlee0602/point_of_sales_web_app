@@ -232,6 +232,8 @@ app.post("/new_invoice", (req, res, next) => {
   .then((new_invoice_id) => {
     return new Promise((resolve, reject) => {
       //create invoice details (phones and carriers)
+
+      // enter here to add chosen phoens and carriers to invoice_details
       if (Object.entries(invoice_items).length > 0) {
         let promises = [];
 
@@ -258,6 +260,15 @@ app.post("/new_invoice", (req, res, next) => {
         .catch((error) => {
           reject(error);
         });
+      } else {
+        // reached here if no invoice items were selected
+        if (invoice_data.pay) {
+          // if no invoice items but chosen to pay, then that is an error
+          reject();
+        } else {
+          // otherwise, simple save function
+          resolve();
+        }
       }
     });
   })

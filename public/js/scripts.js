@@ -241,10 +241,9 @@ $(function() {
     let date = $("[name='date']").val();
     let customer_id = $("[name='customer_id']").val();
     let payment_method_id = $("[name='payment_method_id']").val() ? $("[name='payment_method_id']").val() : false;
-    let pay = is_pay;
 
     // check if payment method is chosen before paying
-    if (pay && !payment_method_id) {
+    if (is_pay && !payment_method_id) {
       window.alert("You need to choose a payment method before you can pay!");
       return;
     }
@@ -275,6 +274,12 @@ $(function() {
       delete invoice_items[to_delete];
     }
 
+    // if trying to pay but no valid phone items are selected, stop the payment
+    if (is_pay && !Object.entries(invoice_items).length) {
+      window.alert("You can't pay for an invoice with no phones!");
+      return;
+    }
+
     // send data to server
     if (date && customer_id) {
       $.ajax({
@@ -284,15 +289,20 @@ $(function() {
         dataType: "json",
         data: JSON.stringify({
           date: date,
-          pay: pay,
+          pay: is_pay,
           payment: payment_method_id,
           customer_id: customer_id,
           invoice_items: invoice_items
         }),
       })
       .done((data, status) => {
+        // success
         window.alert("Success!");
-        window.location= "/invoices";
+        window.location = "/invoices";
+      })
+      .fail((response, status) => {
+        // big error
+        console.log("oops", response.statusText, status);
       })
 
     } else {
