@@ -25,9 +25,10 @@
 					<option>Payment Method</option>
 				</select>
 
-				<select class="table-search hide">
-				</select>
-				<input class="table-search" type="text" placeholder="search...">
+				<input class="table-search" list="invoice_search" type="text" placeholder="search...">
+				<datalist id="invoice_search">
+					<option value="kaka">
+				</datalist>
 			</div>
 
 			<!-- search bar -->
@@ -90,55 +91,6 @@
             </td>
           </tr>
           {{/each}}
-
-					<!-- <tr>
-						<td>1</td>
-						<td>1</td>
-						<td>David Lee</td>
-						<td>2020-02-07</td>
-						<td>FALSE</td>
-						<td>Cash</td>
-						<td>3497.00</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-success btn-sm">PAY</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-info btn-sm">VIEW</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>2</td>
-						<td>Ken Nguyen</td>
-						<td>2020-01-30</td>
-						<td>TRUE</td>
-						<td>Credit</td>
-						<td>2329.00</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-success btn-sm">PAY</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-info btn-sm">VIEW</button>
-							</div>
-						</td>
-						<td>
-							<div class="row text-center">
-								<button type="button" class="btn btn-warning btn-sm">UPDATE</button>
-							</div>
-						</td>
-					</tr> -->
 				</tbody>
 			</table>
 			<br>

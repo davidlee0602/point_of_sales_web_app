@@ -292,9 +292,12 @@ app.post("/new_invoice", (req, res, next) => {
 })
 
 app.get("/invoices", (req, res, next) => {
+    console.log("phere", req.query, req.query["category"], req.query.key);
     // show all invoices and accompanying data
     let context = {};
     context.title = 'AREA 51 - Invoices';
+
+    let filter = ' WHERE ';
 
     let query =
     `SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
