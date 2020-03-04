@@ -94,3 +94,7 @@ table, th, td {
   	margin-right: auto;
   	transition-duration: 0.5s;
 }
+
+#table-filter-keyword {
+  padding-left: 4px;
+}

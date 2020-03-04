@@ -297,6 +297,16 @@ app.get("/invoices", (req, res, next) => {
     let context = {};
     context.title = 'AREA 51 - Invoices';
 
+    let categories = {
+      'Date': 'i.invoice_date',
+      'Invoice ID': 'i.invoice_id',
+      'Customer ID': 'c.customer_id',
+      'Customer Name': 'customer_name',
+      'Payment Method': 'p.name',
+      'Paid': 'i.invoice_paid'
+    };
+    context.categories = categories;
+
     let filter = ' WHERE ';
 
     let query =
@@ -313,6 +323,7 @@ app.get("/invoices", (req, res, next) => {
       if (err) next(err);
 
       context.rows = results;
+      console.log("dear", results);
 
       res.render('invoices', context);
     });

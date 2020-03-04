@@ -15,19 +15,16 @@
 				<span class="glyphicon glyphicon-search table-search-icon">
 				</span>
 
-				<select class="table-search">
+				<select class="table-search" id="table-filter-category">
 					<option>Filter by .. </option>
-					<option>Invoice ID</option>
-					<option>Customer ID</option>
-					<option>Customer Name</option>
-					<option>Date</option>
-					<option>Paid</option>
-					<option>Payment Method</option>
+					{{#each categories}}
+					<option value={{@key}}>{{@key}}</option>
+					{{/each}}
 				</select>
 
-				<input class="table-search" list="invoice_search" type="text" placeholder="search...">
-				<datalist id="invoice_search">
-					<option value="kaka">
+				<input class="table-search" id="table-filter-keyword" list="invoice-search" type="text" placeholder="search...">
+				<datalist id="invoice-search">
+					<option value="choose a category">
 				</datalist>
 			</div>
 
@@ -95,4 +92,19 @@
 			</table>
 			<br>
 		</div>
+
+		<script>
+
+			// make pre-populated filter keys based on invoice data
+			let keywords = {};
+
+			// {{#each rows}}
+			// console.log({{this}});
+			// {{/each}}
+
+			// search/filter based on class Requirement
+			$("#table-filter-category").change(function() {
+				console.log("tear");
+			});
+		</script>
 	<!-- </div> -->
