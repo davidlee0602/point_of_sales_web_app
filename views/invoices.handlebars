@@ -18,7 +18,7 @@
 				<select class="table-search" id="table-filter-category">
 					<option>Filter by .. </option>
 					{{#each categories}}
-					<option value={{@key}}>{{@key}}</option>
+					<option value="{{@key}}">{{@key}}</option>
 					{{/each}}
 				</select>
 
@@ -95,16 +95,64 @@
 
 		<script>
 
+			// search filter data list
+			let datalist = $("#invoice-search");
+
 			// make pre-populated filter keys based on invoice data
 			let keywords = {};
 
-			// {{#each rows}}
-			// console.log({{this}});
-			// {{/each}}
-
 			// search/filter based on class Requirement
 			$("#table-filter-category").change(function() {
-				console.log("tear");
+				let dataset = [];
+
+				switch(this.value) {
+					case 'Date':
+						{{#each invoice_dates}}
+							dataset.push("{{this}}");
+						{{/each}}
+						break;
+					case 'Invoice ID':
+						{{#each invoice_ids}}
+							dataset.push("{{this}}");
+						{{/each}}
+						break;
+					case 'Customer ID':
+						{{#each customer_ids}}
+							dataset.push("{{this}}");
+						{{/each}}
+						break;
+					case 'Customer Name':
+						{{#each customer_names}}
+							dataset.push("{{this}}");
+						{{/each}}
+						break;
+					case 'Payment Method':
+						{{#each payment_methods}}
+							dataset.push("{{this}}");
+						{{/each}}
+
+						dataset.push("Unpaid");
+						break;
+					case 'Paid':
+						dataset.push("True");
+						dataset.push("False");
+						break;
+					case 'Total Due':
+						{{#each invoice_totals}}
+							dataset.push("{{this}}");
+						{{/each}}
+						break;
+					default:
+						dataset.push("choose a category");
+				}
+
+				// empty current filter dropdown data list and populate with specific category data
+				datalist.empty();
+				dataset.forEach((item)=>{
+					$("<option>", {
+						"value": item
+					}).appendTo(datalist);
+				})
 			});
 		</script>
 	<!-- </div> -->

@@ -297,19 +297,30 @@ app.get("/invoices", (req, res, next) => {
     let context = {};
     context.title = 'AREA 51 - Invoices';
 
+    // search/filter categories
     let categories = {
       'Date': 'i.invoice_date',
       'Invoice ID': 'i.invoice_id',
       'Customer ID': 'c.customer_id',
       'Customer Name': 'customer_name',
       'Payment Method': 'p.name',
-      'Paid': 'i.invoice_paid'
+      'Paid': 'i.invoice_paid',
+      'Total Due': 'i.total_due'
     };
     context.categories = categories;
 
-    let filter = ' WHERE ';
+    // queries to populate search/filter
+    let invoice_category_query =
+    `SELECT invoice_id, invoice_date, total_due FROM invoices ORDER BY invoice_id ASC`;
 
-    let query =
+    let customer_category_query =
+    `SELECT customer_id, CONCAT(first_name, ' ', last_name) AS full_name
+    FROM customers ORDER BY customer_id`;
+
+    let payment_method_category_query = `SELECT name from payment_methods`;
+
+    // invoice table query
+    let invoice_query =
     `SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
      c.customer_id, c.first_name, c.last_name, p.name
     FROM invoices i
@@ -319,14 +330,82 @@ app.get("/invoices", (req, res, next) => {
     p.payment_method_id = i.payment_method_id
     ORDER BY i.invoice_id ASC`;
 
-    mysql.pool.query(query, (err, results, fields) => {
-      if (err) next(err);
+    let filter = ' WHERE ';
 
-      context.rows = results;
-      console.log("dear", results);
+    // query for categories first then for invoice table
+    new Promise((resolve, reject) => {
+      // get invoice ids, dates, and totals for search feature
+      mysql.pool.query(invoice_category_query, (err, results, fields) => {
+        if (err) reject(err);
 
-      res.render('invoices', context);
-    });
+        context.invoice_ids = [];
+        context.invoice_dates = [];
+        context.invoice_totals = [];
+
+        results.forEach((invoice) => {
+          context.invoice_ids.push(invoice.invoice_id);
+
+          if (!context.invoice_dates.includes(invoice.date)) {
+            context.invoice_dates.push(invoice.invoice_date);
+          }
+          
+          if (!context.invoice_totals.includes(invoice.total_due)) {
+            context.invoice_totals.push(invoice.total_due);
+          }
+        })
+
+        resolve();
+      });
+    })
+    .then(()=>{
+      // get customer ids and names for search feature
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(customer_category_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          context.customer_ids = [];
+          context.customer_names = [];
+
+          results.forEach((invoice) => {
+            context.customer_ids.push(invoice.customer_id);
+            context.customer_names.push(invoice.full_name);
+          })
+
+          resolve();
+        })
+      })
+    })
+    .then(()=>{
+      // get payment methods for search feature
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(payment_method_category_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          context.payment_methods = [];
+
+          results.forEach((invoice) => {
+            context.payment_methods.push(invoice.name);
+          })
+
+          resolve();
+        })
+      })
+    })
+    .then(()=>{
+      // join invoice data for tables
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(invoice_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          context.rows = results;
+
+          res.render('invoices', context);
+        });
+      })
+    })
+    .catch((error) => {
+      next(error);
+    })
 });
 
 app.get("/invoice_details", (req, res, next) => {
