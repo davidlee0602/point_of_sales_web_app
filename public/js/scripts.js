@@ -237,13 +237,16 @@ $(function() {
     }
   }
 
-  // when click to save invoice, get all form fields
-  $("#save_invoice_button").click(function(e) {
-    // console.log("form stuff", $(this).parents().find("form").first().find(":input"));
+  function processCreateNewInvoiceForm(is_pay) {
     let date = $("[name='date']").val();
     let customer_id = $("[name='customer_id']").val();
-    let payment_method_id = $("[name='payment_method_id']").val();
-    let pay = false;
+    let payment_method_id = $("[name='payment_method_id']").val() ? $("[name='payment_method_id']").val() : false;
+
+    // check if payment method is chosen before paying
+    if (is_pay && !payment_method_id) {
+      window.alert("You need to choose a payment method before you can pay!");
+      return;
+    }
 
     //phones and carriers
     let invoice_items = {};
@@ -271,6 +274,12 @@ $(function() {
       delete invoice_items[to_delete];
     }
 
+    // if trying to pay but no valid phone items are selected, stop the payment
+    if (is_pay && !Object.entries(invoice_items).length) {
+      window.alert("You can't pay for an invoice with no phones!");
+      return;
+    }
+
     // send data to server
     if (date && customer_id) {
       $.ajax({
@@ -280,18 +289,43 @@ $(function() {
         dataType: "json",
         data: JSON.stringify({
           date: date,
-          pay: pay,
+          pay: is_pay,
           payment: payment_method_id,
           customer_id: customer_id,
           invoice_items: invoice_items
-        })
-      });
+        }),
+      })
+      .done((data, status) => {
+        // success
+        window.alert("Success!");
+        window.location = "/invoices";
+      })
+      .fail((response, status) => {
+        // big error
+        console.log("oops", response.statusText, status);
+      })
+
+    } else {
+      window.alert("Missing date or customer!");
     }
+  }
+
+  // when click to save invoice, get all form fields
+  $("#save_invoice_button").click(function(e) {
+    // console.log("form stuff", $(this).parents().find("form").first().find(":input"));
+    let is_pay = false;
+    processCreateNewInvoiceForm(is_pay);
 
     e.preventDefault();
   });
 
   // when click to pay invoice from /new_invoice
+  $("#pay_invoice_button").click(function(e) {
+    let is_pay = true;
+    processCreateNewInvoiceForm(is_pay);
+
+    e.preventDefault();
+  });
 
 
   // search/filter functionality
