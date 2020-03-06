@@ -67,14 +67,22 @@ table, th, td {
 
 }
 
+.search-bar-row > form {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
 .table-search {
-	margin: 0 20px 20px 0;
+	margin-top: 0;
+  margin-right: 10px;
 	border: 2px solid gray;
 	border-radius: 5px;
 }
 
-.table-search-icon {
-	margin-right: 8px;
+#table-search-submit {
+	height: 25px;
+  padding-bottom: 20px;
 }
 
 .resize_img{

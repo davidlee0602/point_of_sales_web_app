@@ -292,8 +292,8 @@ app.post("/new_invoice", (req, res, next) => {
 })
 
 app.get("/invoices", (req, res, next) => {
-    console.log("phere", req.query, req.query["category"], req.query.key);
     // show all invoices and accompanying data
+    let filter = '';
     let context = {};
     context.title = 'AREA 51 - Invoices';
 
@@ -311,13 +311,34 @@ app.get("/invoices", (req, res, next) => {
 
     // queries to populate search/filter
     let invoice_category_query =
-    `SELECT invoice_id, invoice_date, total_due FROM invoices ORDER BY invoice_id ASC`;
-
+      `SELECT invoice_id, invoice_date, total_due FROM invoices ORDER BY invoice_id ASC`;
     let customer_category_query =
-    `SELECT customer_id, CONCAT(first_name, ' ', last_name) AS full_name
-    FROM customers ORDER BY customer_id`;
+      `SELECT customer_id, CONCAT(first_name, ' ', last_name) AS full_name
+      FROM customers ORDER BY customer_id`;
+    let payment_method_category_query =
+      `SELECT name from payment_methods`;
 
-    let payment_method_category_query = `SELECT name from payment_methods`;
+    // check for search/filter query in URL
+    if (Object.entries(req.query).length && Object.keys(categories).includes(req.query.category)) {
+      let category = req.query.category;
+      let key = req.query.key;
+
+      if (key) {
+        filter = ' WHERE ';
+
+        if (category == 'Customer Name') {
+          // by name
+          let first_name;
+          let last_name;
+          [first_name, last_name] = key.split(" ");
+          filter += 'c.first_name LIKE "%' + first_name + '%" OR c.last_name LIKE "%' + first_name + '%" ';
+          filter += 'OR c.first_name LIKE "%' + last_name + '%" OR c.last_name LIKE "%' + last_name + '%" ';
+        } else if (category == 'Payment Method') {
+          
+        }
+      }
+
+    }
 
     // invoice table query
     let invoice_query =
@@ -328,9 +349,10 @@ app.get("/invoices", (req, res, next) => {
     c.customer_id = i.customer_id
     LEFT JOIN payment_methods p ON
     p.payment_method_id = i.payment_method_id
+    ` + filter + `
     ORDER BY i.invoice_id ASC`;
 
-    let filter = ' WHERE ';
+    console.log(invoice_query);
 
     // query for categories first then for invoice table
     new Promise((resolve, reject) => {
@@ -348,7 +370,7 @@ app.get("/invoices", (req, res, next) => {
           if (!context.invoice_dates.includes(invoice.date)) {
             context.invoice_dates.push(invoice.invoice_date);
           }
-          
+
           if (!context.invoice_totals.includes(invoice.total_due)) {
             context.invoice_totals.push(invoice.total_due);
           }
