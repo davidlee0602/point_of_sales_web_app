@@ -52,6 +52,15 @@ p.payment_method_id = i.payment_method_id
 WHERE :attribute LIKE %:keyword% -- this would require some conditional branching for different types of attributes in the backend code
 ORDER BY i.invoice_id ASC;
 
+-- SPECIAL FILTER QUERY CONDITIONS --
+-- (customer name):
+--  WHERE c.first_name LIKE %:first_name%
+--    OR c.last_name LIKE %:first_name%
+--    OR c.first_name LIKE %:last_name%
+--    OR c.last_name LIKE %:last_name%
+-- (payment_method == UNPAID): WHERE p.payment_method_id IS NULL
+
+
 -- READ/SELECT invoice_details
 SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
  c.customer_id, c.first_name, c.last_name,

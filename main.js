@@ -319,6 +319,7 @@ app.get("/invoices", (req, res, next) => {
       `SELECT name from payment_methods`;
 
     // check for search/filter query in URL
+    // formulate filter query based on user's filters
     if (Object.entries(req.query).length && Object.keys(categories).includes(req.query.category)) {
       let category = req.query.category;
       let key = req.query.key;
@@ -331,13 +332,32 @@ app.get("/invoices", (req, res, next) => {
           let first_name;
           let last_name;
           [first_name, last_name] = key.split(" ");
+
           filter += 'c.first_name LIKE "%' + first_name + '%" OR c.last_name LIKE "%' + first_name + '%" ';
           filter += 'OR c.first_name LIKE "%' + last_name + '%" OR c.last_name LIKE "%' + last_name + '%" ';
-        } else if (category == 'Payment Method') {
-          
+
+        } else {
+          filter += categories[category];
+          key = key.toLowerCase();
+
+          if (category == 'Payment Method' && key == 'unpaid') {
+            // by payment method
+            // special case if looking for null payment method
+            filter += ' IS NULL ';
+          } else {
+
+            // convert text true and false to mysql 0 or 1 (for 'Paid' category)
+            if (key == 'true') {
+              key = 1;
+            } else if (key == 'false') {
+              key = 0;
+            }
+
+            // catch all for other querey categories that dont require special parsing
+            filter += ' LIKE "%' + key + '%" ';
+          }
         }
       }
-
     }
 
     // invoice table query
@@ -351,8 +371,6 @@ app.get("/invoices", (req, res, next) => {
     p.payment_method_id = i.payment_method_id
     ` + filter + `
     ORDER BY i.invoice_id ASC`;
-
-    console.log(invoice_query);
 
     // query for categories first then for invoice table
     new Promise((resolve, reject) => {
