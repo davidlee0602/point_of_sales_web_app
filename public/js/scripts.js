@@ -330,16 +330,16 @@ $(function() {
 
   // search/filter functionality
   // citation: https://www.w3schools.com/bootstrap/bootstrap_filters.asp
-  $('.table-search').first().on("keyup", function() {
-    //grab input value
-    let value = $(this).val().toLowerCase();
-
-    // filter table rows by input value
-    $('input.table-search').parent().next()
-    .find('.table-searchable tr')
-    .filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-    })
-  });
+  // $('.table-search').first().on("keyup", function() {
+  //   //grab input value
+  //   let value = $(this).val().toLowerCase();
+  //
+  //   // filter table rows by input value
+  //   $('input.table-search').parent().next()
+  //   .find('.table-searchable tr')
+  //   .filter(function() {
+  //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+  //   })
+  // });
 
 });

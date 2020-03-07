@@ -1,5 +1,5 @@
 // main.js
-// let moment = require('moment');
+let moment = require('moment');
 let express = require('express');
 let mysql = require('./dbcon.js');
 let bodyParser = require('body-parser');
@@ -8,6 +8,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 let handlebars = require('express-handlebars').create({defaultLayout:'main'});
+// handlebars helpers
+handlebars.handlebars.registerHelper('formatDate', (dateString) => {
+  return new handlebars.handlebars.SafeString(
+    moment(dateString).format('MM-DD-YYYY')
+  )
+});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -16,12 +22,6 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT);
 app.use(express.static('public'));
 
-// handlebars helpers
-// handlebars.handlebars.registerHelper('formatDate', (dateString) => {
-//   return new handlebars.SafeString(
-//     moment(dateString).format('YYYY-MM-DD')
-//   )
-// });
 
 app.get("/", (req, res) => {
     res.render('home', {title: 'AREA 51'});
@@ -292,14 +292,87 @@ app.post("/new_invoice", (req, res, next) => {
 })
 
 app.get("/invoices", (req, res, next) => {
-    console.log("phere", req.query, req.query["category"], req.query.key);
     // show all invoices and accompanying data
+    let filter = '';
     let context = {};
     context.title = 'AREA 51 - Invoices';
 
-    let filter = ' WHERE ';
+    // search/filter categories
+    let categories = {
+      'Date': 'i.invoice_date',
+      'Invoice ID': 'i.invoice_id',
+      'Customer ID': 'c.customer_id',
+      'Customer Name': 'customer_name',
+      'Payment Method': 'p.name',
+      'Paid': 'i.invoice_paid',
+      'Total Due': 'i.total_due'
+    };
+    context.categories = categories;
 
-    let query =
+    // queries to populate search/filter
+    let invoice_category_query =
+      `SELECT invoice_id, invoice_date, total_due FROM invoices ORDER BY invoice_id ASC`;
+    let customer_category_query =
+      `SELECT customer_id, CONCAT(first_name, ' ', last_name) AS full_name
+      FROM customers ORDER BY customer_id`;
+    let payment_method_category_query =
+      `SELECT name from payment_methods`;
+
+    // check for search/filter query in URL
+    // formulate filter query based on user's filters
+    if (Object.entries(req.query).length && Object.keys(categories).includes(req.query.category)) {
+      let category = req.query.category;
+      let key = req.query.key;
+
+      if (key) {
+        filter = ' WHERE ';
+
+        if (category == 'Customer Name') {
+          // by name
+          let first_name;
+          let last_name;
+          [first_name, last_name] = key.split(" ");
+
+          filter += 'c.first_name LIKE "%' + first_name + '%" OR c.last_name LIKE "%' + first_name + '%" ';
+          filter += 'OR c.first_name LIKE "%' + last_name + '%" OR c.last_name LIKE "%' + last_name + '%" ';
+
+        } else {
+          filter += categories[category];
+          key = key.toLowerCase();
+
+          if (category == 'Payment Method' && key == 'unpaid') {
+            // by payment method
+            // special case if looking for null payment method
+            filter += ' IS NULL ';
+          } else {
+
+            if (category == 'Date') {
+              // check if date is in format 'MM-DD-YYYY'
+              // if so, include the query for 'YYYY-MM-DD' format as well
+              if (key.split('-').length == 3) {
+                let [month, day, year] = key.split('-');
+                let universal_format = [year, month, day].join("-");
+                filter += ' LIKE "%' + universal_format + '%" OR ';
+                filter += categories[category];
+              }
+            }
+
+            // convert text true and false to mysql 0 or 1 (for 'Paid' category)
+            if (key == 'true') {
+              key = 1;
+            } else if (key == 'false') {
+              key = 0;
+            }
+
+            // catch all for other querey categories that dont require special parsing
+            filter += ' LIKE "%' + key + '%" ';
+          }
+        }
+      }
+    }
+
+    // invoice table query
+    let invoice_query =
     `SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
      c.customer_id, c.first_name, c.last_name, p.name
     FROM invoices i
@@ -307,15 +380,83 @@ app.get("/invoices", (req, res, next) => {
     c.customer_id = i.customer_id
     LEFT JOIN payment_methods p ON
     p.payment_method_id = i.payment_method_id
+    ` + filter + `
     ORDER BY i.invoice_id ASC`;
 
-    mysql.pool.query(query, (err, results, fields) => {
-      if (err) next(err);
+    // query for categories first then for invoice table
+    new Promise((resolve, reject) => {
+      // get invoice ids, dates, and totals for search feature
+      mysql.pool.query(invoice_category_query, (err, results, fields) => {
+        if (err) reject(err);
 
-      context.rows = results;
+        context.invoice_ids = [];
+        context.invoice_dates = [];
+        context.invoice_totals = [];
 
-      res.render('invoices', context);
-    });
+        results.forEach((invoice) => {
+          context.invoice_ids.push(invoice.invoice_id);
+
+          if (!context.invoice_dates.includes(invoice.date)) {
+            context.invoice_dates.push(invoice.invoice_date);
+          }
+
+          if (!context.invoice_totals.includes(invoice.total_due)) {
+            context.invoice_totals.push(invoice.total_due);
+          }
+        })
+
+        resolve();
+      });
+    })
+    .then(()=>{
+      // get customer ids and names for search feature
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(customer_category_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          context.customer_ids = [];
+          context.customer_names = [];
+
+          results.forEach((invoice) => {
+            context.customer_ids.push(invoice.customer_id);
+            context.customer_names.push(invoice.full_name);
+          })
+
+          resolve();
+        })
+      })
+    })
+    .then(()=>{
+      // get payment methods for search feature
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(payment_method_category_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          context.payment_methods = [];
+
+          results.forEach((invoice) => {
+            context.payment_methods.push(invoice.name);
+          })
+
+          resolve();
+        })
+      })
+    })
+    .then(()=>{
+      // join invoice data for tables
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(invoice_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          context.rows = results;
+
+          res.render('invoices', context);
+        });
+      })
+    })
+    .catch((error) => {
+      next(error);
+    })
 });
 
 app.get("/invoice_details", (req, res, next) => {

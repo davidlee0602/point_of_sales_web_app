@@ -11,27 +11,27 @@
 		<div class="jumbotron">
 
 			<!-- class requirement search bar -->
-			<div class="row pull-right">
-				<span class="glyphicon glyphicon-search table-search-icon">
-				</span>
+			<div class="row pull-right search-bar-row">
+				<form action="/invoices" method="GET">
+					<select class="table-search" id="table-filter-category" name="category">
+						<option value="">Filter by .. </option>
+						{{#each categories}}
+						<option value="{{@key}}">{{@key}}</option>
+						{{/each}}
+					</select>
 
-				<select class="table-search">
-					<option>Filter by .. </option>
-					<option>Invoice ID</option>
-					<option>Customer ID</option>
-					<option>Customer Name</option>
-					<option>Date</option>
-					<option>Paid</option>
-					<option>Payment Method</option>
-				</select>
+					<input class="table-search" id="table-filter-keyword" list="invoice-search" type="text" placeholder="search..." name="key" autocomplete="off">
+					<datalist id="invoice-search">
+						<option value="choose a category">
+					</datalist>
 
-				<input class="table-search" list="invoice_search" type="text" placeholder="search...">
-				<datalist id="invoice_search">
-					<option value="kaka">
-				</datalist>
+					<button id="table-search-submit" class="btn btn-sm btn-danger">
+						<span class="glyphicon glyphicon-search table-search-icon"></span> GO!
+					</button>
+				</form>
 			</div>
 
-			<!-- search bar -->
+			<!-- old search bar -->
 			<div class="row pull-right input-group hide">
 				<span class="glyphicon glyphicon-search table-search-icon">
 				</span>
@@ -58,7 +58,7 @@
             <td>{{invoice_id}}</td>
             <td>{{customer_id}}</td>
             <td>{{first_name}} {{last_name}}</td>
-            <td>{{invoice_date}}</td>
+            <td>{{formatDate invoice_date}}</td>
             <td>
               {{#if invoice_paid}}
                 TRUE
@@ -95,4 +95,68 @@
 			</table>
 			<br>
 		</div>
+
+		<script>
+			// search filter data list
+			let datalist = $("#invoice-search");
+			let search_box = $("#table-filter-keyword");
+
+			// make pre-populated filter keys based on invoice data
+			let keywords = {};
+
+			// search/filter based on class Requirement
+			$("#table-filter-category").change(function() {
+				let dataset = [];
+
+				switch(this.value) {
+					case 'Date':
+						{{#each invoice_dates}}
+							dataset.push("{{formatDate this}}");
+						{{/each}}
+						break;
+					case 'Invoice ID':
+						{{#each invoice_ids}}
+							dataset.push("{{this}}");
+						{{/each}}
+						break;
+					case 'Customer ID':
+						{{#each customer_ids}}
+							dataset.push("{{this}}");
+						{{/each}}
+						break;
+					case 'Customer Name':
+						{{#each customer_names}}
+							dataset.push("{{this}}");
+						{{/each}}
+						break;
+					case 'Payment Method':
+						{{#each payment_methods}}
+							dataset.push("{{this}}");
+						{{/each}}
+
+						dataset.push("Unpaid");
+						break;
+					case 'Paid':
+						dataset.push("True");
+						dataset.push("False");
+						break;
+					case 'Total Due':
+						{{#each invoice_totals}}
+							dataset.push("{{this}}");
+						{{/each}}
+						break;
+					default:
+						dataset.push("choose a category");
+				}
+
+				// empty current filter keyword, dropdown data list and populate with specific category data
+				search_box.val("");
+				datalist.empty();
+				dataset.forEach((item)=>{
+					$("<option>", {
+						"value": item
+					}).appendTo(datalist);
+				})
+			});
+		</script>
 	<!-- </div> -->
