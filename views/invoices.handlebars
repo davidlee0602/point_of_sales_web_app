@@ -31,7 +31,7 @@
 				</form>
 			</div>
 
-			<!-- search bar -->
+			<!-- old search bar -->
 			<div class="row pull-right input-group hide">
 				<span class="glyphicon glyphicon-search table-search-icon">
 				</span>
@@ -58,7 +58,7 @@
             <td>{{invoice_id}}</td>
             <td>{{customer_id}}</td>
             <td>{{first_name}} {{last_name}}</td>
-            <td>{{invoice_date}}</td>
+            <td>{{formatDate invoice_date}}</td>
             <td>
               {{#if invoice_paid}}
                 TRUE
@@ -97,7 +97,6 @@
 		</div>
 
 		<script>
-
 			// search filter data list
 			let datalist = $("#invoice-search");
 			let search_box = $("#table-filter-keyword");
@@ -112,7 +111,7 @@
 				switch(this.value) {
 					case 'Date':
 						{{#each invoice_dates}}
-							dataset.push("{{this}}");
+							dataset.push("{{formatDate this}}");
 						{{/each}}
 						break;
 					case 'Invoice ID':

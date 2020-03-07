@@ -1,5 +1,5 @@
 // main.js
-// let moment = require('moment');
+let moment = require('moment');
 let express = require('express');
 let mysql = require('./dbcon.js');
 let bodyParser = require('body-parser');
@@ -8,6 +8,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 let handlebars = require('express-handlebars').create({defaultLayout:'main'});
+// handlebars helpers
+handlebars.handlebars.registerHelper('formatDate', (dateString) => {
+  return new handlebars.handlebars.SafeString(
+    moment(dateString).format('MM-DD-YYYY')
+  )
+});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -16,12 +22,6 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT);
 app.use(express.static('public'));
 
-// handlebars helpers
-// handlebars.handlebars.registerHelper('formatDate', (dateString) => {
-//   return new handlebars.SafeString(
-//     moment(dateString).format('YYYY-MM-DD')
-//   )
-// });
 
 app.get("/", (req, res) => {
     res.render('home', {title: 'AREA 51'});
@@ -345,6 +345,17 @@ app.get("/invoices", (req, res, next) => {
             // special case if looking for null payment method
             filter += ' IS NULL ';
           } else {
+
+            if (category == 'Date') {
+              // check if date is in format 'MM-DD-YYYY'
+              // if so, include the query for 'YYYY-MM-DD' format as well
+              if (key.split('-').length == 3) {
+                let [month, day, year] = key.split('-');
+                let universal_format = [year, month, day].join("-");
+                filter += ' LIKE "%' + universal_format + '%" OR ';
+                filter += categories[category];
+              }
+            }
 
             // convert text true and false to mysql 0 or 1 (for 'Paid' category)
             if (key == 'true') {
