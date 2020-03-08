@@ -23,7 +23,7 @@
                   </div>
                </div>
                <br>
-               <u>IMAGE URL</u>
+               <u>IMAGE URL <small>(External URL must start with "www.", "http://", or "https://")</small></u>
                <div class="row">
                   <div class="col-lg-1">
                      <input type="text" name="image_url" id="image_url" required><br>
@@ -55,7 +55,7 @@
    <!-- div collapseable -->
 </div>
 <br>
-<form>
+<form id="update_phone_form" action="/phones" method="POST">
    <div class="container">
    <!-- Modal -->
    <div class="modal fade" id="updateModal" role="dialog">
@@ -69,44 +69,42 @@
             <div class="modal-body">
                <div class="container">
                   <div class="container">
-                    <form>
-                       <input type="hidden" name="phone_id" id="phone_id_input" value="">
+                       <input type="hidden" name="phone_id" value="">
                        <u>MAKE</u>
                        <div class="row">
                           <div class="col-lg-1">
-                             <input type="text" name="make" id="make_input" required><br>
+                             <input type="text" name="make_update" required><br>
                           </div>
                        </div>
                        <br>
                        <u>MODEL</u>
                        <div class="row">
                           <div class="col-lg-1">
-                             <input type="text" name="model" id="model_input" required><br>
+                             <input type="text" name="model_update" required><br>
                           </div>
                        </div>
                        <br>
-                       <u>IMAGE URL (If outside resource URL must start with "www.")</u>
+                       <u>IMAGE URL <small>(External URL must start with "www.", "http://", or "https://")</small></u>
                        <div class="row">
                           <div class="col-lg-1">
-                             <input type="text" name="image_url" id="image_url_input" required><br>
+                             <input type="text" name="image_url_update" required><br>
                           </div>
                        </div>
                        <br>
                        <u>PURCHASE COST</u>
                        <div class="row">
                           <div class="col-lg-1">
-                             <input type="number" name="purchase_cost" id="purchase_cost_input" required><br>
+                             <input type="number" name="purchase_cost_update" step="0.01" required><br>
                           </div>
                        </div>
                        <br>
                        <u>RETAIL COST</u>
                        <div class="row">
                           <div class="col-lg-1">
-                             <input type="number" name="retail_cost" id="retail_cost_input" required><br>
+                             <input type="number" name="retail_cost_update" step="0.01" required><br>
                           </div>
                        </div>
                        <br>
-                   </form>
                   </div>
                </div>
                <div class="modal-footer">
@@ -147,7 +145,7 @@
             <tr>
                 <td class="phone_make">{{this.make}}</td>
                 <td class="phone_model">{{this.model}}</td>
-                <td class="phone_img_url" data-url="{{this.image}}"><img class="resize_img" src="/images/{{this.image}}" alt="{{this.make}} {{this.model}}"></td>
+                <td class="phone_img_url" data-url="{{this.image}}"><img class="resize_img" src="{{formatImageURL this.image}}" alt="{{this.make}} {{this.model}}"></td>
                 <td class="phone_purchase_cost">{{this.purchase}}</td>
                 <td class="phone_retail_cost">{{this.retail}}</td>
                 <td>
