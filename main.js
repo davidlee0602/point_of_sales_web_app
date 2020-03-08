@@ -139,7 +139,7 @@ app.get("/new_invoice", (req, res, next) => {
   new Promise((resolve, reject) => {
       //get phones
       mysql.pool.query(phones_query, (err, results, fields)=>{
-        if (err) reject(err);
+        if (err) return reject(err);
 
         let phones = [];
         let phone_detail = {}
@@ -159,7 +159,7 @@ app.get("/new_invoice", (req, res, next) => {
       // get carriers
       return new Promise((resolve, reject) => {
         mysql.pool.query(carriers_query, (err, results, fields) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           let carriers = [];
           let carrier_detail = {};
@@ -179,7 +179,7 @@ app.get("/new_invoice", (req, res, next) => {
       // get customers
       return new Promise((resolve, reject) => {
         mysql.pool.query(customers_query, (err, results, fields) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           let customers = [];
           let customer_detail = {};
@@ -199,7 +199,7 @@ app.get("/new_invoice", (req, res, next) => {
       // get payment methods
       return new Promise((resolve, reject) => {
         mysql.pool.query(paymentmethods_query, (err, results, fields) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           let paymentmethods = [];
           let paymentmethod_detail = {};
@@ -261,7 +261,7 @@ app.post("/new_invoice", (req, res, next) => {
   new Promise((resolve, reject) => {
     //create new invoice
     mysql.pool.query(new_invoice_query, [invoice_data.date, invoice_data.pay, invoice_data.customer_id, invoice_data.payment], (err, results, fields) => {
-      if (err) reject(err);
+      if (err) return reject(err);
 
       let new_invoice_id = results.insertId;
       resolve(new_invoice_id);
@@ -278,7 +278,7 @@ app.post("/new_invoice", (req, res, next) => {
         function createInvoiceDetails(invoice_id, phone_id, carrier_id) {
           return new Promise((resolve, reject) => {
             mysql.pool.query(new_invoice_details_query, [new_invoice_id, phone_id, carrier_id], (err, results, fields) => {
-              if (err) reject(err);
+              if (err) return reject(err);
 
               resolve();
             })
@@ -314,7 +314,7 @@ app.post("/new_invoice", (req, res, next) => {
     return new Promise((resolve, reject) => {
       //update invoice total due
       mysql.pool.query(update_invoice_total_due_query, [new_invoice_id, new_invoice_id], (err, results, fields) => {
-        if (err) reject(err);
+        if (err) return reject(err);
 
         resolve();
       })
@@ -425,7 +425,7 @@ app.get("/invoices", (req, res, next) => {
     new Promise((resolve, reject) => {
       // get invoice ids, dates, and totals for search feature
       mysql.pool.query(invoice_category_query, (err, results, fields) => {
-        if (err) reject(err);
+        if (err) return reject(err);
 
         context.invoice_ids = [];
         context.invoice_dates = [];
@@ -450,7 +450,7 @@ app.get("/invoices", (req, res, next) => {
       // get customer ids and names for search feature
       return new Promise((resolve, reject) => {
         mysql.pool.query(customer_category_query, (err, results, fields) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           context.customer_ids = [];
           context.customer_names = [];
@@ -468,7 +468,7 @@ app.get("/invoices", (req, res, next) => {
       // get payment methods for search feature
       return new Promise((resolve, reject) => {
         mysql.pool.query(payment_method_category_query, (err, results, fields) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           context.payment_methods = [];
 
@@ -484,7 +484,7 @@ app.get("/invoices", (req, res, next) => {
       // join invoice data for tables
       return new Promise((resolve, reject) => {
         mysql.pool.query(invoice_query, (err, results, fields) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           context.rows = results;
 
@@ -500,19 +500,21 @@ app.get("/invoices", (req, res, next) => {
 /*David 03082020*/
 app.get("/invoice_details", (req, res, next) => {
   let context = {};
+  context.title = 'AREA 51 - Invoice Details';
+
   let phones_query = `SELECT * FROM phones`;
   let carriers_query = `SELECT * FROM carriers`;
   var invoice_details_query =
-	'SELECT invoices.invoice_id, invoices.customer_id, customers.first_name, customers.last_name, invoices.invoice_date, invoices.invoice_paid, invoices.total_due '+ 
+	'SELECT invoices.invoice_id, invoices.customer_id, customers.first_name, customers.last_name, invoices.invoice_date, invoices.invoice_paid, invoices.total_due '+
 	'FROM invoices INNER JOIN customers on invoices.customer_id = customers.customer_id WHERE invoices.invoice_paid = "0"';
   var invoice_details_view_query = 'SELECT invoice_details.invoice_detail_id, invoice_details.invoice_id, invoice_details.phone_id, invoice_details.carrier_id, CONCAT(phones.make," " ,phones.model) AS phone_name,  phones.retail_cost, carriers.name AS carrier_name FROM invoice_details INNER JOIN phones ON invoice_details.phone_id = phones.phone_id INNER JOIN carriers ON invoice_details.carrier_id = carriers.carrier_id ORDER BY invoice_details.invoice_detail_id';
-// 
+//
   // query phones, carriers, invoices and invoice_details
 
   new Promise((resolve, reject) => {
       //get phones
       mysql.pool.query(phones_query, (err, results, fields)=>{
-        if (err) reject(err);
+        if (err) return reject(err);
 
         let phones = [];
         let phone_detail = {}
@@ -532,7 +534,7 @@ app.get("/invoice_details", (req, res, next) => {
       // get carriers
       return new Promise((resolve, reject) => {
         mysql.pool.query(carriers_query, (err, results, fields) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           let carriers = [];
           let carrier_detail = {};
@@ -552,7 +554,7 @@ app.get("/invoice_details", (req, res, next) => {
       // get invoices
       return new Promise((resolve, reject) => {
         mysql.pool.query(invoice_details_query, (err, results, fields) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           let invoices = [];
           let invoice_detail = {};
@@ -577,7 +579,7 @@ app.get("/invoice_details", (req, res, next) => {
       // get invoice_details
       return new Promise((resolve, reject) => {
         mysql.pool.query(invoice_details_view_query, (err, results, fields) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           let invoices_views = [];
           let invoice_detail_view = {};
@@ -585,11 +587,11 @@ app.get("/invoice_details", (req, res, next) => {
             let iview = results[i];
             invoice_detail_view = {};
             invoice_detail_view.invoice_detail_id = iview.invoice_detail_id;
-            invoice_detail_view.invoice_id= iview.invoice_id;            
+            invoice_detail_view.invoice_id= iview.invoice_id;
             invoice_detail_view.phone_id = iview.phone_id;
             invoice_detail_view.carrier_id = iview.carrier_id;
-			invoice_detail_view.phone_name = iview.phone_name;
-			invoice_detail_view.carrier_name = iview.carrier_name;
+			      invoice_detail_view.phone_name = iview.phone_name;
+			      invoice_detail_view.carrier_name = iview.carrier_name;
             invoice_detail_view.retail_cost = iview.retail_cost;
             invoices_views.push(invoice_detail_view);
           }
@@ -680,8 +682,11 @@ app.get("/carriers/lookup", (req, res, next) => {
 /*David 03082020*/
 
 app.get("/edit_invoice", (req, res, next) => {
+    let context = {};
+    context.title = 'AREA 51 - Edit Invoice';
+
     let invoices_query;
-    res.render('edit_invoice');
+    res.render('edit_invoice', context);
 });
 
 app.get("/customers", (req, res, next) => {
@@ -727,6 +732,8 @@ app.post("/customers", (req, res, next) => {
 
 app.get("/carriers", (req, res, next) => {
 	var context = {};
+  context.title = 'AREA 51 - Carriers';
+
 	mysql.pool.query('SELECT * FROM carriers',
   		(err, rows, result)=> {
 	        if(err) next(err);
@@ -754,7 +761,10 @@ app.get("/add_carrier", (req, res, next) => {
 });
 
 app.get("/about", (req, res) => {
-    res.render('about');
+    let context = {};
+    context.title = 'AREA 51 - About';
+
+    res.render('about', context);
 });
 
 app.use((req, res) => {
