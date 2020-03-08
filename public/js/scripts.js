@@ -342,6 +342,117 @@ $(function() {
   //   })
   // });
 
+/*DAVID 03082020*/
+//reference table for use in invoice_details page
+let counter_test = {count:0};
+function counter(){
+    ++counter_test.count;
+}
+function counter_start(varobj){
+  counter_test.count = varobj;
+}
+
+let reference_price = {};
+let reference_phone = {};
+let reference_carrier = {};
+
+//add invoice detail
+$("#add_invoice_detail").click(function () {
+    let invoice_id = document.getElementById("fixed_invoice_id").value
+    let phone_id = document.getElementById("phone_option").value
+    let carrier_id = document.getElementById("carrier_option").value
+    if(phone_id != "none" && carrier_id != "none"){
+
+
+    counter();
+    $("#invoice_detail_table").after('<tr value =' + invoice_id + '><td value = ' + counter_test.count + '>' + counter_test.count + '</td><td value = ' + counter_test.count + '>'+reference_phone[phone_id]+'</td><td value = ' + counter_test.count + '>'+reference_carrier[carrier_id]+'</td><td value = ' + counter_test.count + '>'+reference_price[phone_id]+'</td><td value = ' + counter_test.count + '><div class="row text-center"><button title="remove_phone" class="btn btn-danger btn-sm" type="button" value='+ counter_test.count +'>DELETE</button></div></td></tr>');
+            
+    $.ajax({
+        type: "POST",
+        url: "/new_invoice_details",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+          invoice: invoice_id,
+          phone: phone_id,
+          carrier: carrier_id
+        }),
+      })
+
+     }else{
+      alert("Please select a phone and carrier to add.")
+     }
+ });
+
+//filter invoice details modal
+$("[title|='details_table']").click(function () {
+    document.getElementById("fixed_invoice_id").value = $(this).val();
+    $("#invoice_detail_table").find("td").each(function (i, row)
+            {
+                  counter_start($(this).attr('value'));
+                })
+    var rows = $("#invoice_detail_table").find("tr").hide();
+    rows.filter("tr[value='"+$(this).val()+"']").show();
+ });
+
+$("[title|='close_details_table']").click(function () {
+    location.reload(true);
+ });
+
+//remove phone and carrier from invoice details
+$(document).on('click',"[title|='remove_phone']", function() {
+        $.ajax({
+        type: "POST",
+        url: "/delete_invoice_details",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+          delete_id: $(this).val()
+          }),
+        })
+  $(this).closest('tr').remove();
+});
+
+//load reference tables
+$(document).ready(function(){
+
+     $.ajax({ type: "GET",   
+         url: "/phones/lookup",   
+         async: true,
+         success : function(response)
+         {
+          for (i = 0; i < response.results.length; i++){
+            reference_price[response.results[i]["phone_id"]] =  response.results[i]["price"];
+            reference_phone[response.results[i]["phone_id"]] =  response.results[i]["make"] +" "+ response.results[i]["model"];
+          }
+         }
+    });
+
+     $.ajax({ type: "GET",   
+     url: "/phones2/lookup",   
+     async: true,
+     success : function(response)
+     {
+        for (i = 0; i < response.results.length; i++){
+        reference_phone[response.results[i]["phone_id"]] =  response.results[i]["make"] +" "+ response.results[i]["model"];
+      }
+     }
+    });
+
+     $.ajax({ type: "GET",   
+         url: "/carriers/lookup",   
+         async: true,
+         success : function(response)
+         {
+          for (i = 0; i < response.results.length; i++){
+            reference_carrier[response.results[i]["carrier_id"]] =  response.results[i]["name"];
+          }
+         }
+    });
+
+
+});
+/*DAVID 03082020*/
 
   // UPDATE PHONES
   // Populate phones update modal form

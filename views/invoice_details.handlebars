@@ -6,7 +6,7 @@
         <!-- Modal content-->
         <div class="modal-content">
           <div class="modal-header">
-            <button class="close" data-dismiss="modal" type="button">&times;</button>
+            <button id ="close_show1" title="close_details_table" class="close" data-dismiss="modal" type="button">&times;</button>
             <h4 class="modal-title">Update Customer Invoice</h4>
           </div>
           <div class="modal-body">
@@ -14,110 +14,76 @@
               <u>Invoice ID:</u>
               <div class="row">
                 <div class="col-lg-1">
-                  <input disabled name="fname" type="text" value="1"><br>
+                  <input id="fixed_invoice_id" disabled name="fname" type="text" value=""><br>
                 </div>
               </div><br>
               <div class="row">
                 <div class="col-lg-1">
-                  Phone<select name="phone_item_1">
-                    <option value="">
-                      --
-                    </option>
-                    <option value="1">
-                      iPhone 11 Pro Max
-                    </option>
-                    <option value="2">
-                      Galaxy Note 10+
-                    </option>
-                    <option value="3">
-                      7T Pro
-                    </option>
-                    <option value="4">
-                      Pixel 4 XL
-                    </option>
-                    <option value="5">
-                      Razr Black
-                    </option>
-                    <option value="6">
-                      Xperia 1
-                    </option>
-                    <option value="7">
-                      P30 Pro
-                    </option>
-                  </select>
+                  Phone<select id="phone_option">
+                      <option value="none">
+                        --
+                      </option>
+                      {{#if phones}}
+                      {{#each phones}}
+                      <option value="{{this.phone_id}}">
+                          {{this.make}} {{this.model}}
+                        </option>
+                      {{/each}}
+                      {{/if}}
+                    </select>
                 </div>
                 <div class="col-lg-1 col-lg-offset-1">
-                  Carrier<select name="carrier_item_1">
-                    <option value="">
-                      --
-                    </option>
-                    <option value="1">
-                      AT&T
-                    </option>
-                    <option value="2">
-                      Cricket
-                    </option>
-                    <option value="3">
-                      Metro by T-Mobile
-                    </option>
-                    <option value="4">
-                      Mint
-                    </option>
-                    <option value="5">
-                      T-Mobile
-                    </option>
-                    <option value="6">
-                      Sprint
-                    </option>
-                    <option value="7">
-                      Verizon
-                    </option>
-                  </select>
+                  Carrier<select id="carrier_option">
+                      <option value="none">
+                        --
+                      </option>
+                      {{#if carriers}}
+                      {{#each carriers}}
+                      <option value={{this.carrier_id}}>
+                          {{this.name}}
+                        </option>
+                      {{/each}}
+                      {{/if}}
+                    </select>
                 </div><br>
                 <div class="col-lg-1 col-lg-offset-1">
-                  <button class="btn btn-success btn-sm" type="button">ADD TO INVOICE</button>
+                  <button id="add_invoice_detail" class="btn btn-success btn-sm" type="button">ADD TO INVOICE</button>
                 </div>
               </div><br>
               <div class="container">
-                <table class="table table-hover table-bordered" style="width: 44%;">
+                <!-- <table class="table table-hover table-bordered" style="width: 44%;"> -->
+                <table style="width: 44%;">  
                   <thead align="center">
                     <tr>
-                      <th>Invoice Detail ID</th>
+                      <th >Invoice Detail ID</th>
                       <th>Phone</th>
                       <th>Carrier</th>
                       <th>Retail($)</th>
                       <th class="col-xs-2">Delete</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>iPhone 11</td>
-                      <td>Verizon</td>
-                      <td>999.99</td>
-                      <td>
+                  <tbody id = "invoice_detail_table">
+                  {{#if invoices_views}}
+                  {{#each invoices_views}}
+                    <tr value = {{this.invoice_id}}>
+                      <td value = {{this.invoice_detail_id}}>{{this.invoice_detail_id}}</td>
+                      <td value = {{this.invoice_detail_id}}>{{this.phone_name}}</td>
+                      <td value = {{this.invoice_detail_id}}>{{this.carrier_name}}</td>
+                      <td value = {{this.invoice_detail_id}}>{{this.retail_cost}}</td>                      
+                      <td value = {{this.invoice_detail_id}}>
                         <div class="row text-center">
-                          <button class="btn btn-danger btn-sm" type="button">DELETE</button>
+                          <button class="btn btn-danger btn-sm" title="remove_phone" type="button" value={{this.invoice_detail_id}}>DELETE</button>
                         </div>
                       </td>
                     </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Razr Black</td>
-                      <td>T-mobile</td>
-                      <td>1199.99</td>
-                      <td>
-                        <div class="row text-center">
-                          <button class="btn btn-danger btn-sm" type="button">DELETE</button>
-                        </div>
-                      </td>
-                    </tr>
+                  {{/each}}
+                  {{/if}}
                   </tbody>
                 </table>
               </div>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-default btn-sm" data-dismiss="modal" type="button">CLOSE</button>
+              <button id="close_show2" title="close_details_table" class="btn btn-default btn-sm" data-dismiss="modal" type="button">CLOSE</button>
             </div>
           </div>
         </div>
@@ -149,19 +115,27 @@
         </tr>
       </thead>
       <tbody class="table-searchable">
-        <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>David Lee</td>
-          <td>2020-02-07</td>
-          <td>FALSE</td>
-          <td>1069.99</td>
-          <td>
-            <div class="row text-center">
-              <button class="btn btn-warning btn-sm" data-target="#updateModal" data-toggle="modal" type="button">UPDATE</button>
-            </div>
-          </td>
-        </tr>
+        {{#if invoices}}
+        {{#each invoices}}
+          <tr>
+              <td>{{this.invoice_id}}</td>
+              <td>{{this.customer_id}}</td>
+              <td>{{this.first_name}} {{this.last_name}}</td>
+              <td>{{this.invoice_date}}</td>
+              {{#if invoice_paid}}
+                <td>TRUE</td>
+              {{else}}
+                <td>FALSE</td>
+              {{/if}}
+              <td>{{this.total_due}}</td>
+              <td>
+              <div class="row text-center">
+                <button id ="invoice_update" type="button" class="btn btn-warning btn-sm" title="details_table" data-toggle="modal" data-target="#updateModal" value={{this.invoice_id}}> UPDATE </button>
+                </div>
+              </td>
+          </tr>
+        {{/each}}
+        {{/if}}
       </tbody>
     </table><br>
   </div><!-- </div> -->

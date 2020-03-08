@@ -497,9 +497,187 @@ app.get("/invoices", (req, res, next) => {
     })
 });
 
+/*David 03082020*/
 app.get("/invoice_details", (req, res, next) => {
-    res.render('invoice_details');
+  let context = {};
+  let phones_query = `SELECT * FROM phones`;
+  let carriers_query = `SELECT * FROM carriers`;
+  var invoice_details_query =
+	'SELECT invoices.invoice_id, invoices.customer_id, customers.first_name, customers.last_name, invoices.invoice_date, invoices.invoice_paid, invoices.total_due '+ 
+	'FROM invoices INNER JOIN customers on invoices.customer_id = customers.customer_id WHERE invoices.invoice_paid = "0"';
+  var invoice_details_view_query = 'SELECT invoice_details.invoice_detail_id, invoice_details.invoice_id, invoice_details.phone_id, invoice_details.carrier_id, CONCAT(phones.make," " ,phones.model) AS phone_name,  phones.retail_cost, carriers.name AS carrier_name FROM invoice_details INNER JOIN phones ON invoice_details.phone_id = phones.phone_id INNER JOIN carriers ON invoice_details.carrier_id = carriers.carrier_id ORDER BY invoice_details.invoice_detail_id';
+// 
+  // query phones, carriers, invoices and invoice_details
+
+  new Promise((resolve, reject) => {
+      //get phones
+      mysql.pool.query(phones_query, (err, results, fields)=>{
+        if (err) reject(err);
+
+        let phones = [];
+        let phone_detail = {}
+        for (let i = 0, k = results.length; i<k; i++) {
+          let phone = results[i];
+          phone_detail = {};
+          phone_detail.phone_id = phone.phone_id;
+          phone_detail.make = phone.make;
+          phone_detail.model = phone.model;
+          phones.push(phone_detail);
+        }
+        context.phones = phones;
+        resolve();
+      });
+    })
+    .then(() => {
+      // get carriers
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(carriers_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          let carriers = [];
+          let carrier_detail = {};
+          for (let i = 0, k = results.length; i<k; i++) {
+            let carrier = results[i];
+            carrier_detail = {};
+            carrier_detail.carrier_id = carrier.carrier_id;
+            carrier_detail.name = carrier.name;
+            carriers.push(carrier_detail);
+          }
+          context.carriers = carriers;
+          resolve();
+        })
+      })
+    })
+    .then(() => {
+      // get invoices
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(invoice_details_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          let invoices = [];
+          let invoice_detail = {};
+          for (let i = 0, k = results.length; i<k; i++) {
+            let invoice_detail_instance = results[i];
+            invoice_detail = {};
+            invoice_detail.invoice_id = invoice_detail_instance.invoice_id;
+            invoice_detail.customer_id = invoice_detail_instance.customer_id;
+            invoice_detail.first_name = invoice_detail_instance.first_name;
+            invoice_detail.last_name = invoice_detail_instance.last_name;
+            invoice_detail.invoice_date = invoice_detail_instance.invoice_date;
+            invoice_detail.invoice_paid = invoice_detail_instance.invoice_paid;
+            invoice_detail.total_due = invoice_detail_instance.total_due;
+            invoices.push(invoice_detail);
+          }
+          context.invoices = invoices;
+          resolve();
+        })
+      })
+    })
+    .then(() => {
+      // get invoice_details
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(invoice_details_view_query, (err, results, fields) => {
+          if (err) reject(err);
+
+          let invoices_views = [];
+          let invoice_detail_view = {};
+          for (let i = 0, k = results.length; i<k; i++) {
+            let iview = results[i];
+            invoice_detail_view = {};
+            invoice_detail_view.invoice_detail_id = iview.invoice_detail_id;
+            invoice_detail_view.invoice_id= iview.invoice_id;            
+            invoice_detail_view.phone_id = iview.phone_id;
+            invoice_detail_view.carrier_id = iview.carrier_id;
+			invoice_detail_view.phone_name = iview.phone_name;
+			invoice_detail_view.carrier_name = iview.carrier_name;
+            invoice_detail_view.retail_cost = iview.retail_cost;
+            invoices_views.push(invoice_detail_view);
+          }
+          context.invoices_views = invoices_views;
+          resolve();
+        })
+      })
+    })
+    .then(() => {
+      // render page
+      res.render('invoice_details', context);
+    })
+    .catch((error) => {
+      next(error);
+    })
+
 });
+
+app.post('/new_invoice_details', function (req, res) {
+
+   var data  = [
+    req.body.invoice,
+    req.body.phone,
+    req.body.carrier
+  ]
+
+   mysql.pool.query(`INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (?, ?, ?)`, data, function (error, results, fields) {
+	  if (error) throw error;
+	  res.end(JSON.stringify(results));
+	});
+});
+
+app.post('/delete_invoice_details', function (req, res) {
+
+   var data  = [
+    req.body.delete_id,
+  ]
+   mysql.pool.query(`DELETE FROM invoice_details WHERE invoice_detail_id = (?)`, data, function (error, results, fields) {
+	  if (error) throw error;
+	  res.end(JSON.stringify(results));
+	});
+});
+
+app.get("/phones/lookup", (req, res, next) => {
+	var context = {};
+
+  	mysql.pool.query('SELECT * FROM phones',
+  		(err, rows, result)=> {
+	        if(err) next(err);
+	        var storage = [];
+	        for(var i in rows){
+	            storage.push({"phone_id": rows[i].phone_id, "price": rows[i].retail_cost})
+	        }
+	        context.results = storage;
+         	res.json(context);
+    	});
+});
+
+app.get("/phones2/lookup", (req, res, next) => {
+	var context = {};
+
+  	mysql.pool.query('SELECT * FROM phones',
+  		(err, rows, result)=> {
+	        if(err) next(err);
+	        var storage = [];
+	        for(var i in rows){
+	            storage.push({"phone_id": rows[i].phone_id, "make": rows[i].make ,"model": rows[i].model})
+	        }
+	        context.results = storage;
+         	res.json(context);
+    	});
+});
+
+app.get("/carriers/lookup", (req, res, next) => {
+	var context = {};
+
+  	mysql.pool.query('SELECT * FROM carriers',
+  		(err, rows, result)=> {
+	        if(err) next(err);
+	        var storage = [];
+	        for(var i in rows){
+	            storage.push({"carrier_id": rows[i].carrier_id, "name": rows[i].name})
+	        }
+	        context.results = storage;
+         	res.json(context);
+    	});
+});
+/*David 03082020*/
 
 app.get("/edit_invoice", (req, res, next) => {
     let invoices_query;
