@@ -29,13 +29,22 @@ app.get("/", (req, res) => {
 
 app.get("/phones", (req, res, next) => {
 	var context = {};
+  context.title = 'AREA 51 - Phones';
 
   	mysql.pool.query('SELECT * FROM phones',
   		(err, rows, result)=> {
 	        if(err) next(err);
 	        var storage = [];
 	        for(var i in rows){
-	            storage.push({"make": rows[i].make, "model": rows[i].model, "image": rows[i].image_url, "purchase": rows[i].purchase_cost, "retail": rows[i].retail_cost})
+              console.log(rows[i]);
+	            storage.push({
+                "phone_id": rows[i].phone_id,
+                "make": rows[i].make,
+                "model": rows[i].model,
+                "image": rows[i].image_url,
+                "purchase": rows[i].purchase_cost,
+                "retail": rows[i].retail_cost
+              })
 	        }
 	        context.results = storage;
          	res.render('phones', context);
