@@ -342,4 +342,34 @@ $(function() {
   //   })
   // });
 
+
+  // UPDATE PHONES
+  // Populate phones update modal form
+  $(".update-phone-button").click(function(e) {
+    // modal inputs
+    let phone_id_input = $('input[name=phone_id]');
+    let make_input = $('input[name=make_update]');
+    let model_input = $('input[name=model_update]');
+    let image_url_input = $('input[name=image_url_update]');
+    let purchase_cost_input = $('input[name=purchase_cost_update]');
+    let retail_cost_input = $('input[name=retail_cost_update]');
+
+    // row values
+    let row = $(this).parent().parent();
+    let make_value = row.siblings(".phone_make").first().text();
+    let model_value = row.siblings(".phone_model").first().text();
+    let image_value = row.siblings(".phone_img_url").first().data("url");
+    let purchase_value = row.siblings(".phone_purchase_cost").first().text();
+    let retail_value = row.siblings(".phone_retail_cost").first().text();
+
+    // populate form fields
+    phone_id_input.val($(this).data("phone-id"));
+    make_input.val(make_value);
+    model_input.val(model_value);
+    image_url_input.val(image_value);
+    purchase_cost_input.val(purchase_value);
+    retail_cost_input.val(retail_value);
+  });
+
+
 });

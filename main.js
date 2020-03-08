@@ -9,11 +9,19 @@ dotenv.config();
 
 let handlebars = require('express-handlebars').create({defaultLayout:'main'});
 // handlebars helpers
+// format date
 handlebars.handlebars.registerHelper('formatDate', (dateString) => {
   return new handlebars.handlebars.SafeString(
     moment(dateString).format('MM-DD-YYYY')
   )
 });
+// format phone image urls
+handlebars.handlebars.registerHelper('formatImageURL', (image_url) => {
+  if (!image_url.includes("www.") && !image_url.includes("http://") && !image_url.includes("https://")) {
+    image_url = "/images/" + image_url;
+  }
+  return new handlebars.handlebars.SafeString(image_url);
+})
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -29,18 +37,48 @@ app.get("/", (req, res) => {
 
 app.get("/phones", (req, res, next) => {
 	var context = {};
+  context.title = 'AREA 51 - Phones';
 
   	mysql.pool.query('SELECT * FROM phones',
   		(err, rows, result)=> {
 	        if(err) next(err);
 	        var storage = [];
 	        for(var i in rows){
-	            storage.push({"make": rows[i].make, "model": rows[i].model, "image": rows[i].image_url, "purchase": rows[i].purchase_cost, "retail": rows[i].retail_cost})
+	            storage.push({
+                "phone_id": rows[i].phone_id,
+                "make": rows[i].make,
+                "model": rows[i].model,
+                "image": rows[i].image_url,
+                "purchase": rows[i].purchase_cost,
+                "retail": rows[i].retail_cost
+              })
 	        }
 	        context.results = storage;
          	res.render('phones', context);
     	});
 });
+
+app.post("/phones", (req, res, next) => {
+  // update a phone's details
+
+  let query =
+  `UPDATE phones SET
+  make = ?,
+  model = ?,
+  image_url = ?,
+  purchase_cost = ?,
+  retail_cost = ?
+  WHERE phones.phone_id = ?`;
+
+  mysql.pool.query(query,
+    [req.body.make_update, req.body.model_update, req.body.image_url_update,
+      req.body.purchase_cost_update, req.body.retail_cost_update, req.body.phone_id],
+    (err, results, fields) => {
+      if (err) return next(err);
+
+      res.redirect("phones");
+  })
+})
 
 app.get("/add_phone", (req, res, next) => {
 	var context = {};
@@ -68,7 +106,7 @@ app.get("/paymentmethods", (req, res, next) => {
     let query = `SELECT * FROM payment_methods`;
 
     mysql.pool.query(query, (err, results, fields) => {
-      if (err) next(err);
+      if (err) return next(err);
 
       context.rows = results;
 
@@ -81,7 +119,7 @@ app.post("/paymentmethods", (req, res, next) => {
   let query = `INSERT INTO payment_methods (name) VALUES (?)`;
 
   mysql.pool.query(query, req.body.name, (err, results, fields) => {
-    if (err) next(err);
+    if (err) return next(err);
 
     res.redirect('paymentmethods');
   });
@@ -223,7 +261,7 @@ app.post("/new_invoice", (req, res, next) => {
   new Promise((resolve, reject) => {
     //create new invoice
     mysql.pool.query(new_invoice_query, [invoice_data.date, invoice_data.pay, invoice_data.customer_id, invoice_data.payment], (err, results, fields) => {
-      if (err) next(err);
+      if (err) reject(err);
 
       let new_invoice_id = results.insertId;
       resolve(new_invoice_id);
@@ -476,7 +514,7 @@ app.get("/customers", (req, res, next) => {
   let query = `SELECT * FROM customers;`;
 
   mysql.pool.query(query, (err, results, fields) => {
-    if (err) next(err);
+    if (err) return next(err);
 
     context.rows = results;
 
@@ -503,7 +541,8 @@ app.post("/customers", (req, res, next) => {
   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
   mysql.pool.query(query, data, (err, results, fields) => {
-    if (err) next(err);
+    if (err) return next(err);
+
     res.redirect('/customers');
   })
 });

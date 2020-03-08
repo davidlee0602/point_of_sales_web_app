@@ -23,7 +23,7 @@
                   </div>
                </div>
                <br>
-               <u>IMAGE URL</u>
+               <u>IMAGE URL <small>(External URL must start with "www.", "http://", or "https://")</small></u>
                <div class="row">
                   <div class="col-lg-1">
                      <input type="text" name="image_url" id="image_url" required><br>
@@ -55,7 +55,7 @@
    <!-- div collapseable -->
 </div>
 <br>
-<form>
+<form id="update_phone_form" action="/phones" method="POST">
    <div class="container">
    <!-- Modal -->
    <div class="modal fade" id="updateModal" role="dialog">
@@ -64,50 +64,51 @@
          <div class="modal-content">
             <div class="modal-header">
                <button type="button" class="close" data-dismiss="modal">&times;</button>
-               <h4 class="modal-title">Update Customer</h4>
+               <h4 class="modal-title">Update Phone</h4>
             </div>
             <div class="modal-body">
                <div class="container">
                   <div class="container">
-                     <u>MAKE</u>
-                     <div class="row">
-                        <div class="col-lg-1">
-                           <input type="text" name="make" id="make_input" required><br>
-                        </div>
-                     </div>
-                     <br>
-                     <u>MODEL</u>
-                     <div class="row">
-                        <div class="col-lg-1">
-                           <input type="text" name="model" id="model_input" required><br>
-                        </div>
-                     </div>
-                     <br>
-                     <u>IMAGE URL</u>
-                     <div class="row">
-                        <div class="col-lg-1">
-                           <input type="text" name="image_url" id="image_url_input" required><br>
-                        </div>
-                     </div>
-                     <br>
-                     <u>PURCHASE COST</u>
-                     <div class="row">
-                        <div class="col-lg-1">
-                           <input type="number" name="purchase_cost" id="purchase_cost_input" required><br>
-                        </div>
-                     </div>
-                     <br>
-                     <u>RETAIL COST</u>
-                     <div class="row">
-                        <div class="col-lg-1">
-                           <input type="number" name="retail_cost" id="retail_cost_input" required><br>
-                        </div>
-                     </div>
-                     <br>
+                       <input type="hidden" name="phone_id" value="">
+                       <u>MAKE</u>
+                       <div class="row">
+                          <div class="col-lg-1">
+                             <input type="text" name="make_update" required><br>
+                          </div>
+                       </div>
+                       <br>
+                       <u>MODEL</u>
+                       <div class="row">
+                          <div class="col-lg-1">
+                             <input type="text" name="model_update" required><br>
+                          </div>
+                       </div>
+                       <br>
+                       <u>IMAGE URL <small>(External URL must start with "www.", "http://", or "https://")</small></u>
+                       <div class="row">
+                          <div class="col-lg-1">
+                             <input type="text" name="image_url_update" required><br>
+                          </div>
+                       </div>
+                       <br>
+                       <u>PURCHASE COST</u>
+                       <div class="row">
+                          <div class="col-lg-1">
+                             <input type="number" name="purchase_cost_update" step="0.01" required><br>
+                          </div>
+                       </div>
+                       <br>
+                       <u>RETAIL COST</u>
+                       <div class="row">
+                          <div class="col-lg-1">
+                             <input type="number" name="retail_cost_update" step="0.01" required><br>
+                          </div>
+                       </div>
+                       <br>
                   </div>
                </div>
                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">SUBMIT</button>
+                  <button type="submit" class="btn btn-primary btn-sm">SUBMIT</button>
                   <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">CLOSE</button>
                </div>
             </div>
@@ -142,14 +143,14 @@
             {{#if results}}
             {{#each results}}
             <tr>
-                <td>{{this.make}}</td>
-                <td>{{this.model}}</td>
-                <td><img class="resize_img" src="/images/{{this.image}}" alt="{{this.make}} {{this.model}}"></td>
-                <td>{{this.purchase}}</td>
-                <td>{{this.retail}}</td>
+                <td class="phone_make">{{this.make}}</td>
+                <td class="phone_model">{{this.model}}</td>
+                <td class="phone_img_url" data-url="{{this.image}}"><img class="resize_img" src="{{formatImageURL this.image}}" alt="{{this.make}} {{this.model}}"></td>
+                <td class="phone_purchase_cost">{{this.purchase}}</td>
+                <td class="phone_retail_cost">{{this.retail}}</td>
                 <td>
                   <div class="row text-center">
-                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                     <button type="button" class="update-phone-button btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal" data-phone-id="{{this.phone_id}}">UPDATE</button>
                   </div>
                </td>
             </tr>
