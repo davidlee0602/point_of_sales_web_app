@@ -500,6 +500,8 @@ app.get("/invoices", (req, res, next) => {
 /*David 03082020*/
 app.get("/invoice_details", (req, res, next) => {
   let context = {};
+  context.title = 'AREA 51 - Invoice Details';
+
   let phones_query = `SELECT * FROM phones`;
   let carriers_query = `SELECT * FROM carriers`;
   var invoice_details_query =
@@ -588,8 +590,8 @@ app.get("/invoice_details", (req, res, next) => {
             invoice_detail_view.invoice_id= iview.invoice_id;
             invoice_detail_view.phone_id = iview.phone_id;
             invoice_detail_view.carrier_id = iview.carrier_id;
-			invoice_detail_view.phone_name = iview.phone_name;
-			invoice_detail_view.carrier_name = iview.carrier_name;
+			      invoice_detail_view.phone_name = iview.phone_name;
+			      invoice_detail_view.carrier_name = iview.carrier_name;
             invoice_detail_view.retail_cost = iview.retail_cost;
             invoices_views.push(invoice_detail_view);
           }
@@ -680,8 +682,11 @@ app.get("/carriers/lookup", (req, res, next) => {
 /*David 03082020*/
 
 app.get("/edit_invoice", (req, res, next) => {
+    let context = {};
+    context.title = 'AREA 51 - Edit Invoice';
+
     let invoices_query;
-    res.render('edit_invoice');
+    res.render('edit_invoice', context);
 });
 
 app.get("/customers", (req, res, next) => {
@@ -727,6 +732,8 @@ app.post("/customers", (req, res, next) => {
 
 app.get("/carriers", (req, res, next) => {
 	var context = {};
+  context.title = 'AREA 51 - Carriers';
+
 	mysql.pool.query('SELECT * FROM carriers',
   		(err, rows, result)=> {
 	        if(err) next(err);
@@ -754,7 +761,10 @@ app.get("/add_carrier", (req, res, next) => {
 });
 
 app.get("/about", (req, res) => {
-    res.render('about');
+    let context = {};
+    context.title = 'AREA 51 - About';
+
+    res.render('about', context);
 });
 
 app.use((req, res) => {

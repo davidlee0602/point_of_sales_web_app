@@ -52,7 +52,7 @@
               </div><br>
               <div class="container">
                 <!-- <table class="table table-hover table-bordered" style="width: 44%;"> -->
-                <table style="width: 44%;">  
+                <table style="width: 44%;">
                   <thead align="center">
                     <tr>
                       <th >Invoice Detail ID</th>
@@ -69,7 +69,7 @@
                       <td value = {{this.invoice_detail_id}}>{{this.invoice_detail_id}}</td>
                       <td value = {{this.invoice_detail_id}}>{{this.phone_name}}</td>
                       <td value = {{this.invoice_detail_id}}>{{this.carrier_name}}</td>
-                      <td value = {{this.invoice_detail_id}}>{{this.retail_cost}}</td>                      
+                      <td value = {{this.invoice_detail_id}}>{{this.retail_cost}}</td>
                       <td value = {{this.invoice_detail_id}}>
                         <div class="row text-center">
                           <button class="btn btn-danger btn-sm" title="remove_phone" type="button" value={{this.invoice_detail_id}}>DELETE</button>
@@ -93,7 +93,7 @@
 </form><br>
 <div class="container">
   <!-- <div class="col-lg-12"> -->
-  <p><strong>Invoice Details</strong></p>
+  <h2 class="page-heading">Invoice Details</h2>
   <div class="jumbotron">
     <!-- search bar -->
     <div class="row pull-right input-group hide">
@@ -121,7 +121,7 @@
               <td>{{this.invoice_id}}</td>
               <td>{{this.customer_id}}</td>
               <td>{{this.first_name}} {{this.last_name}}</td>
-              <td>{{this.invoice_date}}</td>
+              <td>{{formatDate this.invoice_date}}</td>
               {{#if invoice_paid}}
                 <td>TRUE</td>
               {{else}}
