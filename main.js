@@ -739,7 +739,7 @@ app.get("/carriers", (req, res, next) => {
 	        if(err) next(err);
 	        var storage = [];
 	        for(var i in rows){
-	            storage.push({"name": rows[i].name})
+	            storage.push({"carrier_id": rows[i].carrier_id,"name": rows[i].name})
 	        }
 	        context.results = storage;
          	res.render('carriers', context);
@@ -759,6 +759,30 @@ app.get("/add_carrier", (req, res, next) => {
 		    res.redirect('/carriers');
 	  	});
 });
+
+app.post("/update_carrier", (req, res, next) => {
+  let query =
+  `UPDATE carriers SET name = ? WHERE carriers.carrier_id = ?`;
+
+  mysql.pool.query(query, [req.body.carrier_name, req.body.carrier_id_holder],
+    (err, results, fields) => {
+      if (err) return next(err);
+
+      res.redirect("carriers");
+  })
+})
+
+app.post("/update_payment_method", (req, res, next) => {
+  let query =
+  `UPDATE payment_methods SET name = ? WHERE payment_methods.payment_method_id = ?`;
+
+  mysql.pool.query(query, [req.body.payment_name, req.body.payment_method_id_holder],
+    (err, results, fields) => {
+      if (err) return next(err);
+
+      res.redirect("paymentmethods");
+  })
+})
 
 app.get("/about", (req, res) => {
     let context = {};

@@ -453,7 +453,14 @@ $(document).ready(function(){
 
 });
 /*DAVID 03082020*/
+$(document).on('click',"[title|='update_carrier']", function() {
+	document.getElementById("carrier_id_holder").value = $(this).val();
+});
 
+$(document).on('click',"[title|='update_payment_method']", function() {
+  document.getElementById("payment_method_id_holder").value = $(this).val();
+});
+/*DAVID 03082020_2*/ 
   // UPDATE PHONES
   // Populate phones update modal form
   $(".update-phone-button").click(function(e) {

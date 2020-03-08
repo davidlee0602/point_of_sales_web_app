@@ -27,7 +27,7 @@
    <!-- div collapseable -->
 </div>
 <br>
-<form>
+<form action="/update_payment_method" method="POST">
   <!-- Modal -->
   <div class="modal fade" id="updateModal" role="dialog">
      <div class="modal-dialog">
@@ -42,12 +42,13 @@
                  <u>PAYMENT METHOD NAME</u>
                  <div class="row">
                     <div class="col-lg-1">
-                       <input type="text" name="name" required><br>
+                       <input type="text" name="payment_name" id="payment_name" required><br>
+                       <input type="text" name="payment_method_id_holder" id="payment_method_id_holder"required><br>
                     </div>
                  </div>
               </div>
               <div class="modal-footer">
-                 <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">SUBMIT</button>
+                 <button type="submit" class="btn btn-primary btn-sm">SUBMIT</button>
                  <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">CLOSE</button>
               </div>
            </div>
@@ -80,7 +81,7 @@
                <td>{{name}}</td>
                <td>
                   <div class="row text-center">
-                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal" title="update_payment_method" value={{payment_method_id}}>UPDATE</button>
                   </div>
                </td>
             </tr>
