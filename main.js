@@ -7,6 +7,18 @@ let app = express();
 const dotenv = require('dotenv');
 dotenv.config();
 
+// Node version mismatch on FLIP, polyfil for Object.entries
+if (!Object.entries) {
+   Object.entries = function( obj ){
+      var ownProps = Object.keys( obj ),
+         i = ownProps.length,
+         resArray = new Array(i); // preallocate the Array
+
+      while (i--)
+         resArray[i] = [ownProps[i], obj[ownProps[i]]];
+      return resArray;
+   }
+};
 
 // Handlebars
 let handlebars = require('express-handlebars').create({defaultLayout:'main'});
