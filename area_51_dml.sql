@@ -82,9 +82,9 @@ cr.carrier_id = d.carrier_id
 ORDER BY i.invoice_id ASC;*/
 
 -- Updated READ/SELECT Invoice Details
-SELECT invoices.invoice_id, invoices.customer_id, customers.first_name, customers.last_name, 
-invoices.invoice_date, invoices.invoice_paid, invoices.total_due FROM invoices 
-INNER JOIN customers on invoices.customer_id = customers.customer_id WHERE invoices.invoice_paid = "0"';
+SELECT invoices.invoice_id, invoices.customer_id, customers.first_name, customers.last_name,
+invoices.invoice_date, invoices.invoice_paid, invoices.total_due FROM invoices
+INNER JOIN customers on invoices.customer_id = customers.customer_id WHERE invoices.invoice_paid = "0";
 
 -- READ/SELECT payment_methods
 SELECT * FROM payment_methods;
