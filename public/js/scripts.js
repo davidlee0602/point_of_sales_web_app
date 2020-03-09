@@ -488,6 +488,8 @@ $(document).on('click',"[title|='update_customer']", function() {
   document.getElementById("email").value = reference_customer[$(this).val()][7];
 });
 /*DAVID 03082020_2*/
+
+
   // UPDATE PHONES
   // Populate phones update modal form
   $(".update-phone-button").click(function(e) {
@@ -516,5 +518,28 @@ $(document).on('click',"[title|='update_customer']", function() {
     retail_cost_input.val(retail_value);
   });
 
+
+  // UPDATE INVOICES
+  // Populate invoice update modal form
+  $(".update-invoice-button").click(function(e) {
+    // modal inputs
+    let invoice_id_input = $('input[name=invoice_id_holder]');
+    let invoice_date_input = $('input[name=date_input]');
+    let customer_input = $('select[name=customer_input]');
+    let payment_method_input = $('select[name=payment_method_input]');
+
+    // row values
+    let row = $(this).parent().parent();
+    let invoice_id_value = row.siblings(".invoice_id").first().text();
+    let date_value = row.siblings(".invoice_date").data("date-value");
+    let customer_id_value = row.siblings(".invoice_customer_id").first().text();
+    let payment_method_value = row.siblings(".invoice_payment_method").data("payment-method-id");
+
+    // populate form fields
+    invoice_id_input.val(invoice_id_value);
+    invoice_date_input.val(date_value);
+    customer_input.val(customer_id_value);
+    payment_method_input.val(payment_method_value);
+  })
 
 });

@@ -17,6 +17,12 @@ handlebars.handlebars.registerHelper('formatDate', (dateString) => {
     moment(dateString).format('MM-DD-YYYY')
   )
 });
+// format date for SQL/Universal
+handlebars.handlebars.registerHelper('formatDateUniversal', (dateString) => {
+  return new handlebars.handlebars.SafeString(
+    moment(dateString).format('YYYY-MM-DD')
+  )
+});
 // format phone image urls
 handlebars.handlebars.registerHelper('formatImageURL', (image_url) => {
   if (!image_url.includes("www.") && !image_url.includes("http://") && !image_url.includes("https://")) {
@@ -358,7 +364,7 @@ app.get("/invoices", (req, res, next) => {
       `SELECT customer_id, CONCAT(first_name, ' ', last_name) AS full_name
       FROM customers ORDER BY customer_id`;
     let payment_method_category_query =
-      `SELECT name from payment_methods`;
+      `SELECT payment_method_id, name from payment_methods`;
 
     // check for search/filter query in URL
     // formulate filter query based on user's filters
@@ -416,7 +422,7 @@ app.get("/invoices", (req, res, next) => {
     // invoice table query
     let invoice_query =
     `SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
-     c.customer_id, c.first_name, c.last_name, p.name
+     c.customer_id, c.first_name, c.last_name, p.payment_method_id, p.name
     FROM invoices i
     JOIN customers c ON
     c.customer_id = i.customer_id
@@ -456,12 +462,10 @@ app.get("/invoices", (req, res, next) => {
         mysql.pool.query(customer_category_query, (err, results, fields) => {
           if (err) return reject(err);
 
-          context.customer_ids = [];
-          context.customer_names = [];
+          context.customers = {};
 
           results.forEach((invoice) => {
-            context.customer_ids.push(invoice.customer_id);
-            context.customer_names.push(invoice.full_name);
+            context.customers[invoice.customer_id] = invoice.full_name;
           })
 
           resolve();
@@ -474,10 +478,10 @@ app.get("/invoices", (req, res, next) => {
         mysql.pool.query(payment_method_category_query, (err, results, fields) => {
           if (err) return reject(err);
 
-          context.payment_methods = [];
+          context.payment_methods = {};
 
           results.forEach((invoice) => {
-            context.payment_methods.push(invoice.name);
+            context.payment_methods[invoice.payment_method_id] = invoice.name;
           })
 
           resolve();
@@ -812,6 +816,30 @@ app.post("/update_customer", (req, res, next) => {
       if (err) return next(err);
 
       res.redirect("customers");
+  })
+})
+
+app.post("/update_invoice", (req, res, next) => {
+
+  let update_query = `UPDATE invoices SET invoice_date = ?, payment_method_id = ?, customer_id = ?
+  WHERE invoices.invoice_id = ?`;
+  let update_query_nullify_payment = `UPDATE invoices SET invoice_date = ?, payment_method_id = NULL, customer_id = ?
+  WHERE invoices.invoice_id = ?`;
+
+  let payment_index = 1;
+  let update_values = [req.body.date_input, req.body.payment_method_input, req.body.customer_input, req.body.invoice_id_holder];
+
+  if (!req.body.payment_method_input) {
+    // change query to set payment_method_id to NULL
+    update_query = update_query_nullify_payment;
+    // remove payment_method from update_values array
+    update_values.splice(payment_index, 1);
+  }
+
+  mysql.pool.query(update_query, update_values, (err, results, fields) => {
+    if (err) return next(err);
+
+    res.redirect("invoices");
   })
 })
 
