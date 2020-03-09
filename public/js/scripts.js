@@ -466,10 +466,14 @@ $(document).ready(function(){
 /*DAVID 03082020*/
 $(document).on('click',"[title|='update_carrier']", function() {
 	document.getElementById("carrier_id_holder").value = $(this).val();
+  // pre-populate modal form with value of selected carrier
+  document.getElementById("carrier_name").value = $(this).parent().parent().siblings().first().text();
 });
 
 $(document).on('click',"[title|='update_payment_method']", function() {
   document.getElementById("payment_method_id_holder").value = $(this).val();
+  // pre-populate modal form with value of selected payment method
+  document.getElementById("payment_name").value = $(this).parent().parent().siblings().first().text();
 });
 
 $(document).on('click',"[title|='update_customer']", function() {
