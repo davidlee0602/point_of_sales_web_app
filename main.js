@@ -7,6 +7,8 @@ let app = express();
 const dotenv = require('dotenv');
 dotenv.config();
 
+
+// Handlebars
 let handlebars = require('express-handlebars').create({defaultLayout:'main'});
 // handlebars helpers
 // format date
@@ -22,6 +24,7 @@ handlebars.handlebars.registerHelper('formatImageURL', (image_url) => {
   }
   return new handlebars.handlebars.SafeString(image_url);
 })
+
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
