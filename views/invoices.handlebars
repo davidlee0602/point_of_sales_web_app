@@ -138,7 +138,7 @@
             <td class="invoice_total_due">{{total_due}}</td>
             <td>
               <div class="row text-center">
-                <button type="button" class="pay-invoice-button btn btn-success btn-sm" {{#if invoice_paid}}disabled{{/if}}>PAY</button>
+                <button type="button" class="pay-invoice-button btn btn-success btn-sm" data-value="{{invoice_id}}" {{#if invoice_paid}}disabled{{/if}}>PAY</button>
               </div>
             </td>
             <td>
@@ -152,7 +152,7 @@
 								class="update-invoice-button btn btn-warning btn-sm"
 								data-toggle="modal"
 								data-target="#updateModal"
-								value={{invoice_id}}
+								data-value="{{invoice_id}}"
 								{{#if invoice_paid}}disabled{{/if}}>UPDATE</button>
               </div>
             </td>

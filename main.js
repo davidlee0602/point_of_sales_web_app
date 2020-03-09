@@ -843,6 +843,16 @@ app.post("/update_invoice", (req, res, next) => {
   })
 })
 
+app.post("/pay_invoice", (req, res, next) => {
+  let query = `UPDATE invoices SET invoice_paid = '1' WHERE invoices.invoice_id = ?`;
+
+  mysql.pool.query(query, req.body.invoice_id, (err, results, fields) => {
+    if (err) return next(err);
+
+    res.json({status: 200});
+  })
+})
+
 app.get("/about", (req, res) => {
     let context = {};
     context.title = 'AREA 51 - About';
