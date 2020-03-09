@@ -301,6 +301,7 @@ $(function() {
       })
       .fail((response, status) => {
         // big error
+        window.alert("Oops.. something went wrong.");
         console.log("oops", response.statusText, status);
       })
 
@@ -540,6 +541,39 @@ $(document).on('click',"[title|='update_customer']", function() {
     invoice_date_input.val(date_value);
     customer_input.val(customer_id_value);
     payment_method_input.val(payment_method_value);
+  })
+
+  // PAY INVOICE FROM INVOICES PAGE
+  $(".pay-invoice-button").click(function(e) {
+    let invoice_id = $(this).data("value");
+    let payment_method_value = $(this).parent().parent().siblings(".invoice_payment_method").data("payment-method-id");
+
+    if (payment_method_value) {
+      let answer = confirm("Are you sure you want to pay this invoice?");
+      if (answer) {
+        $.ajax({
+          type: "POST",
+          url: "/pay_invoice",
+          contentType: "application/json",
+          dataType: "json",
+          data: JSON.stringify({
+            invoice_id: invoice_id
+          }),
+        })
+        .done((data, status) => {
+          // success
+          window.alert("Success!");
+          window.location = "/invoices";
+        })
+        .fail((response, status) => {
+          // big error
+          window.alert("Oops.. something went wrong.");
+          console.log("oops", response.statusText, status);
+        })
+      }
+    } else {
+      window.alert("You can't pay without choosing a payment method!");
+    }
   })
 
 });
