@@ -26,7 +26,7 @@ handlebars.handlebars.registerHelper('formatDateUniversal', (dateString) => {
 // format phone image urls
 handlebars.handlebars.registerHelper('formatImageURL', (image_url) => {
   if (!image_url.includes("www.") && !image_url.includes("http://") && !image_url.includes("https://")) {
-    image_url = "/images" + image_url;
+    image_url = "/images/" + image_url;
   }
   return new handlebars.handlebars.SafeString(image_url);
 })
