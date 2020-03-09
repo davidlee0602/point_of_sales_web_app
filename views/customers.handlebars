@@ -56,7 +56,7 @@
    <!-- div collapseable -->
 </div>
 <br>
-<form>
+<form action="/update_customer" method="POST">
   <!-- Modal -->
   <div class="modal fade" id="updateModal" role="dialog">
      <div class="modal-dialog">
@@ -71,47 +71,48 @@
                  <div class="container">
                     <u>NAME</u>
                     <div class="row">
+                       <input type="hidden" name="customer_id_holder" id="customer_id_holder" value="" required>
                        <div class="col-lg-1">
-                          First<input type="text" name="fname" required><br>
+                       	  First<input type="text" name="first_name" id="first_name" required><br>
                        </div>
                        <div class="col-lg-1 col-lg-offset-2">
-                          Last<input type="text" name="lname" required><br>
+                          Last<input type="text" name="last_name" id="last_name" required><br>
                        </div>
                     </div>
                     <br>
                     <u>ADDRESS</u>
                     <div class="row">
                        <div class="col-lg-1">
-                          Street<input type="text" name="street" required><br>
+                          Street<input type="text" name="street" id="street" required><br>
                        </div>
                        <div class="col-lg-1 col-lg-offset-2">
-                          City<input type="text" name="city" required><br>
+                          City<input type="text" name="city" id="city" required><br>
                        </div>
                     </div>
                     <br>
                     <div class="row">
                        <div class="col-lg-1">
-                          State<input type="text" name="state" required><br>
+                          State<input type="text" name="state" id="state" required><br>
                        </div>
                        <div class="col-lg-1 col-lg-offset-2">
-                          Zip<input type="number" name="zip" required><br>
+                          Zip<input type="number" name="zip" id="zip" required><br>
                        </div>
                     </div>
                     <br>
                     <u>CONTACT</u>
                     <div class="row">
                        <div class="col-lg-1">
-                          Phone<input type="text" name="phone" required><br>
+                          Phone<input type="text" name="phone" id="phone" required><br>
                        </div>
                        <div class="col-lg-1 col-lg-offset-2">
-                          Email<input type="text" name="email" required><br>
+                          Email<input type="text" name="email" id="email" required><br>
                        </div>
                     </div>
                     <br>
                  </div>
               </div>
               <div class="modal-footer">
-                 <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">SUBMIT</button>
+                 <button type="submit" class="btn btn-primary btn-sm">SUBMIT</button>
                  <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">CLOSE</button>
               </div>
            </div>
@@ -159,7 +160,7 @@
                <td>{{email}}</td>
                <td>
                   <div class="row text-center">
-                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal">UPDATE</button>
+                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal" title="update_customer" value={{customer_id}}>UPDATE</button>
                   </div>
                </td>
             </tr>

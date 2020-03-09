@@ -28,6 +28,7 @@ app.use(bodyParser.json());
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT);
+// app.set('port', 3000);
 app.use(express.static('public'));
 
 
@@ -679,6 +680,21 @@ app.get("/carriers/lookup", (req, res, next) => {
          	res.json(context);
     	});
 });
+
+app.get("/customers/lookup", (req, res, next) => {
+	var context = {};
+
+  	mysql.pool.query('SELECT * FROM customers',
+  		(err, rows, result)=> {
+	        if(err) next(err);
+	        var storage = [];
+	        for(var i in rows){
+	            storage.push({"customer_id": rows[i].customer_id, "first_name": rows[i].first_name, "last_name": rows[i].last_name, "street": rows[i].street, "city": rows[i].city, "state": rows[i].state, "zip": rows[i].zip, "phone": rows[i].phone, "email": rows[i].email})
+	        }
+	        context.results = storage;
+         	res.json(context);
+    	});
+});
 /*David 03082020*/
 
 app.get("/edit_invoice", (req, res, next) => {
@@ -781,6 +797,18 @@ app.post("/update_payment_method", (req, res, next) => {
       if (err) return next(err);
 
       res.redirect("paymentmethods");
+  })
+})
+
+app.post("/update_customer", (req, res, next) => {
+  let query =
+  `UPDATE customers SET first_name = ?, last_name = ?, street = ?, city = ?, state = ?, zip = ?, phone = ?, email = ? WHERE customers.customer_id = ?`;
+
+  mysql.pool.query(query, [req.body.first_name, req.body.last_name, req.body.street, req.body.city, req.body.state, req.body.zip, req.body.phone, req.body.email, req.body.customer_id_holder],
+    (err, results, fields) => {
+      if (err) return next(err);
+
+      res.redirect("customers");
   })
 })
 

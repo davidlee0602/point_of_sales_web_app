@@ -355,6 +355,7 @@ function counter_start(varobj){
 let reference_price = {};
 let reference_phone = {};
 let reference_carrier = {};
+let reference_customer = {};
 
 //add invoice detail
 $("#add_invoice_detail").click(function () {
@@ -450,6 +451,18 @@ $(document).ready(function(){
          }
     });
 
+     $.ajax({ type: "GET",   
+         url: "/customers/lookup",   
+         async: true,
+         success : function(response)
+         {
+          for (i = 0; i < response.results.length; i++){
+            reference_customer[response.results[i]["customer_id"]] =  [response.results[i]["first_name"], response.results[i]["last_name"], response.results[i]["street"], response.results[i]["city"], response.results[i]["state"], response.results[i]["zip"], response.results[i]["phone"], response.results[i]["email"]];
+          }
+          console.log(reference_customer);
+         }
+    });
+
 
 });
 /*DAVID 03082020*/
@@ -459,6 +472,18 @@ $(document).on('click',"[title|='update_carrier']", function() {
 
 $(document).on('click',"[title|='update_payment_method']", function() {
   document.getElementById("payment_method_id_holder").value = $(this).val();
+});
+
+$(document).on('click',"[title|='update_customer']", function() {
+  document.getElementById("customer_id_holder").value = $(this).val();
+  document.getElementById("first_name").value = reference_customer[$(this).val()][0];
+  document.getElementById("last_name").value = reference_customer[$(this).val()][1];
+  document.getElementById("street").value = reference_customer[$(this).val()][2];
+  document.getElementById("city").value = reference_customer[$(this).val()][3];
+  document.getElementById("state").value = reference_customer[$(this).val()][4];
+  document.getElementById("zip").value = reference_customer[$(this).val()][5];
+  document.getElementById("phone").value = reference_customer[$(this).val()][6];
+  document.getElementById("email").value = reference_customer[$(this).val()][7];
 });
 /*DAVID 03082020_2*/ 
   // UPDATE PHONES
