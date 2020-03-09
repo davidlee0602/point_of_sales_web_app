@@ -1,14 +1,14 @@
 -- Area 51 Phone Emporium
 
 -- *** Data Definition Queries ***
-SET FOREIGN_KEY_CHECKS=0;
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `phones`;
 DROP TABLE IF EXISTS `customers`;
 DROP TABLE IF EXISTS `invoices`;
 DROP TABLE IF EXISTS `invoice_details`;
 DROP TABLE IF EXISTS `payment_methods`;
 DROP TABLE IF EXISTS `carriers`;
-SET FOREIGN_KEY_CHECKS=1;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- phones
 CREATE TABLE phones (
