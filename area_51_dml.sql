@@ -86,6 +86,19 @@ SELECT invoices.invoice_id, invoices.customer_id, customers.first_name, customer
 invoices.invoice_date, invoices.invoice_paid, invoices.total_due FROM invoices
 INNER JOIN customers on invoices.customer_id = customers.customer_id WHERE invoices.invoice_paid = "0";
 
+-- READ/SELECT invoice_details
+SELECT invoice_details.invoice_detail_id,
+invoice_details.invoice_id,
+invoice_details.phone_id,
+invoice_details.carrier_id,
+CONCAT(phones.make," " ,phones.model) AS phone_name,
+phones.retail_cost,
+carriers.name AS carrier_name
+FROM invoice_details
+INNER JOIN phones ON invoice_details.phone_id = phones.phone_id
+INNER JOIN carriers ON invoice_details.carrier_id = carriers.carrier_id
+ORDER BY invoice_details.invoice_detail_id;
+
 -- READ/SELECT payment_methods
 SELECT * FROM payment_methods;
 -- READ/SELECT carriers
