@@ -160,8 +160,7 @@ $(function() {
       let carrierOption = $("<option/>", {
         "value": window.a51.carriers[i].id
       })
-
-      carrierOption.text(window.a51.carriers[i].name);
+      carrierOption.text(window.a51.carriers[i].name.replace(/&amp;/g, '&'));
       carrierSelect.append(carrierOption);
     }
     // put a break after carrier label, a select inside label, then inside phone column
@@ -367,7 +366,7 @@ $("#add_invoice_detail").click(function () {
 
     counter();
     $("#invoice_detail_table").after('<tr value =' + invoice_id + '><td value = ' + counter_test.count + '>' + counter_test.count + '</td><td value = ' + counter_test.count + '>'+reference_phone[phone_id]+'</td><td value = ' + counter_test.count + '>'+reference_carrier[carrier_id]+'</td><td value = ' + counter_test.count + '>'+reference_price[phone_id]+'</td><td value = ' + counter_test.count + '><div class="row text-center"><button title="remove_phone" class="btn btn-danger btn-sm" type="button" value='+ counter_test.count +'>DELETE</button></div></td></tr>');
-            
+
     $.ajax({
         type: "POST",
         url: "/new_invoice_details",
@@ -417,8 +416,8 @@ $(document).on('click',"[title|='remove_phone']", function() {
 //load reference tables
 $(document).ready(function(){
 
-     $.ajax({ type: "GET",   
-         url: "/phones/lookup",   
+     $.ajax({ type: "GET",
+         url: "/phones/lookup",
          async: true,
          success : function(response)
          {
@@ -429,8 +428,8 @@ $(document).ready(function(){
          }
     });
 
-     $.ajax({ type: "GET",   
-     url: "/phones2/lookup",   
+     $.ajax({ type: "GET",
+     url: "/phones2/lookup",
      async: true,
      success : function(response)
      {
@@ -440,8 +439,8 @@ $(document).ready(function(){
      }
     });
 
-     $.ajax({ type: "GET",   
-         url: "/carriers/lookup",   
+     $.ajax({ type: "GET",
+         url: "/carriers/lookup",
          async: true,
          success : function(response)
          {
@@ -451,15 +450,14 @@ $(document).ready(function(){
          }
     });
 
-     $.ajax({ type: "GET",   
-         url: "/customers/lookup",   
+     $.ajax({ type: "GET",
+         url: "/customers/lookup",
          async: true,
          success : function(response)
          {
           for (i = 0; i < response.results.length; i++){
             reference_customer[response.results[i]["customer_id"]] =  [response.results[i]["first_name"], response.results[i]["last_name"], response.results[i]["street"], response.results[i]["city"], response.results[i]["state"], response.results[i]["zip"], response.results[i]["phone"], response.results[i]["email"]];
           }
-          console.log(reference_customer);
          }
     });
 
@@ -468,10 +466,14 @@ $(document).ready(function(){
 /*DAVID 03082020*/
 $(document).on('click',"[title|='update_carrier']", function() {
 	document.getElementById("carrier_id_holder").value = $(this).val();
+  // pre-populate modal form with value of selected carrier
+  document.getElementById("carrier_name").value = $(this).parent().parent().siblings().first().text();
 });
 
 $(document).on('click',"[title|='update_payment_method']", function() {
   document.getElementById("payment_method_id_holder").value = $(this).val();
+  // pre-populate modal form with value of selected payment method
+  document.getElementById("payment_name").value = $(this).parent().parent().siblings().first().text();
 });
 
 $(document).on('click',"[title|='update_customer']", function() {
@@ -485,7 +487,9 @@ $(document).on('click',"[title|='update_customer']", function() {
   document.getElementById("phone").value = reference_customer[$(this).val()][6];
   document.getElementById("email").value = reference_customer[$(this).val()][7];
 });
-/*DAVID 03082020_2*/ 
+/*DAVID 03082020_2*/
+
+
   // UPDATE PHONES
   // Populate phones update modal form
   $(".update-phone-button").click(function(e) {
@@ -514,5 +518,28 @@ $(document).on('click',"[title|='update_customer']", function() {
     retail_cost_input.val(retail_value);
   });
 
+
+  // UPDATE INVOICES
+  // Populate invoice update modal form
+  $(".update-invoice-button").click(function(e) {
+    // modal inputs
+    let invoice_id_input = $('input[name=invoice_id_holder]');
+    let invoice_date_input = $('input[name=date_input]');
+    let customer_input = $('select[name=customer_input]');
+    let payment_method_input = $('select[name=payment_method_input]');
+
+    // row values
+    let row = $(this).parent().parent();
+    let invoice_id_value = row.siblings(".invoice_id").first().text();
+    let date_value = row.siblings(".invoice_date").data("date-value");
+    let customer_id_value = row.siblings(".invoice_customer_id").first().text();
+    let payment_method_value = row.siblings(".invoice_payment_method").data("payment-method-id");
+
+    // populate form fields
+    invoice_id_input.val(invoice_id_value);
+    invoice_date_input.val(date_value);
+    customer_input.val(customer_id_value);
+    payment_method_input.val(payment_method_value);
+  })
 
 });

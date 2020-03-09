@@ -5,6 +5,68 @@
 
 <br>
 
+<form action="/update_invoice" method="POST">
+  <!-- Modal -->
+  <div class="modal fade" id="updateModal" role="dialog">
+     <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+           <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Update Invoice</h4>
+           </div>
+           <div class="modal-body">
+              <div class="container">
+                 <div class="container">
+									 	<u>Invoice ID:</u>
+										<div class="row">
+											<div class="col-lg-1">
+												<input type="text" name="invoice_id_holder" value="" required readonly="readonly">
+											</div>
+										</div>
+										<br>
+										<u>Date</u>
+										<div class="row">
+											<div class="col-lg-1">
+												<input type="date" name="date_input" required>
+											</div>
+										</div>
+										<br>
+										<u>Customer</u>
+										<div class="row">
+											<div class="col-lg-1">
+												<select name="customer_input">
+													{{#each customers}}
+														<option value="{{@key}}">{{this}}</option>
+													{{/each}}
+												</select>
+											</div>
+										</div>
+										<br>
+										<u>Payment Method</u>
+										<div class="row">
+											<div class="col-lg-1">
+												<select name="payment_method_input">
+													{{#each payment_methods}}
+													<option value="{{@key}}">{{this}}</option>
+													{{/each}}
+													<option value="">None</option>
+												</select>
+											</div>
+										</div>
+										<br>
+                 </div>
+              </div>
+              <div class="modal-footer">
+                 <button type="submit" class="btn btn-primary btn-sm">SUBMIT</button>
+                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">CLOSE</button>
+              </div>
+           </div>
+        </div>
+     </div>
+  </div>
+</form>
+
 <div class="container">
 	<!-- <div class="col-lg-12"> -->
 		<h2 class="page-heading">Invoices</h2>
@@ -55,40 +117,50 @@
 				<tbody class="table-searchable">
           {{#each rows}}
           <tr>
-            <td>{{invoice_id}}</td>
-            <td>{{customer_id}}</td>
-            <td>{{first_name}} {{last_name}}</td>
-            <td>{{formatDate invoice_date}}</td>
-            <td>
+            <td class="invoice_id">{{invoice_id}}</td>
+            <td class="invoice_customer_id">{{customer_id}}</td>
+            <td class="invoice_customer_name">{{first_name}} {{last_name}}</td>
+            <td class="invoice_date" data-date-value="{{formatDateUniversal invoice_date}}">{{formatDate invoice_date}}</td>
+            <td class="invoice_paid">
               {{#if invoice_paid}}
                 TRUE
               {{else}}
                 FALSE
               {{/if}}
             </td>
-            <td>
+            <td class="invoice_payment_method" data-payment-method-id="{{payment_method_id}}">
               {{#if name}}
                 {{name}}
               {{else}}
                 UNPAID
               {{/if}}
             </td>
-            <td>{{total_due}}</td>
+            <td class="invoice_total_due">{{total_due}}</td>
             <td>
               <div class="row text-center">
-                <button type="button" class="btn btn-success btn-sm">PAY</button>
+                <button type="button" class="pay-invoice-button btn btn-success btn-sm" {{#if invoice_paid}}disabled{{/if}}>PAY</button>
               </div>
             </td>
             <td>
               <div class="row text-center">
-                <button type="button" class="btn btn-info btn-sm">VIEW</button>
+                <button type="button" class="view-invoice-button btn btn-info btn-sm">VIEW</button>
               </div>
             </td>
             <td>
               <div class="row text-center">
-                <button type="button" class="btn btn-warning btn-sm">UPDATE</button>
+                <button type="button"
+								class="update-invoice-button btn btn-warning btn-sm"
+								data-toggle="modal"
+								data-target="#updateModal"
+								value={{invoice_id}}
+								{{#if invoice_paid}}disabled{{/if}}>UPDATE</button>
               </div>
             </td>
+						<td>
+							<div class="row text-center">
+								<button type="button" class="btn btn-danger btn-sm" {{#if invoice_paid}}disabled{{/if}}>Add Phone</button>
+							</div>
+						</td>
           </tr>
           {{/each}}
 				</tbody>
@@ -120,12 +192,12 @@
 						{{/each}}
 						break;
 					case 'Customer ID':
-						{{#each customer_ids}}
-							dataset.push("{{this}}");
+						{{#each customers}}
+							dataset.push("{{@key}}");
 						{{/each}}
 						break;
 					case 'Customer Name':
-						{{#each customer_names}}
+						{{#each customers}}
 							dataset.push("{{this}}");
 						{{/each}}
 						break;

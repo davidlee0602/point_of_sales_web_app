@@ -33,7 +33,7 @@ SELECT * FROM customers;
 
 -- READ/SELECT invoices (first view)
 SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
- c.customer_id, c.first_name, c.last_name, p.name
+ c.customer_id, c.first_name, c.last_name, p.payment_method_id, p.name
 FROM invoices i
 JOIN customers c ON
 c.customer_id = i.customer_id
@@ -43,7 +43,7 @@ ORDER BY i.invoice_id ASC;
 
 -- READ/SELECT invoices (filter view)
 SELECT i.invoice_id, i.invoice_date, i.invoice_paid, i.total_due,
- c.customer_id, c.first_name, c.last_name, p.name
+ c.customer_id, c.first_name, c.last_name, p.payment_method_id, p.name
 FROM invoices i
 JOIN customers c ON
 c.customer_id = i.customer_id
