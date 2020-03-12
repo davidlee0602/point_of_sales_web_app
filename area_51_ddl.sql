@@ -54,11 +54,11 @@ CREATE TABLE invoices (
   payment_method_id INT,
   customer_id INT NOT NULL,
   FOREIGN KEY (payment_method_id) REFERENCES payment_methods (payment_method_id)
-  ON DELETE NO ACTION
-  ON UPDATE CASCADE,
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
   FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
-  ON DELETE NO ACTION
-  ON UPDATE CASCADE
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE
 )ENGINE=InnoDB;
 
 -- invoice details
@@ -68,14 +68,14 @@ CREATE TABLE invoice_details (
   phone_id INT NOT NULL,
   carrier_id INT NOT NULL,
   FOREIGN KEY (invoice_id) REFERENCES invoices(invoice_id)
-  ON DELETE NO ACTION
-  ON UPDATE CASCADE,
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
   FOREIGN KEY (phone_id) REFERENCES phones(phone_id)
-  ON DELETE NO ACTION
-  ON UPDATE CASCADE,
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
   FOREIGN KEY (carrier_id) REFERENCES carriers(carrier_id)
-  ON DELETE NO ACTION
-  ON UPDATE CASCADE
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE
 )ENGINE=InnoDB;
 
 -- *** Sample Data ***

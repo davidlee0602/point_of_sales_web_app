@@ -42,6 +42,10 @@ handlebars.handlebars.registerHelper('formatImageURL', (image_url) => {
   }
   return new handlebars.handlebars.SafeString(image_url);
 })
+// index counter
+handlebars.handlebars.registerHelper('counter', (index) => {
+  return index + 1;
+})
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -716,12 +720,70 @@ app.get("/customers/lookup", (req, res, next) => {
 });
 /*David 03082020*/
 
-app.get("/edit_invoice", (req, res, next) => {
+app.get("/view_invoice/:id", (req, res, next) => {
+    // route to view one specific invoice with invoice_details (phones and carriers)
+    let invoice_id = req.params.id;
     let context = {};
-    context.title = 'AREA 51 - Edit Invoice';
+    context.title = 'AREA 51 - View Invoice';
 
-    let invoices_query;
-    res.render('edit_invoice', context);
+    let invoice_details_query =
+    `SELECT invoices.invoice_id, invoices.customer_id, CONCAT(customers.first_name, " ", customers.last_name) AS customer_name,
+    invoices.invoice_date, invoices.invoice_paid, invoices.total_due, payment_methods.payment_method_id, payment_methods.name AS payment_name
+    FROM invoices
+    INNER JOIN customers on invoices.customer_id = customers.customer_id
+    LEFT JOIN payment_methods on invoices.payment_method_id = payment_methods.payment_method_id
+    WHERE invoices.invoice_id = ?`;
+
+    let invoice_phones_query =
+    `SELECT invoice_details.invoice_detail_id,
+    invoice_details.invoice_id,
+    invoice_details.phone_id,
+    invoice_details.carrier_id,
+    CONCAT(phones.make," " ,phones.model) AS phone_name,
+    phones.retail_cost,
+    carriers.name AS carrier_name
+    FROM invoice_details
+    INNER JOIN phones ON invoice_details.phone_id = phones.phone_id
+    INNER JOIN carriers ON invoice_details.carrier_id = carriers.carrier_id
+    WHERE invoice_details.invoice_id = ?
+    ORDER BY invoice_details.invoice_detail_id`;
+
+    new Promise((resolve, reject) => {
+      mysql.pool.query(invoice_details_query, invoice_id, (err, results, fields) => {
+        // query for invoice data (invoice, customers, payment method)
+        if (err) return reject(err);
+
+        results = results[0];
+        context.invoice_id = results.invoice_id;
+        context.customer_id = results.customer_id;
+        context.customer_name = results.customer_name;
+        context.invoice_date = results.invoice_date;
+        context.invoice_paid = results.invoice_paid;
+        context.total_due = results.total_due;
+        context.payment_method_id = results.payment_method_id;
+        context.payment_name = results.payment_name;
+
+        resolve();
+      })
+    })
+    .then(() => {
+      return new Promise((resolve, reject) => {
+        mysql.pool.query(invoice_phones_query, invoice_id, (err, results, fields) => {
+          // query for invoice_details (phones and carriers)
+          if (err) return reject(err);
+
+          context.phones = results;
+
+          resolve();
+        })
+      })
+    })
+    .then(() => {
+      res.render('view_invoice', context);
+    })
+    .catch((error) => {
+      next(error);
+    })
 });
 
 app.get("/customers", (req, res, next) => {

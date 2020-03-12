@@ -39,3 +39,41 @@ edit_invoice hidden field flags. compare changes in front end since data already
   - is_update
 
 User can't pay until payment method is set
+
+=======================
+
+ken - 3/12/2020
+
+-- Queries to update invoice_due, but does not work automatically due to you can't UPDATE the same table you SELECT in a subquery in the WHERE clause..
+
+-- Chang
+SELECT invoice_id FROM invoices INNER JOIN customers ON customers.customer_id = invoices.customer_id WHERE first_name = 'Uchiha' AND last_name = 'Chang';
+UPDATE invoices
+SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
+                  JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
+                  WHERE invoice_details.invoice_id = 1)
+WHERE invoices.invoice_id = 1;
+
+-- Taco
+SELECT invoice_id FROM invoices INNER JOIN customers ON customers.customer_id = invoices.customer_id WHERE first_name = 'Taco' AND last_name = 'Prince';
+UPDATE invoices
+SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
+                  JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
+                  WHERE invoice_details.invoice_id = 2)
+WHERE invoices.invoice_id = 2;
+
+-- Vinny
+SELECT invoice_id FROM invoices INNER JOIN customers ON customers.customer_id = invoices.customer_id WHERE first_name = 'Vinny' AND last_name = 'Pistone';
+UPDATE invoices
+SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
+                  JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
+                  WHERE invoice_details.invoice_id = 3)
+WHERE invoices.invoice_id = 3;
+
+-- BigD
+SELECT invoice_id FROM invoices INNER JOIN customers ON customers.customer_id = invoices.customer_id WHERE first_name = 'Dequarius' AND last_name = 'Johnson';
+UPDATE invoices
+SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
+                  JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
+                  WHERE invoice_details.invoice_id = 4)
+WHERE invoices.invoice_id = 4;
