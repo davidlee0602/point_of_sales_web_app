@@ -1,0 +1,92 @@
+<div class="container">
+  <h2 class="page-heading">View Invoice</h2>
+</div>
+
+<div class="jumbotron">
+  <form id="view_invoice_form">
+    <div class="container">
+
+			<u>INVOICE NUMBER</u>
+			<div class="row">
+					<div class="col-lg-1">
+						<select id="view_invoice_number">
+							<option value="{{invoice_id}}" selected>{{invoice_id}}</option>
+						</select>
+					</div>
+			</div>
+			<br>
+
+			<u>STATUS</u>
+			<div class="row">
+					<div class="col-lg-1">
+						<select name="status">
+							<option value="{{invoice_paid}}" selected>{{#if invoice_paid}}PAID{{else}}UNPAID{{/if}}</option>
+						</select>
+					</div>
+			</div>
+			<br>
+
+      <u>DATE</u>
+      <div class="row">
+        <div class="col-lg-1">
+          <input type="date" name="date" value="{{formatDateUniversal invoice_date}}" readonly><br>
+        </div>
+      </div>
+      <br>
+
+      <u>CUSTOMER</u>
+      <div class="row">
+        <div class="col-lg-1">
+          <select name="customer_id">
+            <option value="{{customer_id}}" selected>{{customer_id}} -- {{customer_name}}</option>
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <u>PAYMENT METHOD</u>
+      <div class="row">
+        <div class="col-lg-1">
+          <select name="payment_method_id">
+            <option value="{{payment_method_id}}" selected>{{#if payment_name}}{{payment_name}}{{else}}NONE{{/if}}</option>
+          </select>
+        </div>
+      </div>
+      <br>
+
+      {{#each phones}}
+      <div class="row phone_form">
+        <div class="col-lg-2">
+          <label>
+          Invoice Item {{counter @index}}
+            <select name="phone_item_{{counter @index}}">
+              <option value="{{phone_id}}"> {{phone_name}} </option>
+            </select>
+          </label>
+        </div>
+
+        <div class="col-lg-2 col-lg-offset-2">
+          <label>
+          Carrier
+          <br>
+            <select name="carrier_item_{{counter @index}}">
+              <option value="{{carrier_id}}"> {{carrier_name}} </option>
+            </select>
+          </label>
+        </div>
+      </div>
+      {{/each}}
+
+      <br>
+      <br>
+      <div class="row">
+          <div>
+            <h4><u>TOTAL</u>: ${{total_due}}</h4>
+          </div>
+      </div>
+
+      <br>
+
+    </div>
+  </form>
+</div>

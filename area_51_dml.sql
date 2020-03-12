@@ -99,6 +99,28 @@ INNER JOIN phones ON invoice_details.phone_id = phones.phone_id
 INNER JOIN carriers ON invoice_details.carrier_id = carriers.carrier_id
 ORDER BY invoice_details.invoice_detail_id;
 
+-- READ/SELECT Invoice Details for VIEW ONE INVOICE (invoice, customer, payment_methods)
+SELECT invoices.invoice_id, invoices.customer_id, CONCAT(customers.first_name, " ", customers.last_name) AS customer_name,
+invoices.invoice_date, invoices.invoice_paid, invoices.total_due, payment_methods.payment_method_id, payment_methods.name AS payment_name
+FROM invoices
+INNER JOIN customers on invoices.customer_id = customers.customer_id
+LEFT JOIN payment_methods on invoices.payment_method_id = payment_methods.payment_method_id
+WHERE invoices.invoice_id = :invoice_id;
+
+-- READ/SELECT invoice_details for VIEW ONE INVOICE (invoice_details, phones, carriers)
+SELECT invoice_details.invoice_detail_id,
+invoice_details.invoice_id,
+invoice_details.phone_id,
+invoice_details.carrier_id,
+CONCAT(phones.make," " ,phones.model) AS phone_name,
+phones.retail_cost,
+carriers.name AS carrier_name
+FROM invoice_details
+INNER JOIN phones ON invoice_details.phone_id = phones.phone_id
+INNER JOIN carriers ON invoice_details.carrier_id = carriers.carrier_id
+WHERE invoice_details.invoice_id = :invoice_id
+ORDER BY invoice_details.invoice_detail_id;
+
 -- READ/SELECT payment_methods
 SELECT * FROM payment_methods;
 -- READ/SELECT carriers
