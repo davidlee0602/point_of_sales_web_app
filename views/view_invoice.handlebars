@@ -1,5 +1,6 @@
 <div class="container">
-  <h2 class="page-heading">View Invoice</h2>
+  <button class="btn btn-danger"><a href="/invoices">Back to Invoices</a></button>
+  <h2 class="page-heading">View Invoice #{{invoice_id}}</h2>
 </div>
 
 <div class="jumbotron">
@@ -80,8 +81,10 @@
       <br>
       <br>
       <div class="row">
-          <div>
-            <h4><u>TOTAL</u>: ${{total_due}}</h4>
+          <div class="col-lg-2">
+            <h2>
+              <u class="total_due_header">TOTAL:</u><span class="green">$</span>{{total_due}}
+            </h2>
           </div>
       </div>
 

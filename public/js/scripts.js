@@ -82,11 +82,16 @@ $(function() {
     });
   }
 
-  // event listener to button add new phone forms to invoices (both new and edit)
+  // event listener to button add new phone forms to new invoices form
   add_phone_form_button.click(function(e) {
     let new_row = createAddPhoneForm();
 
     $(this).parents('form').find(".phone_form").last().after(new_row);
+
+    // attach form change handlers to new row to
+    // update invoice_due total
+    //  and to show/hide checkmark that validates if both phone and carrier are selected
+    attach_phone_form_handlers(new_row);
 
     e.preventDefault();
   });
@@ -167,6 +172,16 @@ $(function() {
     carrierLabel.append($("<br/>"));
     carrierLabel.append(carrierSelect);
     carrierDiv.append(carrierLabel);
+
+    // create span to hold checkmark to denote if
+    // phone form is valid (has selected both phone and carrier)
+    // append as last child of carrierDiv
+    // <span class="phone_row_valid green glyphicon glyphicon-ok hide"></span>
+    let validCheckmarkSpan = $("<span/>");
+    let validCheckmarkSpanClasses =
+      ["phone_row_valid", "green", "glyphicon", "glyphicon-ok", "hide"];
+    validCheckmarkSpan.addClass(validCheckmarkSpanClasses.join(" "));
+    carrierDiv.append(validCheckmarkSpan);
 
     row.append(phoneDiv);
     row.append(carrierDiv);
@@ -575,5 +590,70 @@ $(document).on('click',"[title|='update_customer']", function() {
       window.alert("You can't pay without choosing a payment method!");
     }
   })
+
+
+  // UPDATE TOTAL FUNCTIONALITY ON NEW INVOICE PAGE
+
+  // handler functions
+  function update_invoice_total_due() {
+    let total_field = $("span.total_due")
+    let total = 0;
+
+    let phone_form_rows = $(".phone_form");
+
+    phone_form_rows.each(function(row) {
+      // only add phone's price to invoice total if both phone and carrier are selected
+      let phone_select = $(this).find("select.invoice_phones");
+      let carrier_select = $(this).find("select.invoice_carriers");
+      let phone_val = phone_select.val();
+      let carrier_val = carrier_select.val();
+
+      // add selected phone price to total if carrier has been selected
+      if (phone_val && carrier_val) {
+        let phone_price = phone_select.find("[value=" + phone_val + "]").data("price");
+        if (phone_price) {
+          total += phone_price;
+        }
+      }
+    })
+
+    // fix total to have only 2 decimal digits
+    total = parseFloat(total).toFixed(2);
+    // update total due field on invoice form
+    total_field.text(total);
+  }
+  function show_hide_phone_form_validation(new_div) {
+    // <span class="phone_row_valid green glyphicon glyphicon-ok hide"></span>
+
+  }
+  // attach invoice_due update to first phone and carrier form row on invoices page
+  //  and attach show/hide checkmark to denote if phone form row has selected both a phone and carrier
+  $("select.invoice_phones").change(function(e) {
+    update_invoice_total_due();
+    show_hide_phone_form_validation($(this));
+  })
+  $("select.invoice_carriers").change(function(e) {
+    update_invoice_total_due();
+    show_hide_phone_form_validation($(this));
+  })
+
+  // need to attach invoice_due update functions to
+  // dynamically created phone form rows when they are created
+  function attach_phone_form_handlers(new_div) {
+    let phone_select = new_div.find("select.invoice_phones");
+    let carrier_select = new_div.find("select.invoice_carriers");
+
+    phone_select.change(function(e) {
+      update_invoice_total_due();
+      show_hide_phone_form_validation(new_div);
+    })
+
+    carrier_select.change(function(e) {
+      update_invoice_total_due();
+      show_hide_phone_form_validation(new_div);
+    })
+  }
+
+
 
 });
