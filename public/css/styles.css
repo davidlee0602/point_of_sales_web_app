@@ -13,7 +13,7 @@ body{
   	-o-background-size: cover;
 }
 
-a:visited {
+a:visited, a:link {
 	color: inherit;
 }
 
@@ -107,4 +107,16 @@ table, th, td {
 
 .page-heading {
   color: rgba(237,237,237,0.8);
+}
+
+.total_due_header {
+  margin-right: 20px;
+}
+
+.phone_row_valid {
+  margin-left: 10px;
+}
+
+.green {
+  color: green;
 }

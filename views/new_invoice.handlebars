@@ -49,7 +49,7 @@
             <select class="invoice_phones" name="phone_item_1">
               <option value=""> -- </option>
               {{#each phones}}
-              <option value="{{id}}">{{name}}</option>
+              <option value="{{id}}" data-price="{{price}}">{{name}}</option>
               {{/each}}
             </select>
           </label>
@@ -66,6 +66,8 @@
               {{/each}}
             </select>
           </label>
+          <!-- gylphicon to show only if row has selected phone and carrier -->
+          <span class="phone_row_valid green glyphicon glyphicon-ok hide"></span>
         </div>
       </div>
 
@@ -81,7 +83,11 @@
       <br>
       <br>
       <div class="row">
-          <u>TOTAL</u>
+          <div class="col-lg-2">
+            <h2>
+              <u class="total_due_header">TOTAL:</u><span class="green">$</span><span class="total_due">0.00</span>
+            </h2>
+          </div>
       </div>
 
       <br>
@@ -94,6 +100,7 @@
 </div>
 
 <script>
+  // set data to global objects for use on this page
   window.a51 = {};
   a51["phones"] = [];
   a51["carriers"] = [];
