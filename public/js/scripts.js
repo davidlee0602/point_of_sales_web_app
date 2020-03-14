@@ -622,38 +622,61 @@ $(document).on('click',"[title|='update_customer']", function() {
     // update total due field on invoice form
     total_field.text(total);
   }
-  function show_hide_phone_form_validation(new_div) {
-    // <span class="phone_row_valid green glyphicon glyphicon-ok hide"></span>
 
+  function show_hide_phone_form_validation(new_div) {
+    let phone_select = new_div.find("select.invoice_phones");
+    let carrier_select = new_div.find("select.invoice_carriers");
+    let check_mark_span = new_div.find("span.phone_row_valid");
+    let phone_val = phone_select.val();
+    let carrier_val = carrier_select.val();
+
+    // toggle check mark depending on if both phones and carriers were selected
+    if (phone_val && carrier_val) {
+      check_mark_span.removeClass("hide");
+    } else {
+      check_mark_span.addClass("hide");
+    }
   }
-  // attach invoice_due update to first phone and carrier form row on invoices page
-  //  and attach show/hide checkmark to denote if phone form row has selected both a phone and carrier
-  $("select.invoice_phones").change(function(e) {
+
+  // abstraction to allow attaching handlers to dynamic rows as well as static rows (first row on page)
+  function phone_form_actions(new_div) {
     update_invoice_total_due();
-    show_hide_phone_form_validation($(this));
-  })
-  $("select.invoice_carriers").change(function(e) {
-    update_invoice_total_due();
-    show_hide_phone_form_validation($(this));
-  })
+
+    // pass the phone form to the show/hide handler
+    show_hide_phone_form_validation(new_div);
+  }
 
   // need to attach invoice_due update functions to
-  // dynamically created phone form rows when they are created
+  // dynamically created phone form rows when they are created,
+  // this is the wrapper function for dynamic rows that calls attach_phone_form_handlers
   function attach_phone_form_handlers(new_div) {
     let phone_select = new_div.find("select.invoice_phones");
     let carrier_select = new_div.find("select.invoice_carriers");
 
     phone_select.change(function(e) {
-      update_invoice_total_due();
-      show_hide_phone_form_validation(new_div);
+      phone_form_actions(new_div);
     })
 
     carrier_select.change(function(e) {
-      update_invoice_total_due();
-      show_hide_phone_form_validation(new_div);
+      phone_form_actions(new_div);
     })
   }
 
+  // attach invoice_due update to first phone and carrier form row on invoices page
+  //  and attach show/hide checkmark to denote if phone form row has selected both a phone and carrier
 
+  // attach to first static phone select
+  $("select.invoice_phones").change(function(e) {
+    // get the ancestor .phone_form (containing row div) as pass it to the show/hide handler
+    let this_row = $(this).closest(".phone_form");
+    phone_form_actions(this_row);
+  })
+
+  // attach to first static carrier select
+  $("select.invoice_carriers").change(function(e) {
+    // get the ancestor .phone_form (containing row div) as pass it to the show/hide handler
+    let this_row = $(this).closest(".phone_form");
+    phone_form_actions(this_row);
+  })
 
 });

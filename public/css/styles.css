@@ -13,7 +13,7 @@ body{
   	-o-background-size: cover;
 }
 
-a:visited {
+a:visited, a:link {
 	color: inherit;
 }
 
