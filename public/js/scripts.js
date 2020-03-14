@@ -639,7 +639,7 @@ $(document).on('click',"[title|='update_customer']", function() {
   }
 
   // abstraction to allow attaching handlers to dynamic rows as well as static rows (first row on page)
-  function phone_form_actions(new_div) {
+  function phone_form_handlers(new_div) {
     update_invoice_total_due();
 
     // pass the phone form to the show/hide handler
@@ -654,11 +654,11 @@ $(document).on('click',"[title|='update_customer']", function() {
     let carrier_select = new_div.find("select.invoice_carriers");
 
     phone_select.change(function(e) {
-      phone_form_actions(new_div);
+      phone_form_handlers(new_div);
     })
 
     carrier_select.change(function(e) {
-      phone_form_actions(new_div);
+      phone_form_handlers(new_div);
     })
   }
 
@@ -669,14 +669,14 @@ $(document).on('click',"[title|='update_customer']", function() {
   $("select.invoice_phones").change(function(e) {
     // get the ancestor .phone_form (containing row div) as pass it to the show/hide handler
     let this_row = $(this).closest(".phone_form");
-    phone_form_actions(this_row);
+    phone_form_handlers(this_row);
   })
 
   // attach to first static carrier select
   $("select.invoice_carriers").change(function(e) {
     // get the ancestor .phone_form (containing row div) as pass it to the show/hide handler
     let this_row = $(this).closest(".phone_form");
-    phone_form_actions(this_row);
+    phone_form_handlers(this_row);
   })
 
 });
