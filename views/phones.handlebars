@@ -139,7 +139,7 @@
                <th>Update</th>
             </tr>
          </thead>
-         <tbody class="table-searchable">
+         <tbody class="table-searchable" title="phone_table_image_search">
             {{#if results}}
             {{#each results}}
             <tr>
@@ -161,4 +161,14 @@
       <br>
    </div>
    <!-- </div> -->
+</div>
+<div id="citation">
+<caption>Citation</caption>
+<ul id="citation_list">
+{{#if results}}
+{{#each results}}
+  <li>{{this.image}}</li>
+{{/each}}
+{{/if}}
+</ul>
 </div>

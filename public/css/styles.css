@@ -120,3 +120,14 @@ table, th, td {
 .green {
   color: green;
 }
+
+#citation{
+  padding: 5px;
+  border-style: solid;
+  position:relative;
+  bottom:0;
+  right:-70%;
+  width: 300px;
+  font: 10px italic;
+  color:white;
+}

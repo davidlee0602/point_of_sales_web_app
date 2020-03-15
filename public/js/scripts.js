@@ -695,5 +695,14 @@ $(document).on('click',"[title|='navigate_invoice_details']", function() {
   $(location).attr("href", "/invoice_details");
 });
 
-
+$(document).ready(function($) { //need to change to specific
+    $("[title|='phone_table_image_search']").find("td").each(function (i, row)
+            {
+              if ($(this).attr('data-url') != undefined) {
+                if($(this).attr('data-url').toLowerCase().search(".com") > 0){
+                  console.log($(this).attr('data-url'));
+                }
+              }
+            })
+  });
 });
