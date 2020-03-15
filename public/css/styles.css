@@ -131,3 +131,10 @@ table, th, td {
   font: 10px italic;
   color:white;
 }
+
+#imageText{
+  top: 60%;
+  font-size: 25px;
+  color:snow;
+  text-align: center;
+}
