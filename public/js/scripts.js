@@ -571,6 +571,16 @@ $(document).on('click',"[title|='update_customer']", function() {
     let invoice_id = $(this).data("value");
     let payment_method_value = $(this).parent().parent().siblings(".invoice_payment_method").data("payment-method-id");
 
+    // front-end validation: to prevent user from paying an invoice that has no phones,
+    // check if total_due column on table is zero.
+    // not the best solution, a better solution would be to validate on the back end,
+    // or have a way of checking the number of phones on an invoice from the front end
+    let invoice_total = $(this).parent().parent().siblings(".invoice_total_due").text();
+    if (invoice_total == 0) {
+      window.alert("You can't pay for an invoice with no phones!");
+      return;
+    }
+
     if (payment_method_value) {
       let answer = confirm("Are you sure you want to pay this invoice?");
       if (answer) {
