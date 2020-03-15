@@ -647,12 +647,37 @@ app.post('/new_invoice_details', function (req, res) {
 	});
 });
 
+app.post('/update_add_invoice_total', function (req, res) {
+
+   var data  = [
+    req.body.price,
+    req.body.invoice,
+  ]
+   mysql.pool.query(`UPDATE invoices SET total_due = (total_due + ?) WHERE invoices.invoice_id = ?`, data, function (error, results, fields) {
+	  if (error) throw error;
+	  res.end(JSON.stringify(results));
+	});
+});
+
 app.post('/delete_invoice_details', function (req, res) {
 
    var data  = [
     req.body.delete_id,
   ]
    mysql.pool.query(`DELETE FROM invoice_details WHERE invoice_detail_id = (?)`, data, function (error, results, fields) {
+	  if (error) throw error;
+	  res.end(JSON.stringify(results));
+	});
+});
+
+//review here
+app.post('/update_subtract_invoice_total', function (req, res) {
+
+   var data  = [
+    req.body.price,
+    req.body.invoice,
+  ]
+   mysql.pool.query(`UPDATE invoices SET total_due = (total_due - ?) WHERE invoices.invoice_id = ?`, data, function (error, results, fields) {
 	  if (error) throw error;
 	  res.end(JSON.stringify(results));
 	});

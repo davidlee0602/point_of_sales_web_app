@@ -395,6 +395,17 @@ $("#add_invoice_detail").click(function () {
         }),
       })
 
+    $.ajax({
+        type: "POST",
+        url: "/update_add_invoice_total",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+          invoice: invoice_id,
+          price: reference_price[phone_id],
+        }),
+      })
+
      }else{
       alert("Please select a phone and carrier to add.")
      }
@@ -425,7 +436,18 @@ $("[title|='close_details_table']").click(function () {
 
 //remove phone and carrier from invoice details
 $(document).on('click',"[title|='remove_phone']", function() {
+	let invoice_id = document.getElementById("fixed_invoice_id").value
         $.ajax({
+        type: "POST",
+        url: "/update_subtract_invoice_total",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+          invoice: invoice_id,
+          price: reference_price[$(this).attr('data-value')],
+          }),
+      	})
+      	$.ajax({
         type: "POST",
         url: "/delete_invoice_details",
         contentType: "application/json",
