@@ -13,10 +13,14 @@ INSERT INTO invoices (invoice_date, invoice_paid, customer_id, payment_method_id
   /*FOR EACH Phone & Carrier ADDITION*/
   /*this_invoice_id_value will store the invoice_id that was created*/
   INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (:this_invoice_id_value, :phone_id_dropdown_value, :carrier_id_dropdown_value);
-    -- Updated how total_due in invoices will be summed once a new phone is added via the invoice_details page 03/15/2020
-    UPDATE invoices SET total_due = (total_due + :new_phone_price) WHERE invoices.invoice_id = :this_invoice_id;
+  UPDATE invoices
+    SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
+                      JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
+                      WHERE invoice_details.invoice_id = (:this_invoice_id_value));
 -- CREATE invoice_details http://web.engr.oregonstate.edu/~leed8/invoice_details.html
 INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (:invoice_id_button_selected_value, :phone_id_dropdown_value, :carrier_id_dropdown_value);
+-- Set new total due for invoices.total_due
+  UPDATE invoices SET total_due = (total_due + :new_phone_price) WHERE invoices.invoice_id = :this_invoice_id;
 -- CREATE payment_methods http://web.engr.oregonstate.edu/~leed8/paymentmethods.html
 INSERT INTO payment_methods (name) VALUES (:payment_method_name_input);
 -- CREATE carriers http://web.engr.oregonstate.edu/~leed8/carriers.html
@@ -156,21 +160,11 @@ WHERE carriers.carrier_id = (:carrier_id_selected_value);
 -- DELETE invoice_details
 DELETE FROM invoice_details WHERE invoice_detail_id = (:invoice_detail_id_selected_input);
 -- UPDATE invoices
-    -- Updated how total_due in invoices will be subtracted once a new phone is added via the invoice_details page 03/15/2020
-    UPDATE invoices SET total_due = (total_due + :selected_phone_price) WHERE invoices.invoice_id = :this_invoice_id;
-
-
-
--- Previous add and delete invoice_details to control value of total due in invoices:
--- FOR REVIEW
--- Delete
---   SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
---                     JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
---                     WHERE invoice_details.invoice_id = (:deleted_invoice_detail_selected_input_invoice_id)) /*variable value is the invoice_id of the already deleted invoice_detail row*/
---   WHERE invoices.invoice_id = (:deleted_invoice_detail_selected_input_invoice_id); /*variable value is the invoice_id of the already deleted invoice_detail row*/
-
--- Add
-  -- UPDATE invoices
-    -- SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
-    --                   JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
-    --                   WHERE invoice_details.invoice_id = (:this_invoice_id_value))
+  SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
+                    JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
+                    WHERE invoice_details.invoice_id = (:deleted_invoice_detail_selected_input_invoice_id)) /*variable value is the invoice_id of the already deleted invoice_detail row*/
+  WHERE invoices.invoice_id = (:deleted_invoice_detail_selected_input_invoice_id); /*variable value is the invoice_id of the already deleted invoice_detail row*/
+-- Delete invoice_details http://web.engr.oregonstate.edu/~leed8/invoice_details.html
+DELETE FROM invoice_details WHERE invoice_detail_id = (:invoice_detail_id_selected_input);;
+  -- Set new total due for invoices.total_due
+  UPDATE invoices SET total_due = (total_due - :selected_phone_price) WHERE invoices.invoice_id = :this_invoice_id;
