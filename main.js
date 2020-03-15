@@ -641,7 +641,6 @@ app.post('/new_invoice_details', function (req, res) {
     req.body.phone,
     req.body.carrier
   ]
-
    mysql.pool.query(`INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (?, ?, ?)`, data, function (error, results, fields) {
 	  if (error) throw error;
 	  res.end(JSON.stringify(results));

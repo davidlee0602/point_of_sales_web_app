@@ -140,3 +140,13 @@
     </table><br>
   </div><!-- </div> -->
 </div>
+<script type="text/javascript">
+  $(document).ready(function($) {
+    if(localStorage.getItem("ref_id") != null && localStorage.getItem("ref_id") > -1){
+    document.getElementById("fixed_invoice_id").value = localStorage.getItem("ref_id");
+    var rows = $("#invoice_detail_table").find("tr").hide();
+    rows.filter("tr[value='"+localStorage.getItem("ref_id")+"']").show();
+    $('#updateModal').modal('show');
+    }
+  });
+</script>

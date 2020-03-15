@@ -401,6 +401,13 @@ $("#add_invoice_detail").click(function () {
  });
 
 //filter invoice details modal
+$(document).ready(function($) { //need to change to specific
+    $("#invoice_detail_table").find("td").each(function (i, row)
+            {
+                  counter_start($(this).attr('value'));
+                })
+  });
+
 $("[title|='details_table']").click(function () {
     document.getElementById("fixed_invoice_id").value = $(this).val();
     $("#invoice_detail_table").find("td").each(function (i, row)
@@ -413,6 +420,7 @@ $("[title|='details_table']").click(function () {
 
 $("[title|='close_details_table']").click(function () {
     location.reload(true);
+    localStorage.setItem("ref_id",-1);
  });
 
 //remove phone and carrier from invoice details
@@ -678,5 +686,14 @@ $(document).on('click',"[title|='update_customer']", function() {
     let this_row = $(this).closest(".phone_form");
     phone_form_handlers(this_row);
   })
+
+//david 03142020
+
+
+$(document).on('click',"[title|='navigate_invoice_details']", function() {
+  localStorage.setItem('ref_id', $(this).val());
+  $(location).attr("href", "/invoice_details");
+});
+
 
 });
