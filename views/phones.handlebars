@@ -40,7 +40,8 @@
                <u>RETAIL COST</u>
                <div class="row">
                   <div class="col-lg-1">
-                     <input type="number" name="retail_cost" id="retail_cost" required><br>
+                    <!-- retail cost has a minimum value for front-end validation of paying from the /invoices table, which doesn't allow payment if invoice is $0 -->
+                     <input type="number" name="retail_cost" id="retail_cost" min="0.01" required><br>
                   </div>
                </div>
                <br>
