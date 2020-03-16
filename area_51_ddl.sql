@@ -207,3 +207,17 @@ INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (
     (SELECT phone_id FROM phones WHERE make = 'Apple' AND model = 'iPhone 11'),
     (SELECT carrier_id FROM carriers WHERE name = 'Verizon')
 );
+
+
+-- NOTE: after adding invoice_details (adding phones to invoices,
+-- you need to manually update each sample invoice in the DBMS console using the provided UPDATE invoice_due query,
+-- this is because SQL won't allow you up UPDATE the same table you use in a SELECT in the same query).
+--
+-- This one:
+--
+-- INSERT INTO invoice_details (invoice_id, phone_id, carrier_id) VALUES (:this_invoice_id_value, :phone_id_dropdown_value, :carrier_id_dropdown_value);
+-- UPDATE invoices
+--   SET total_due = (SELECT IFNULL(SUM(phones.retail_cost), 0.00) FROM phones
+--                     JOIN invoice_details ON phones.phone_id = invoice_details.phone_id
+--                     WHERE invoice_details.invoice_id = :this_invoice_id_value)
+--   WHERE invoices.invoice_id = :this_invoice_id_value;
