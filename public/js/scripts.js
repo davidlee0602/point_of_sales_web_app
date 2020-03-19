@@ -721,12 +721,12 @@ $(document).on('click',"[title|='update_customer']", function() {
 
 //david 03142020
 
-
+//Navigate from invoices page to invoice_details page
 $(document).on('click',"[title|='navigate_invoice_details']", function() {
   localStorage.setItem('ref_id', $(this).val());
   $(location).attr("href", "/invoice_details");
 });
-
+//display url citations for phone images in console
 $(document).ready(function($) { //need to change to specific
     $("[title|='phone_table_image_search']").find("td").each(function (i, row)
             {
