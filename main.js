@@ -53,7 +53,6 @@ app.use(bodyParser.json());
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT);
-// app.set('port', 3000);
 app.use(express.static('public'));
 
 
